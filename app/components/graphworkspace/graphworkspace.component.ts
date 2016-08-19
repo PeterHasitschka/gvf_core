@@ -13,6 +13,7 @@ export class GraphworkspaceComponent {
         this.planes = [];
         this.addPlane(new Plane("Plane eins"));
         this.addPlane(new Plane("Plane zwei"));
+        this.addPlane(new Plane("Plane drei"));
     }
     
     public addPlane(plane) {
