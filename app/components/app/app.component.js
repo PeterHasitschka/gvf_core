@@ -15,7 +15,7 @@ var AppComponent = (function () {
     AppComponent = __decorate([
         core_1.Component({
             selector: 'afel-app',
-            templateUrl: './app/app.html'
+            templateUrl: 'app/components/app/app.html'
         }), 
         __metadata('design:paramtypes', [])
     ], AppComponent);
