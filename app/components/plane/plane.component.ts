@@ -15,18 +15,18 @@ export class PlaneComponent {
     @Input() plane: Plane;
 
     private id;
-    
-    ngAfterViewInit(){
-        this.plane.initScene("graphvisplanecontainer_" + this.id);
+
+    ngAfterViewInit() {
+        this.plane.initScene(this.id);
     }
-    
+
     constructor() {
         this.id = PlaneComponent.counter;
         PlaneComponent.counter++;
     }
-    
-    
-    getId(){
+
+
+    getId() {
         return this.id;
     }
 
