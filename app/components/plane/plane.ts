@@ -1,18 +1,26 @@
 import { Component } from '@angular/core';
 import {ThreeJsScene} from '../graphvis/scene';
 import {Learner} from '../graphvis/data/learner';
+import {GraphVisConfig} from '../graphvis/config';
+import {GraphAbstract} from '../graphvis/graphs/abstract';
 
 export class Plane {
 
-    private name: string;
     private containerId: number;
     private scene: ThreeJsScene;
     static containerPrefix: string = "graphvisplanecontainer_";
+    private graph: GraphAbstract;
 
 
+    constructor(private name: string, graphtype: string) {
 
-    constructor(name: string) {
-        this.name = name;
+        try {
+            this.graph = new GraphVisConfig.active_graphs[graphtype];
+        } catch (e) {
+
+            console.error("Could not create graph of type '" + graphtype + "'!");
+        }
+
     }
 
     public getName() {

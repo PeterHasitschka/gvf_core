@@ -14,8 +14,8 @@ export class GraphworkspaceComponent {
     constructor() {
         this.planes = [];
 
-        this.addPlane(new Plane("Plane eins"));
-        this.addPlane(new Plane("Plane zwei"));
+        this.addPlane(new Plane("Plane eins", 'resource'));
+        this.addPlane(new Plane("Plane zwei", 'resource'));
     }
 
     public getPlanes() {

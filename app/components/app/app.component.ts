@@ -15,7 +15,7 @@ export class AppComponent {
     }
 
     addDummyPlane(): void {
-        this.graphworkspace.addPlane(new Plane("Plane something " + Math.random()));
+        this.graphworkspace.addPlane(new Plane("Plane something " + Math.random(), 'resource'));
     }
 
 
