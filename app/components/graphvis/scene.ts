@@ -1,5 +1,7 @@
 import {GraphVisConfig} from './config';
 
+const THREE = require('../../../node_modules/three/build/three.js');
+
 export class ThreeJsScene {
 
 
@@ -7,8 +9,8 @@ export class ThreeJsScene {
 
         var config = GraphVisConfig.scene;
         // set the scene size
-        var canvasW = dimensions.x,
-            canvasH = dimensions.y;
+        var canvasW = dimensions["x"],
+            canvasH = dimensions["y"];
 
         // set some camera attributes
         var VIEW_ANGLE = config.view_angle,

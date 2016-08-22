@@ -37,6 +37,10 @@ export class Plane {
 
         var container = document.getElementById(Plane.containerPrefix + this.containerId);
         this.scene = new ThreeJsScene(container, canvasDimensions);
+        
+        this.graph.loadData();
+        
+        
     }
 
     calculateCanvasSize() {
@@ -44,6 +48,8 @@ export class Plane {
         return { x: container.clientWidth - 10, y: container.clientHeight - 40 };
     }
 
+
+    
 
 
 }

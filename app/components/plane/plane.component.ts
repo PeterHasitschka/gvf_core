@@ -7,7 +7,6 @@ import {DataService} from '../../services/data.service';
     selector: 'graph-plane',
     templateUrl: 'app/components/plane/plane.component.html',
     styleUrls: ['app/components/plane/plane.css'],
-    providers: [DataService]
 })
 export class PlaneComponent {
 
@@ -29,26 +28,11 @@ export class PlaneComponent {
 
     ngAfterViewInit() {
         this.plane.initScene(this.id);
-        this.getAllLearners();
     }
 
-    /**
-     * Bring all learner-objects to the scene
-     */
-    private populateLearners(): void {
-        console.log("Populating learners to scene!", this.allData.learners);
-    }
+ 
 
-    /**
-     * Asynchronous call for loading all learners
-     */
-    private getAllLearners(): void {
-        DataService.getInstance().getLearners().then(learners => {
-            this.allData.learners = learners;
-            this.populateLearners()
-        }
-        );
-    }
+
 
 
 
