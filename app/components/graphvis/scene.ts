@@ -1,8 +1,10 @@
 import {GraphVisConfig} from './config';
 
-const THREE = require('../../../node_modules/three/build/three.js');
+//const THREE = require('../../../node_modules/three/build/three.js');
 
-export class ThreeJsScene {
+export class GraphScene {
+
+    private threeScene: THREE.Scene;
 
 
     constructor(container: HTMLElement, dimensions: Object) {
@@ -29,10 +31,10 @@ export class ThreeJsScene {
             FAR
         );
 
-        var scene = new THREE.Scene();
+        this.threeScene = new THREE.Scene();
 
         // add the camera to the scene
-        scene.add(camera);
+        this.threeScene.add(camera);
 
         // the camera starts at 0,0,0
         // so pull it back
@@ -72,7 +74,7 @@ export class ThreeJsScene {
             sphereMaterial);
 
         // add the sphere to the scene
-        scene.add(sphere);
+        this.threeScene.add(sphere);
 
         // create a point light
         var pointLight = new THREE.PointLight(0xFFFFFF);
@@ -83,10 +85,13 @@ export class ThreeJsScene {
         pointLight.position.z = 130;
 
         // add to the scene
-        scene.add(pointLight);
+        this.threeScene.add(pointLight);
 
-        renderer.render(scene, camera);
-
+        renderer.render(this.threeScene, camera);
     }
 
+
+    public getThreeScene(): THREE.Scene {
+        return this.threeScene;
+    }
 }
