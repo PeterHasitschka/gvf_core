@@ -14,30 +14,29 @@ export class Plane {
 
     public initScene(container_identifier) {
 
-        console.log(container_identifier);
-
+        var canvasDimensions = this.calculateCanvasSize();
         // set the scene size
-        var WIDTH = 200,
-            HEIGHT = 200;
+        var canvasW = canvasDimensions.x,
+            canvasH = canvasDimensions.y;
 
         // set some camera attributes
         var VIEW_ANGLE = 100,
-            ASPECT = WIDTH / HEIGHT,
+            ASPECT = canvasW / canvasH,
             NEAR = 0.1,
             FAR = 10000;
-
+            
         // get the DOM element to attach to
         var container = document.getElementById(container_identifier);
 
         // create a WebGL renderer, camera
         // and a scene
         var renderer = new THREE.WebGLRenderer();
-        var camera =
-            new THREE.PerspectiveCamera(
-                VIEW_ANGLE,
-                ASPECT,
-                NEAR,
-                FAR);
+        var camera = new THREE.PerspectiveCamera(
+            VIEW_ANGLE,
+            ASPECT,
+            NEAR,
+            FAR
+        );
 
         var scene = new THREE.Scene();
 
@@ -49,7 +48,7 @@ export class Plane {
         camera.position.z = 300;
 
         // start the renderer
-        renderer.setSize(WIDTH, HEIGHT);
+        renderer.setSize(canvasW, canvasH);
 
         // attach the render-supplied DOM element
         container.appendChild(renderer.domElement);
@@ -96,7 +95,12 @@ export class Plane {
 
         // add to the scene
         scene.add(pointLight);
-        
+
         renderer.render(scene, camera);
+    }
+
+    calculateCanvasSize() {
+
+        return { x: 100, y: 100 };
     }
 }
