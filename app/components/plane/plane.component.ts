@@ -16,6 +16,10 @@ export class PlaneComponent {
 
     private id;
     
+    ngAfterViewInit(){
+        this.plane.initScene("graphvisplanecontainer_" + this.id);
+    }
+    
     constructor() {
         this.id = PlaneComponent.counter;
         PlaneComponent.counter++;
