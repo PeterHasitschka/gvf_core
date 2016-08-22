@@ -1,6 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { Plane } from '../plane/plane';
 import {GraphworkspaceComponent} from '../graphworkspace/graphworkspace.component';
+import {DataService} from '../../services/data.service';
 
 @Component({
     selector: 'afel-app',
@@ -17,4 +18,19 @@ export class AppComponent {
         this.graphworkspace.addPlane(new Plane("Plane something " + Math.random()));
     }
 
+
+    showData(): void {
+        DataService.getInstance().getLearners().then(learners => {
+            console.log("LEARNERS:", learners);
+        }
+        );
+        DataService.getInstance().getResources().then(resources => {
+            console.log("RESOURCES:", resources);
+        }
+        );
+        DataService.getInstance().getActivities().then(activities => {
+            console.log("ACTIVITIES:", activities);
+        }
+        );
+    }
 }

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import {Plane} from '../plane/plane';
-
+import {GraphVisConfig} from '../graphvis/config';
 
 @Component({
     selector: 'graphworkspace',
@@ -26,5 +26,12 @@ export class GraphworkspaceComponent {
         this.planes.push(plane);
     }
 
+    public getGridClasses(): string {
+        var c = GraphVisConfig.plane_grid;
+        var out = "col-xs-" + (12 / c.xs) + " col-sm-" + (12 / c.sm) +
+            " col-md-" + (12 / c.md) + " col-lg-" + (12 / c.lg);
+
+        return out;
+    }
 
 } 

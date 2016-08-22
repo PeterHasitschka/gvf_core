@@ -1,6 +1,6 @@
 <p>Plane Workspace</p>
 <div class="container-fluid">
     <div class="row">
-        <graph-plane class="col-xs-12 col-sm-12 col-md-12" *ngFor="let p of getPlanes()" [plane]="p">
+        <graph-plane [class]="getGridClasses()" *ngFor="let p of getPlanes()" [plane]="p">
     </graph-plane>
 </div>
