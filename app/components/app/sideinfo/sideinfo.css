@@ -1,0 +1,9 @@
+.sidebarinfo {
+    float: left;
+    width: 100%;
+    min-height: 200px;
+    background: white;
+    border: 1px solid gray;
+    color: black;
+    padding: 5px;
+}
