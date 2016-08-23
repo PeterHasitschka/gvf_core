@@ -6,8 +6,8 @@ import {NodeAbstract} from './abstract';
  */
 export class NodeSimple extends NodeAbstract {
 
-    constructor() {
+    constructor(x:number, y:number) {
 
-        super();
+        super(x,y);
     }
 }

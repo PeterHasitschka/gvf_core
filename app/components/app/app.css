@@ -1,9 +1,11 @@
 .headerrow {
-    background:#FFEFEF;
+    background:#49368E;
+    color:white;
 }
 
 .mainrow {
-    background:#EAFFF9;
+    background:#24886B;
+    color:white
 }
 
 #mainleftcol {
@@ -11,14 +13,24 @@
 }
 
 #mainmiddlecol {
-    background:#FDEAFF
+    background:#EDF8FF
 }
 
 #mainrightcol {
 
 }
 
+#mainleftcol,#mainrightcol {
+    padding:5px;
+}
+
+#mainrightcol button {
+    margin-top: 9px;
+}
+
 
 .footerrow {
-    background:#FFEFEF
+    background:#49368E;
+    color:white;
+    padding:5px;
 }

@@ -6,13 +6,28 @@ import {ResourceGraph} from './graphs/resourcegraph';
  */
 export class GraphVisConfig {
 
+    /**
+     * Scene related configuration
+     */
     public static scene = {
-        view_angle: 100,
         near: 0.1,
         far: 10000,
 
         camera: {
             z: 300
+        }
+    }
+
+    public static nodes = {
+        segments: 10,
+        abstractnode: {
+            size: 7,
+            color: 0xff00ff,
+            z_pos: 0.0
+        },
+
+        resourcenode: {
+
         }
     }
 
@@ -23,8 +38,8 @@ export class GraphVisConfig {
     public static plane_grid = {
         xs: 1,
         sm: 1,
-        md: 2,
-        lg: 2
+        md: 1,
+        lg: 1
     }
 
 

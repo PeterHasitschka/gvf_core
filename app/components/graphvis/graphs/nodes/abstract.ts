@@ -1,3 +1,6 @@
+import {GraphVisConfig} from '../../config';
+
+
 /**
  * Abstract class of a Node for the GraphVis
  * Derived from the @see{THREE.Mesh} class.
@@ -8,13 +11,36 @@ export abstract class NodeAbstract extends THREE.Mesh {
 
     protected threeMaterial: THREE.Material;
     protected threeGeometry: THREE.Geometry;
+    protected zPos;
+    constructor(x: number, y: number) {
 
-    constructor() {
-        var geometry = new THREE.CircleGeometry(150, 32);
-        var material = new THREE.MeshBasicMaterial({ color: 0xff0000 });
+        var config = GraphVisConfig.nodes;
+
+        var geometry = new THREE.CircleGeometry(
+            config.abstractnode.size,
+            config.segments);
+
+        var material = new THREE.MeshBasicMaterial(
+            {
+                color: config.abstractnode.color
+            });
+
         super(geometry, material);
+
 
         this.threeGeometry = geometry;
         this.threeMaterial = material;
+        this.zPos = config.abstractnode.z_pos;
+
+        x = x === undefined ? 0.0 : x;
+        y = y === undefined ? 0.0 : y;
+
+        this.setPosition(x, y);
+    }
+
+
+    public setPosition(x: number, y: number): void {
+        this.position.setX(x);
+        this.position.setY(y);
     }
 }

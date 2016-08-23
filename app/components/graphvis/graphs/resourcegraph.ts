@@ -15,26 +15,42 @@ export class ResourceGraph extends GraphAbstract {
     protected data: Resource[];
     constructor(plane: Plane) {
         super(plane);
-
-        var node = new NodeSimple();
-        plane.getGraphScene().getThreeScene().add(node);
-        plane.getGraphScene().render();
     }
 
     /**
      * Init method. Super class calls loadData()
-     * @todo: Fill with graph creation
+     * After loading data the afterLoad callback is called
      */
     public init(): void {
         super.init();
+        this.loadData(data => { this.afterLoad(data) });
+    }
 
+    /**
+     * Called as callback after data was loaded asynchronously
+     * @param data - Array of data objects
+     */
+    private afterLoad(data: Resource[]): void {
+        this.data = data;
+        console.log("Resource Data Loaded", this.data);
+        for (let i = 0; i < this.data.length; i++) {
+
+            let dimensions = this.plane.calculateCanvasSize();
+            let x_range = dimensions['x'] - 20;
+            let y_range = dimensions['y'] - 20;
+            var posX = Math.random() * x_range - x_range / 2;
+            var posY = Math.random() * y_range - y_range / 2;
+
+            let n = new NodeSimple(posX, posY);
+            this.plane.getGraphScene().getThreeScene().add(n);
+        }
+        this.plane.getGraphScene().render();
     }
 
 
-    protected loadData(): void {
+    protected loadData(after_load): void {
         DataService.getInstance().getResources().then(rs => {
-            this.data = rs;
-            console.log("Resource Data Loaded", this.data);
+            after_load(rs);
         });
     }
 }

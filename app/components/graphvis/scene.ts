@@ -12,7 +12,7 @@ export class GraphScene {
     private threeScene: THREE.Scene;
     private threeRenderer: THREE.WebGLRenderer;
     private threeCamera: THREE.Camera;
-    
+
     /**
      * @constructor of the GraphScene
      * @param{HTMLMElement} container - Container to hold the canvas
@@ -25,22 +25,22 @@ export class GraphScene {
         var canvasW = dimensions["x"],
             canvasH = dimensions["y"];
 
-        // set some camera attributes
-        var VIEW_ANGLE = config.view_angle,
-            ASPECT = canvasW / canvasH,
-            NEAR = config.near,
-            FAR = config.far;
+
 
 
         // create a WebGL renderer, camera
         // and a scene
         this.threeRenderer = new THREE.WebGLRenderer({ alpha: true });
-        this.threeCamera = new THREE.PerspectiveCamera(
-            VIEW_ANGLE,
-            ASPECT,
-            NEAR,
-            FAR
-        );
+
+
+        this.threeCamera = new THREE.OrthographicCamera(
+            canvasW / - 2,
+            canvasW / 2,
+            canvasH / 2,
+            canvasH / - 2,
+            config.near,
+            config.far);
+
 
         this.threeScene = new THREE.Scene();
 

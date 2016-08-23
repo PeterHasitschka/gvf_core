@@ -67,9 +67,9 @@ export class Plane {
     /**
      * Calculating the width and height of the defined container
      */
-    private calculateCanvasSize(): Object {
+    public calculateCanvasSize(): Object {
         var container = document.getElementById(Plane.containerPrefix + this.containerId);
-        return { x: container.clientWidth - 10, y: container.clientHeight - 40 };
+        return { x: container.clientWidth - 10, y: container.clientHeight - 30 };
     }
 
 

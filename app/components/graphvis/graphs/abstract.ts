@@ -9,7 +9,7 @@ import {DataAbstract} from '../data/abstract';
  * @author Peter Hasitschka
  */
 export abstract class GraphAbstract {
-    
+
     /**
      * The data of a specific type (learner, resource, ...) for this plane
      */
@@ -23,13 +23,13 @@ export abstract class GraphAbstract {
      * Init method for loading data and creating the layout and nodes
      */
     public init(): void {
-        this.loadData();
+
     }
 
     /**
      * Loading data abstract
      */
-    protected loadData(): void {
+    protected loadData(after_load): void {
     }
 
 }
