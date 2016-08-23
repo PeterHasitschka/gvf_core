@@ -1,15 +1,18 @@
-export class Resource {
+import {DataAbstract} from './abstract';
 
+/**
+ * Resource Data object
+ * Holding data of a single Learning-Resource
+ * @author Peter Hasitschka
+ */
+export class Resource extends DataAbstract {
     private static idCounter = 0;
 
-    private id: number;
-    constructor(private data: Object) {
+    constructor(data: Object) {
+        super(data);
+
         this.id = Resource.idCounter;
         Resource.idCounter++;
     }
 
-
-    public getId(): number {
-        return this.id;
-    }
 }

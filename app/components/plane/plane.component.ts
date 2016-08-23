@@ -8,6 +8,11 @@ import {DataService} from '../../services/data.service';
     templateUrl: 'app/components/plane/plane.component.html',
     styleUrls: ['app/components/plane/plane.css'],
 })
+/**
+ * Component holding a @see{Plane} object
+ * Additionally it contains an id, that defines the container for the scene
+ * @author{Peter Hasitschka}
+ */
 export class PlaneComponent {
 
     private static counter: number = 0;
@@ -17,8 +22,10 @@ export class PlaneComponent {
         resources: null,
         activities: null
     }
+
+    // The plane object
     @Input() plane: Plane;
-    private id;
+    private id: number;
 
 
     constructor() {
@@ -26,18 +33,16 @@ export class PlaneComponent {
         PlaneComponent.counter++;
     }
 
-    ngAfterViewInit() {
+    /**
+     * Initializing the scene on the @see{Plane} after making sure that
+     * the container HTML element exists now
+     */
+    ngAfterViewInit(): void {
         this.plane.initScene(this.id);
     }
 
- 
 
-
-
-
-
-
-    getId() {
+    public getId(): number {
         return this.id;
     }
 } 

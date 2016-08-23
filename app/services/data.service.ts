@@ -6,6 +6,11 @@ import { Activity } from '../components/graphvis/data/activity'
 
 
 @Injectable()
+/**
+ * Service for loading resource, learner, and activity data.
+ * Singleton concept => Usage: DataService.getInstance()
+ * @author Peter Hasitschka
+ */
 export class DataService {
 
 

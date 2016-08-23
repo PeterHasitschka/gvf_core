@@ -6,6 +6,11 @@ import {GraphVisConfig} from '../graphvis/config';
     selector: 'graphworkspace',
     templateUrl: 'app/components/graphworkspace/graphworkspace.component.html',
 })
+/**
+ * Component holding all @see{PlaneComponent} elements.
+ * Responsible for managing, adding, and removing them.
+ * @author Peter Hasitschka
+ */
 export class GraphworkspaceComponent {
 
     private planes: Plane[];
@@ -14,20 +19,30 @@ export class GraphworkspaceComponent {
     constructor() {
         this.planes = [];
 
+        //Dummy plane
         this.addPlane(new Plane("Resource Graph", 'resource'));
-        
-        
-        //this.addPlane(new Plane("Plane zwei", 'resource'));
+
     }
 
-    public getPlanes() {
+    /**
+     * Returning all registered planes
+     */
+    public getPlanes(): Plane[] {
         return this.planes;
     }
 
-    public addPlane(plane) {
+    /**
+     * Adding a new @see{Plane} object
+     * @param {Plane}
+     */
+    public addPlane(plane): void {
         this.planes.push(plane);
     }
 
+    /**
+     * Calculating the bootstrap-grid classes, defined in the @see{GraphVisConfig}
+     * @returns string - classes
+     */
     public getGridClasses(): string {
         var c = GraphVisConfig.plane_grid;
         var out = "col-xs-" + (12 / c.xs) + " col-sm-" + (12 / c.sm) +

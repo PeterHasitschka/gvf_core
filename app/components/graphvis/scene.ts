@@ -2,12 +2,22 @@ import {GraphVisConfig} from './config';
 
 //const THREE = require('../../../node_modules/three/build/three.js');
 
+/**
+ * Container holding the THREE.js Scene
+ * Should act as an interface between the logic and THREE.js
+ * @author Peter Hasitschka
+ */
 export class GraphScene {
 
     private threeScene: THREE.Scene;
     private threeRenderer: THREE.WebGLRenderer;
     private threeCamera: THREE.Camera;
-
+    
+    /**
+     * @constructor of the GraphScene
+     * @param{HTMLMElement} container - Container to hold the canvas
+     * @param{Object} dimensions - Simple object holding 'x' and 'y' value, defining the size
+     */
     constructor(container: HTMLElement, dimensions: Object) {
 
         var config = GraphVisConfig.scene;
@@ -48,46 +58,6 @@ export class GraphScene {
         // attach the render-supplied DOM element
         container.appendChild(this.threeRenderer.domElement);
 
-
-        // set up the sphere vars
-        var radius = Math.random() * 100,
-            segments = 16,
-            rings = 16;
-
-
-        // create the sphere's material
-        var sphereMaterial =
-            new THREE.MeshLambertMaterial(
-                {
-                    color: 0xFF0000
-                });
-
-        // create a new mesh with
-        // sphere geometry - we will cover
-        // the sphereMaterial next!
-        var sphere = new THREE.Mesh(
-
-            new THREE.SphereGeometry(
-                radius,
-                segments,
-                rings),
-
-            sphereMaterial);
-
-        // add the sphere to the scene
-        this.threeScene.add(sphere);
-
-        // create a point light
-        var pointLight = new THREE.PointLight(0xFFFFFF);
-
-        // set its position
-        pointLight.position.x = 10;
-        pointLight.position.y = 50;
-        pointLight.position.z = 130;
-
-        // add to the scene
-        this.threeScene.add(pointLight);
-
         this.render();
     }
 
@@ -98,6 +68,7 @@ export class GraphScene {
     public render(): void {
         this.threeRenderer.render(this.threeScene, this.threeCamera);
     }
+
 
     public getThreeScene(): THREE.Scene {
         return this.threeScene;

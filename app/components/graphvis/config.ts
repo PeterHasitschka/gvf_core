@@ -1,5 +1,9 @@
 import {ResourceGraph} from './graphs/resourcegraph';
 
+/**
+ * Configurations related to the Graph Visualization
+ * @author Peter Hasitschka
+ */
 export class GraphVisConfig {
 
     public static scene = {

@@ -8,17 +8,33 @@ import {DataService} from '../../services/data.service';
     templateUrl: 'app/components/app/app.html',
     styleUrls: ['app/components/app/app.css']
 })
+/**
+ * Overall component loaded in the index.html (<afel-app/>)
+ * Defining the HTML/CSS Grid system and loading the @see{GraphworkspaceComponent} component
+ * @author Peter Hasitschka
+ */
 export class AppComponent {
-    @ViewChild(GraphworkspaceComponent) graphworkspace: GraphworkspaceComponent;
-    constructor() {
 
+    @ViewChild(GraphworkspaceComponent) graphworkspace: GraphworkspaceComponent;
+
+    /**
+     * Constructor
+     */
+    constructor() {
     }
 
+    /**
+     * Dummy action to create a dummy plane triggered by button.
+     * @todo: Remove if not necessary anymore
+     */
     addDummyPlane(): void {
         this.graphworkspace.addPlane(new Plane("Plane something " + Math.random(), 'resource'));
     }
 
-
+    /**
+     * Console.log the data from the @see{DataService} Service.
+     * @todo: Remove if not necessary anymore
+     */
     showData(): void {
         DataService.getInstance().getLearners().then(learners => {
             console.log("LEARNERS:", learners);

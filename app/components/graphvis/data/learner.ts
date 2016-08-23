@@ -1,15 +1,18 @@
-export class Learner {
+import {DataAbstract} from './abstract';
 
+/**
+ * Learner Data object
+ * Holding data of a single Learner
+ * @author Peter Hasitschka
+ */
+export class Learner extends DataAbstract {
     private static idCounter = 0;
 
-    private id: number;
-    constructor(private data: Object) {
+    constructor(data: Object) {
+        super(data);
+
         this.id = Learner.idCounter;
         Learner.idCounter++;
     }
 
-
-    public getId(): number {
-        return this.id;
-    }
 }

@@ -5,6 +5,11 @@ import {DataService} from '../../../services/data.service';
 
 import {NodeSimple} from './nodes/simple';
 
+/**
+ * The resource graph shows relations between Learning-Resources
+ * Thus its Data consists of @see{Resource} data objects.
+ * @author Peter Hasitschka
+ */
 export class ResourceGraph extends GraphAbstract {
 
     protected data: Resource[];
@@ -16,8 +21,17 @@ export class ResourceGraph extends GraphAbstract {
         plane.getGraphScene().render();
     }
 
+    /**
+     * Init method. Super class calls loadData()
+     * @todo: Fill with graph creation
+     */
+    public init(): void {
+        super.init();
 
-    loadData(): void {
+    }
+
+
+    protected loadData(): void {
         DataService.getInstance().getResources().then(rs => {
             this.data = rs;
             console.log("Resource Data Loaded", this.data);
