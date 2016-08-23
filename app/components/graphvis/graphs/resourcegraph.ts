@@ -12,15 +12,15 @@ export class ResourceGraph extends GraphAbstract {
         super(plane);
 
         var node = new NodeSimple();
-        //plane.getGraphScene().getThreeScene().add(node);
-        alert("TODO: Fix getGraphScene Constructor problem (resourcegraph.ts");
+        plane.getGraphScene().getThreeScene().add(node);
+        plane.getGraphScene().render();
     }
 
 
     loadData(): void {
         DataService.getInstance().getResources().then(rs => {
             this.data = rs;
-            console.log("Resource Data Loaded");
+            console.log("Resource Data Loaded", this.data);
         });
     }
 }

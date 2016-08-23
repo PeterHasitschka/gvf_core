@@ -5,7 +5,8 @@ import {GraphVisConfig} from './config';
 export class GraphScene {
 
     private threeScene: THREE.Scene;
-
+    private threeRenderer: THREE.WebGLRenderer;
+    private threeCamera: THREE.Camera;
 
     constructor(container: HTMLElement, dimensions: Object) {
 
@@ -23,8 +24,8 @@ export class GraphScene {
 
         // create a WebGL renderer, camera
         // and a scene
-        var renderer = new THREE.WebGLRenderer({ alpha: true });
-        var camera = new THREE.PerspectiveCamera(
+        this.threeRenderer = new THREE.WebGLRenderer({ alpha: true });
+        this.threeCamera = new THREE.PerspectiveCamera(
             VIEW_ANGLE,
             ASPECT,
             NEAR,
@@ -34,18 +35,18 @@ export class GraphScene {
         this.threeScene = new THREE.Scene();
 
         // add the camera to the scene
-        this.threeScene.add(camera);
+        this.threeScene.add(this.threeCamera);
 
         // the camera starts at 0,0,0
         // so pull it back
-        camera.position.z = config.camera.z;
+        this.threeCamera.position.z = config.camera.z;
 
         // start the renderer
-        renderer.setSize(canvasW, canvasH);
-        renderer.setClearColor(0xffffff, 0);
+        this.threeRenderer.setSize(canvasW, canvasH);
+        this.threeRenderer.setClearColor(0xffffff, 0);
 
         // attach the render-supplied DOM element
-        container.appendChild(renderer.domElement);
+        container.appendChild(this.threeRenderer.domElement);
 
 
         // set up the sphere vars
@@ -87,11 +88,22 @@ export class GraphScene {
         // add to the scene
         this.threeScene.add(pointLight);
 
-        renderer.render(this.threeScene, camera);
+        this.render();
     }
 
 
+    /**
+     * Call the 'render' method of the THREE Renderer
+     */
+    public render(): void {
+        this.threeRenderer.render(this.threeScene, this.threeCamera);
+    }
+
     public getThreeScene(): THREE.Scene {
         return this.threeScene;
+    }
+
+    public getThreeRenderer(): THREE.WebGLRenderer {
+        return this.threeRenderer;
     }
 }
