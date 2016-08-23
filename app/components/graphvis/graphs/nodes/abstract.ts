@@ -9,12 +9,15 @@ import {GraphVisConfig} from '../../config';
  */
 export abstract class NodeAbstract extends THREE.Mesh {
 
-    protected threeMaterial: THREE.Material;
+    protected threeMaterial: THREE.MeshBasicMaterial;
     protected threeGeometry: THREE.Geometry;
     protected zPos;
+    protected color: number;
     constructor(x: number, y: number) {
 
         var config = GraphVisConfig.nodes;
+
+        let color = config.abstractnode.color;
 
         var geometry = new THREE.CircleGeometry(
             config.abstractnode.size,
@@ -22,12 +25,12 @@ export abstract class NodeAbstract extends THREE.Mesh {
 
         var material = new THREE.MeshBasicMaterial(
             {
-                color: config.abstractnode.color
+                color: color
             });
 
         super(geometry, material);
 
-
+        this.color = color;
         this.threeGeometry = geometry;
         this.threeMaterial = material;
         this.zPos = config.abstractnode.z_pos;
@@ -37,6 +40,7 @@ export abstract class NodeAbstract extends THREE.Mesh {
 
         this.setPosition(x, y);
     }
+
 
 
     public setPosition(x: number, y: number): void {

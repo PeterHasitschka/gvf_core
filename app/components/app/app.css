@@ -6,6 +6,7 @@
 .mainrow {
     background:#24886B;
     color:white
+
 }
 
 #mainleftcol {
@@ -13,7 +14,8 @@
 }
 
 #mainmiddlecol {
-    background:#EDF8FF
+    background:#EDF8FF;
+    padding-bottom: 21px;        
 }
 
 #mainrightcol {

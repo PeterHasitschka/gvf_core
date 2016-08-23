@@ -1,9 +1,11 @@
+
+
 import {Plane} from '../../plane/plane';
 import {GraphAbstract} from './abstract';
 import {Resource} from '../data/resource';
 import {DataService} from '../../../services/data.service';
 
-import {NodeResource} from './nodes/resource';
+import {NodeLearner} from './nodes/learner';
 
 import {GraphLayoutRandom} from './layouts/random';
 
@@ -13,15 +15,15 @@ import {GraphLayoutRandom} from './layouts/random';
  * Thus its Data consists of @see{Resource} data objects.
  * @author Peter Hasitschka
  */
-export class ResourceGraph extends GraphAbstract {
+export class LearnerGraph extends GraphAbstract {
 
     protected data: Resource[];
     constructor(plane: Plane) {
         super(plane);
 
-        this.dataGetterMethod = DataService.getInstance().getResources.bind(DataService.getInstance());
+        this.dataGetterMethod = DataService.getInstance().getLearners.bind(DataService.getInstance());
         
-        this.nodetype = NodeResource;
+        this.nodetype = NodeLearner;
         this.layout = GraphLayoutRandom;
     }
 

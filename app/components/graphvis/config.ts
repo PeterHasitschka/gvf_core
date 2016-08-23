@@ -1,4 +1,5 @@
 import {ResourceGraph} from './graphs/resourcegraph';
+import {LearnerGraph} from './graphs/learnergraph';
 
 /**
  * Configurations related to the Graph Visualization
@@ -19,7 +20,7 @@ export class GraphVisConfig {
     }
 
     public static nodes = {
-        segments: 10,
+        segments: 32,
         abstractnode: {
             size: 7,
             color: 0xff00ff,
@@ -27,7 +28,10 @@ export class GraphVisConfig {
         },
 
         resourcenode: {
-
+            color: 0x0000ff
+        },
+        learnernode: {
+            color: 0x00aa00
         }
     }
 
@@ -38,13 +42,14 @@ export class GraphVisConfig {
     public static plane_grid = {
         xs: 1,
         sm: 1,
-        md: 1,
-        lg: 1
+        md: 2,
+        lg: 2
     }
 
 
     public static active_graphs = {
-        'resource': ResourceGraph
+        'resource': ResourceGraph,
+        'learner': LearnerGraph
     }
 
 

@@ -21,6 +21,7 @@ export class GraphworkspaceComponent {
 
         //Dummy plane
         this.addPlane(new Plane("Resource Graph", 'resource'));
+        this.addPlane(new Plane("Learner Graph", 'learner'));
 
     }
 
