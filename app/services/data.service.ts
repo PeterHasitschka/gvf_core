@@ -57,6 +57,12 @@ export class DataService {
         new Learner({ name: "Jörg", experience: Math.random() }),
         new Learner({ name: "Karl", experience: Math.random() }),
         new Learner({ name: "Sepp", experience: Math.random() }),
+        new Learner({ name: "Rüdiger", experience: Math.random() }),
+        new Learner({ name: "Fritz", experience: Math.random() }),
+        new Learner({ name: "Franz", experience: Math.random() }),
+        new Learner({ name: "Kurt", experience: Math.random() }),
+        new Learner({ name: "Peter", experience: Math.random() }),
+        new Learner({ name: "Lukas", experience: Math.random() }),
     ];
     private dummyResources = [
         new Resource({ title: "Algebra 1", complexity: Math.random() }),
@@ -73,6 +79,10 @@ export class DataService {
         new Activity({ type: "learning", learner_id: 0, resource_id: 3 }),
         new Activity({ type: "learning", learner_id: 1, resource_id: 1 }),
         new Activity({ type: "learning", learner_id: 1, resource_id: 3 }),
+        new Activity({ type: "communicating", learner1_id: 0, learner2_id: 1 }),
+        new Activity({ type: "communicating", learner1_id: 0, learner2_id: 3 }),
+        new Activity({ type: "communicating", learner1_id: 1, learner2_id: 2 }),
+        new Activity({ type: "communicating", learner1_id: 2, learner2_id: 3 }),
     ];
 
 

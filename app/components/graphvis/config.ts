@@ -22,7 +22,7 @@ export class GraphVisConfig {
     public static nodes = {
         segments: 32,
         abstractnode: {
-            size: 7,
+            size: 5,
             color: 0xff00ff,
             z_pos: 0.0
         },
