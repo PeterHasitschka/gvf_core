@@ -2,6 +2,10 @@ import {Injectable} from '@angular/core';
 import {Learner} from '../components/graphvis/data/learner'
 import {Resource} from '../components/graphvis/data/resource'
 import {Activity} from '../components/graphvis/data/activity'
+import {Http, Response} from '@angular/http';
+import 'rxjs/Rx';
+import {Observable} from "rxjs/Rx";
+
 
 @Injectable()
 /**
@@ -16,95 +20,101 @@ export class DataService {
     static isCreating:Boolean = false;
 
     private data:{
-        'leaners':[Learner],
-        'resources':[Resource],
-        'activities':[Activity]
+        learners:[Learner],
+        resources:[Resource],
+        activities:[Activity]
     };
 
-    constructor() {
+    constructor(private http:Http) {
+
+        this.data = {
+            learners: [],
+            resources: [],
+            activities: []
+        };
+
         if (!DataService.isCreating) {
             //throw new Error("You can't call new in Singleton instances!");
-            return DataService.getInstance();
+            return DataService.getInstance(http);
         }
     }
 
-    static getInstance() {
+    static getInstance(http) {
         if (DataService.instance == null) {
             console.log("CREATING DATASERVICE INSTANCE");
             DataService.isCreating = true;
-            DataService.instance = new DataService();
+            DataService.instance = new DataService(http);
             DataService.isCreating = false;
         }
         return DataService.instance;
     }
 
 
-    // fetchData():{
-    //     //
-    // }
-
-    getLearners():Promise<Learner[]> {
-        return Promise.resolve(this.getDummyLearners());
-    }
-
-    getResources():Promise<Resource[]> {
-        return Promise.resolve(this.getDummyResources());
-    }
-
-    getActivities():Promise<Activity[]> {
-        return Promise.resolve(this.getDummyActivities());
+    fetchData() {
+        console.log("Fetching learning-platform data from server...");
+        return this.fetchLearners()
+            .then(() => {
+                console.log("FETCH now res");
+                return this.fetchResources()
+            })
+            .then(() => {
+                console.log("FETCH now act");
+                return this.fetchActivities()
+            })
     }
 
 
-    /**
-     * Dummy data below!
-     */
-
-    private dummyLearners = [
-        new Learner({name: "Hans", experience: Math.random()}),
-        new Learner({name: "Werner", experience: Math.random()}),
-        new Learner({name: "Hubert", experience: Math.random()}),
-        new Learner({name: "Jörg", experience: Math.random()}),
-        new Learner({name: "Karl", experience: Math.random()}),
-        new Learner({name: "Sepp", experience: Math.random()}),
-        new Learner({name: "Rüdiger", experience: Math.random()}),
-        new Learner({name: "Fritz", experience: Math.random()}),
-        new Learner({name: "Franz", experience: Math.random()}),
-        new Learner({name: "Kurt", experience: Math.random()}),
-        new Learner({name: "Peter", experience: Math.random()}),
-        new Learner({name: "Lukas", experience: Math.random()}),
-    ];
-    private dummyResources = [
-        new Resource({title: "Algebra 1", complexity: Math.random()}),
-        new Resource({title: "Trigonometry", complexity: Math.random()}),
-        new Resource({title: "Algebra 2", complexity: Math.random()}),
-        new Resource({title: "Austrian History", complexity: Math.random()}),
-        new Resource({title: "European Politics", complexity: Math.random()}),
-        new Resource({title: "WWII", complexity: Math.random()}),
-        new Resource({title: "Classical Music", complexity: Math.random()}),
-    ];
-
-    private dummyActivities = [
-        new Activity({type: "learning", learner_id: 0, resource_id: 2}),
-        new Activity({type: "learning", learner_id: 0, resource_id: 3}),
-        new Activity({type: "learning", learner_id: 1, resource_id: 1}),
-        new Activity({type: "learning", learner_id: 1, resource_id: 3}),
-        new Activity({type: "communicating", learner1_id: 0, learner2_id: 1}),
-        new Activity({type: "communicating", learner1_id: 0, learner2_id: 3}),
-        new Activity({type: "communicating", learner1_id: 1, learner2_id: 2}),
-        new Activity({type: "communicating", learner1_id: 2, learner2_id: 3}),
-    ];
-
-
-    getDummyLearners():Learner[] {
-        return this.dummyLearners;
+    fetchLearners() {
+        console.log("Fetching learners data from server...");
+        return this.http.get('dummydata/dummy-learners.json')
+            .map(res => res.json())
+            .toPromise()
+            .then((r) => {
+                r.forEach((resultdata) => {
+                    let learner = new Learner(resultdata);
+                    this.data.learners.push(learner);
+                });
+                console.log("Fetched Learners:", this.data.learners);
+            });
     }
 
-    getDummyResources():Resource[] {
-        return this.dummyResources;
+    fetchResources() {
+        console.log("Fetching resource data from server...");
+        return this.http.get('dummydata/dummy-resources.json')
+            .map(res => res.json())
+            .toPromise()
+            .then((r) => {
+                r.forEach((resultdata) => {
+                    let resource = new Resource(resultdata);
+                    this.data.resources.push(resource);
+                });
+                console.log("Fetched Resources:", this.data.resources);
+            });
     }
 
-    getDummyActivities():Activity[] {
-        return this.dummyActivities;
+    fetchActivities() {
+        console.log("Fetching activities data from server...");
+        return this.http.get('dummydata/dummy-activities.json')
+            .map(res => res.json())
+            .toPromise()
+            .then((r) => {
+                r.forEach((resultdata) => {
+                    let act = new Activity(resultdata);
+                    this.data.activities.push(act);
+                });
+                console.log("Fetched Activties:", this.data.activities);
+            });
+    }
+
+    getLearners():Learner[] {
+        return this.data.learners;
+    }
+
+    getResources():Resource[] {
+        return this.data.resources;
+    }
+
+    getActivities():Activity[] {
+        return this.data.activities;
     }
 }

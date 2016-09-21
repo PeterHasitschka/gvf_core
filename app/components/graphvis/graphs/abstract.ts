@@ -14,36 +14,35 @@ export abstract class GraphAbstract {
     /**
      * The data of a specific type (learner, resource, ...) for this plane
      */
-    protected data: DataAbstract[];
+    protected data:DataAbstract[];
     protected dataGetterMethod;
 
-    protected nodetype: any;
-    protected layout: any;
-    protected nodes: NodeAbstract[];
+    protected nodetype:any;
+    protected layout:any;
+    protected nodes:NodeAbstract[];
 
 
-    constructor(protected plane: Plane) {
+    constructor(protected plane:Plane) {
         this.nodes = [];
     }
 
     /**
      * Init method for loading data and creating the layout and nodes
      */
-    public init(): void {
-        this.loadData(data => { this.afterLoad(data) });
+    public init():void {
+        this.loadData();
     }
 
 
     /**
-        * Called as callback after data was loaded asynchronously
-        * Nodes get created and stored in array
-        * Afterwards layout gets calculated by the defined layout class
-        * @param data - Array of data objects
-        */
-    protected afterLoad(data: DataAbstract[]): void {
-        this.data = data;
+     * Loading data with the defined getter method
+     * Nodes get created and stored in array
+     * Afterwards layout gets calculated by the defined layout class
+     */
+    protected loadData():void {
+        this.data = this.dataGetterMethod();
 
-        data.forEach(function(data: DataAbstract, index: number) {
+        this.data.forEach(function (data:DataAbstract, index:number) {
             let n = new this.nodetype(0, 0);
             this.plane.getGraphScene().getThreeScene().add(n);
             this.nodes.push(n);
@@ -51,17 +50,8 @@ export abstract class GraphAbstract {
         this.plane.getGraphScene().render();
 
         let layout = new this.layout(this.plane);
-        layout.calculatePositions(this.nodes, () => { this.plane.getGraphScene().render() });
-    }
-
-
-    /**
-     * Loading data with the defined getter method
-     * @param after_load Callback to perform after loading was completed
-     */
-    protected loadData(after_load): void {
-        this.dataGetterMethod().then(rs => {
-            after_load(rs);
+        layout.calculatePositions(this.nodes, () => {
+            this.plane.getGraphScene().render()
         });
     }
 }

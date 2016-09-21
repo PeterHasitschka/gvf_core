@@ -1,0 +1,54 @@
+[
+  {
+    "name": "Hans",
+    "experience": 42
+  },
+  {
+    "name": "Sepp",
+    "experience": 78
+  },
+  {
+    "name": "Werner",
+    "experience": 34
+  },
+  {
+    "name": "Hubert",
+    "experience": 67
+  },
+  {
+    "name": "Jörg",
+    "experience": 12
+  },
+  {
+    "name": "Karl",
+    "experience": 34
+  },
+  {
+    "name": "Sepp",
+    "experience": 35
+  },
+  {
+    "name": "Rüdiger",
+    "experience": 100
+  },
+  {
+    "name": "Fritz",
+    "experience": 36
+  },
+  {
+    "name": "Franz",
+    "experience": 14
+  },
+  {
+    "name": "Kurt",
+    "experience": 100
+  },
+  {
+    "name": "Peter",
+    "experience": 57
+  },
+  {
+    "name": "Lukas",
+    "experience": 78
+  }
+]

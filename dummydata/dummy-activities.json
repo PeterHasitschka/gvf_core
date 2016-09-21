@@ -1,0 +1,42 @@
+[
+  {
+    "type": "learning",
+    "learner_id": 0,
+    "resource_id": 2
+  },
+  {
+    "type": "learning",
+    "learner_id": 0,
+    "resource_id": 3
+  },
+  {
+    "type": "learning",
+    "learner_id": 1,
+    "resource_id": 1
+  },
+  {
+    "type": "learning",
+    "learner_id": 1,
+    "resource_id": 3
+  },
+  {
+    "type": "communicating",
+    "learner1_id": 0,
+    "learner2_id": 1
+  },
+  {
+    "type": "communicating",
+    "learner1_id": 0,
+    "learner2_id": 3
+  },
+  {
+    "type": "communicating",
+    "learner1_id": 1,
+    "learner2_id": 2
+  },
+  {
+    "type": "communicating",
+    "learner1_id": 2,
+    "learner2_id": 3
+  }
+]

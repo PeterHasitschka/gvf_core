@@ -26,10 +26,18 @@ export class GraphworkspaceComponent implements OnInit {
     ngOnInit():void {
 
         //Add two simple planes
+        this.dataService.fetchData().then(() => {
 
-        console.log("Creating two planes");
-        this.addPlane(new Plane("Resource Graph", 'resource'));
-        this.addPlane(new Plane("Learner Graph", 'learner'));
+            console.log(this.dataService.getLearners());
+            console.log(this.dataService.getResources());
+            console.log(this.dataService.getActivities());
+
+            console.log("Creating two planes");
+            this.addPlane(new Plane("Resource Graph", 'resource'));
+            this.addPlane(new Plane("Learner Graph", 'learner'));
+        });
+
+
     }
 
     /**

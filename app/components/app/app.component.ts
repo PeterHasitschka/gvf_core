@@ -37,17 +37,17 @@ export class AppComponent {
      * @todo: Remove if not necessary anymore
      */
     showData():void {
-        this.dataService.getLearners().then(learners => {
-                console.log("LEARNERS:", learners);
-            }
-        );
-        this.dataService.getResources().then(resources => {
-                console.log("RESOURCES:", resources);
-            }
-        );
-        this.dataService.getActivities().then(activities => {
-                console.log("ACTIVITIES:", activities);
-            }
-        );
+        // this.dataService.getLearners().then(learners => {
+        //         console.log("LEARNERS:", learners);
+        //     }
+        // );
+        // this.dataService.getResources().then(resources => {
+        //         console.log("RESOURCES:", resources);
+        //     }
+        // );
+        // this.dataService.getActivities().then(activities => {
+        //         console.log("ACTIVITIES:", activities);
+        //     }
+        // );
     }
 }
