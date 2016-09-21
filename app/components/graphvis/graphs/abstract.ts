@@ -42,16 +42,31 @@ export abstract class GraphAbstract {
     protected loadData():void {
         this.data = this.dataGetterMethod();
 
-        this.data.forEach(function (data:DataAbstract, index:number) {
-            let n = new this.nodetype(0, 0);
+        this.data.forEach((data:DataAbstract) => {
+            let n = new this.nodetype(0, 0, data);
             this.plane.getGraphScene().getThreeScene().add(n);
             this.nodes.push(n);
-        }.bind(this));
+        });
         this.plane.getGraphScene().render();
 
         let layout = new this.layout(this.plane);
         layout.calculatePositions(this.nodes, () => {
-            this.plane.getGraphScene().render()
+            this.plane.getGraphScene().render();
         });
+    }
+
+
+    protected getNodeByDataId(id:number):NodeAbstract {
+        let foundNode:NodeAbstract = null;
+        this.nodes.forEach((node:NodeAbstract) => {
+            if (foundNode)
+                return;
+            if (!node.getDataEntity())
+                return;
+            let data = node.getDataEntity();
+            if (data.getId() == id)
+                foundNode = node;
+        });
+        return foundNode;
     }
 }

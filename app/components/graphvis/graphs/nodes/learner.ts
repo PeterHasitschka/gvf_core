@@ -1,5 +1,6 @@
 import {NodeSimple} from './simple';
 import {GraphVisConfig} from '../../config';
+import {DataAbstract} from "../../data/abstract";
 
 /**
  * A Learner node, derived from @see{NodeSimple}
@@ -7,11 +8,9 @@ import {GraphVisConfig} from '../../config';
  */
 export class NodeLearner extends NodeSimple {
 
-    constructor(x: number, y: number) {
-        super(x, y);
-        
+    constructor(x:number, y:number, protected dataEntity:DataAbstract) {
+        super(x, y, dataEntity);
+
         this.setColor(GraphVisConfig.nodes.learnernode.color);
     }
-
-
 }

@@ -1,5 +1,7 @@
 import {NodeAbstract} from './abstract';
 import {GraphVisConfig} from '../../config';
+import {DataAbstract} from "../../data/abstract";
+import {Data} from "@angular/router";
 
 /**
  * A simple node, derived from @see{NodeAbstract}
@@ -7,7 +9,7 @@ import {GraphVisConfig} from '../../config';
  */
 export class NodeSimple extends NodeAbstract {
 
-    constructor(x: number, y: number) {
+    constructor(x: number, y: number, protected dataEntity:DataAbstract) {
         super(x, y);
     }
 

@@ -35,6 +35,13 @@ export class GraphVisConfig {
         }
     }
 
+    public static edges = {
+        abstractedge: {
+            color: 0xff0000,
+            z_pos: -1.0
+        }
+    }
+
     /**
      * Defines the numbers of planes in a row
      * depending on the bootstrap class

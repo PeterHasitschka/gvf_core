@@ -6,13 +6,12 @@ import {DataAbstract} from './abstract';
  * @author Peter Hasitschka
  */
 export class Learner extends DataAbstract {
-    private static idCounter = 0;
 
-    constructor(data: Object) {
+    protected static dataList:Learner[] = [];
+
+    constructor(protected data: Object) {
         super(data);
-
-        this.id = Learner.idCounter;
-        Learner.idCounter++;
+        Learner.dataList.push(this);
     }
 
 }

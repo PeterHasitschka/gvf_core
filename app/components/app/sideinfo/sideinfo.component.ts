@@ -1,5 +1,4 @@
-import { Component, Input } from '@angular/core';
-
+import {Component, Input} from '@angular/core';
 
 
 @Component({
@@ -12,10 +11,10 @@ import { Component, Input } from '@angular/core';
  */
 export class SideInfoComponent {
 
-    public title: string;
-    public text: string;
-    @Input() identifier: string;
-    @Input() title: string;
+    public text:string;
+    @Input() identifier:string;
+    @Input() title:string;
+
     constructor() {
         this.text = "text";
     }

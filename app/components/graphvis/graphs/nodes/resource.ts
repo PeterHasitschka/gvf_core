@@ -1,5 +1,6 @@
 import {NodeSimple} from './simple';
 import {GraphVisConfig} from '../../config';
+import {DataAbstract} from "../../data/abstract";
 
 /**
  * A Resource node, derived from @see{NodeSimple}
@@ -7,9 +8,9 @@ import {GraphVisConfig} from '../../config';
  */
 export class NodeResource extends NodeSimple {
 
-    constructor(x: number, y: number) {
-        super(x, y);
-        
+    constructor(x: number, y: number, protected dataEntity:DataAbstract) {
+        super(x, y, dataEntity);
+
         this.setColor(GraphVisConfig.nodes.resourcenode.color);
     }
 

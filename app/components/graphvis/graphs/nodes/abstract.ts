@@ -1,4 +1,5 @@
 import {GraphVisConfig} from '../../config';
+import {DataAbstract} from "../../data/abstract";
 
 
 /**
@@ -9,11 +10,13 @@ import {GraphVisConfig} from '../../config';
  */
 export abstract class NodeAbstract extends THREE.Mesh {
 
-    protected threeMaterial: THREE.MeshBasicMaterial;
-    protected threeGeometry: THREE.Geometry;
+    protected threeMaterial:THREE.MeshBasicMaterial;
+    protected threeGeometry:THREE.Geometry;
     protected zPos;
-    protected color: number;
-    constructor(x: number, y: number) {
+    protected color:number;
+    protected dataEntity:DataAbstract;
+
+    constructor(x:number, y:number) {
 
         var config = GraphVisConfig.nodes;
 
@@ -42,9 +45,16 @@ export abstract class NodeAbstract extends THREE.Mesh {
     }
 
 
-
-    public setPosition(x: number, y: number): void {
+    public setPosition(x:number, y:number):void {
         this.position.setX(x);
         this.position.setY(y);
+    }
+
+    public getPosition():THREE.Vector3 {
+        return this.position;
+    }
+
+    public getDataEntity():DataAbstract {
+        return this.dataEntity;
     }
 }

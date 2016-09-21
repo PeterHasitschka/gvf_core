@@ -21,13 +21,13 @@
     "id": 3,
     "type": "learning",
     "learner_id": 1,
-    "resource_id": 3
+    "resource_id": 2
   },
   {
-    "id": 4,
-    "type": "communicating",
-    "learner1_id": 0,
-    "learner2_id": 1
+    "id": 3,
+    "type": "learning",
+    "learner_id": 1,
+    "resource_id": 3
   },
   {
     "id": 5,
@@ -52,5 +52,29 @@
     "type": "communicating",
     "learner1_id": 9,
     "learner2_id": 11
+  },
+  {
+    "id": 9,
+    "type": "learning",
+    "learner_id": 7,
+    "resource_id": 3
+  },
+  {
+    "id": 10,
+    "type": "learning",
+    "learner_id": 7,
+    "resource_id": 1
+  },
+  {
+    "id": 11,
+    "type": "learning",
+    "learner_id": 9,
+    "resource_id": 1
+  },
+  {
+    "id": 12,
+    "type": "learning",
+    "learner_id": 9,
+    "resource_id": 6
   }
 ]

@@ -6,13 +6,19 @@ import {DataAbstract} from './abstract';
  * @author Peter Hasitschka
  */
 export class Activity extends DataAbstract {
-    private static idCounter = 0;
 
-    constructor(data: Object) {
+    protected static dataList:Activity[] = [];
+
+    public static TYPE_LEARNING = "learning";
+    public static TYPE_COMMUNICATING = "communicating";
+
+    constructor(protected data:Object) {
         super(data);
+        Activity.dataList.push(this);
+    }
 
-        this.id = Activity.idCounter;
-        Activity.idCounter++;
+    public getType():string {
+        return this.data["type"];
     }
 
 }

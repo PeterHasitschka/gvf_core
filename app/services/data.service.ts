@@ -2,10 +2,10 @@ import {Injectable} from '@angular/core';
 import {Learner} from '../components/graphvis/data/learner'
 import {Resource} from '../components/graphvis/data/resource'
 import {Activity} from '../components/graphvis/data/activity'
-import {Http, Response} from '@angular/http';
-import 'rxjs/Rx';
-import {Observable} from "rxjs/Rx";
+import {Http} from '@angular/http';
 
+import 'rxjs/add/operator/map'
+import 'rxjs/add/operator/toPromise'
 
 @Injectable()
 /**
@@ -19,11 +19,7 @@ export class DataService {
     static instance:DataService;
     static isCreating:Boolean = false;
 
-    private data:{
-        learners:[Learner],
-        resources:[Resource],
-        activities:[Activity]
-    };
+    private data;
 
     constructor(private http:Http) {
 
@@ -39,7 +35,7 @@ export class DataService {
         }
     }
 
-    static getInstance(http) {
+    static getInstance(http?) {
         if (DataService.instance == null) {
             DataService.isCreating = true;
             DataService.instance = new DataService(http);
