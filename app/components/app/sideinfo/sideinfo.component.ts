@@ -15,8 +15,8 @@ export class SideInfoComponent {
     public title: string;
     public text: string;
     @Input() identifier: string;
+    @Input() title: string;
     constructor() {
-        this.title = "title";
         this.text = "text";
     }
 }

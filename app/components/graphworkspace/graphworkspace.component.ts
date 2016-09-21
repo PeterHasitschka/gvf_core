@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
+import {OnInit} from '@angular/core';
 import {Plane} from '../plane/plane';
 import {GraphVisConfig} from '../graphvis/config';
 
@@ -11,24 +12,28 @@ import {GraphVisConfig} from '../graphvis/config';
  * Responsible for managing, adding, and removing them.
  * @author Peter Hasitschka
  */
-export class GraphworkspaceComponent {
+export class GraphworkspaceComponent implements OnInit {
 
-    private planes: Plane[];
+    private planes:Plane[];
 
 
     constructor() {
         this.planes = [];
 
-        //Dummy plane
+    }
+
+    ngOnInit():void {
+
+        //Add two simple planes
+        console.log("Creating two planes");
         this.addPlane(new Plane("Resource Graph", 'resource'));
         this.addPlane(new Plane("Learner Graph", 'learner'));
-
     }
 
     /**
      * Returning all registered planes
      */
-    public getPlanes(): Plane[] {
+    public getPlanes():Plane[] {
         return this.planes;
     }
 
@@ -36,7 +41,7 @@ export class GraphworkspaceComponent {
      * Adding a new @see{Plane} object
      * @param {Plane}
      */
-    public addPlane(plane): void {
+    public addPlane(plane):void {
         this.planes.push(plane);
     }
 
@@ -44,7 +49,7 @@ export class GraphworkspaceComponent {
      * Calculating the bootstrap-grid classes, defined in the @see{GraphVisConfig}
      * @returns string - classes
      */
-    public getGridClasses(): string {
+    public getGridClasses():string {
         var c = GraphVisConfig.plane_grid;
         var out = "col-xs-" + (12 / c.xs) + " col-sm-" + (12 / c.sm) +
             " col-md-" + (12 / c.md) + " col-lg-" + (12 / c.lg);
