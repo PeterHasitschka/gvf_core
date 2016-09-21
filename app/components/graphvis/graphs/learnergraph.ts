@@ -1,5 +1,3 @@
-
-
 import {Plane} from '../../plane/plane';
 import {GraphAbstract} from './abstract';
 import {Resource} from '../data/resource';
@@ -17,12 +15,13 @@ import {GraphLayoutRandom} from './layouts/random';
  */
 export class LearnerGraph extends GraphAbstract {
 
-    protected data: Resource[];
-    constructor(plane: Plane) {
+    protected data:Resource[];
+
+    constructor(plane:Plane, private dataService:DataService) {
         super(plane);
 
         this.dataGetterMethod = DataService.getInstance().getLearners.bind(DataService.getInstance());
-        
+
         this.nodetype = NodeLearner;
         this.layout = GraphLayoutRandom;
     }
@@ -31,7 +30,7 @@ export class LearnerGraph extends GraphAbstract {
      * Init method. Super class calls loadData()
      * After loading data the afterLoad callback is called
      */
-    public init(): void {
+    public init():void {
         super.init();
     }
 

@@ -15,12 +15,13 @@ import {GraphLayoutRandom} from './layouts/random';
  */
 export class ResourceGraph extends GraphAbstract {
 
-    protected data: Resource[];
-    constructor(plane: Plane) {
+    protected data:Resource[];
+
+    constructor(plane:Plane) {
         super(plane);
 
         this.dataGetterMethod = DataService.getInstance().getResources.bind(DataService.getInstance());
-        
+
         this.nodetype = NodeResource;
         this.layout = GraphLayoutRandom;
     }
@@ -29,7 +30,7 @@ export class ResourceGraph extends GraphAbstract {
      * Init method. Super class calls loadData()
      * After loading data the afterLoad callback is called
      */
-    public init(): void {
+    public init():void {
         super.init();
     }
 
