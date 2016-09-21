@@ -41,7 +41,6 @@ export class DataService {
 
     static getInstance(http) {
         if (DataService.instance == null) {
-            console.log("CREATING DATASERVICE INSTANCE");
             DataService.isCreating = true;
             DataService.instance = new DataService(http);
             DataService.isCreating = false;
@@ -54,11 +53,9 @@ export class DataService {
         console.log("Fetching learning-platform data from server...");
         return this.fetchLearners()
             .then(() => {
-                console.log("FETCH now res");
                 return this.fetchResources()
             })
             .then(() => {
-                console.log("FETCH now act");
                 return this.fetchActivities()
             })
     }
