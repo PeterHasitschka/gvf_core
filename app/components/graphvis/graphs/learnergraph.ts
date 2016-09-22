@@ -8,6 +8,7 @@ import {NodeLearner} from './nodes/learner';
 import {GraphLayoutRandom} from './layouts/random';
 import {InterGraphEventService, INTERGRAPH_EVENTS} from "../../../services/intergraphevents.service";
 import {NodeResource} from "./nodes/resource";
+import {Learner} from "../data/learner";
 
 
 /**
@@ -29,9 +30,21 @@ export class LearnerGraph extends GraphAbstract {
 
 
         InterGraphEventService.getInstance().addListener(INTERGRAPH_EVENTS.RESOURCE_NODE_HOVERED, function (e) {
+
+            this.nodes.forEach((n:NodeLearner) => {
+                n.deHighlightNode();
+            });
+
             let node:NodeResource = e.detail;
-            console.log("I AM THE LEARNER GRAPH, JUST REGISTERED AN RESOURCE-HOVER EVENT ON ITS NODE " + node.getDataEntity().getId());
-        });
+            let affectedLearners:Learner[] = Learner.getLearnersByResource(node.getDataEntity());
+            affectedLearners.forEach((l:Learner) => {
+                let affectedLearnerNodes = this.getNodeByDataEntity(l);
+                affectedLearnerNodes.forEach((n:NodeLearner) => {
+                    n.highlightNode();
+                })
+            });
+
+        }.bind(this));
     }
 
     /**

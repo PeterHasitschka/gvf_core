@@ -1,4 +1,6 @@
 import {DataAbstract} from './abstract';
+import {Resource} from "./resource";
+import {Activity} from "./activity";
 
 /**
  * Learner Data object
@@ -14,4 +16,21 @@ export class Learner extends DataAbstract {
         Learner.dataList.push(this);
     }
 
+
+    public static getLearnersByResource(resource:Resource):Learner[]{
+
+        let outList:Learner[] = [];
+        Activity.getDataList().forEach((activitiy:Activity) => {
+            if (activitiy.getType() !== Activity.TYPE_LEARNING)
+                return;
+            if(activitiy.getData(Activity.RESOURCE_ID) === resource.getId())
+                outList.push(Learner.getObject(activitiy.getData(Activity.LEARNER_ID)));
+        });
+
+        return outList;
+    }
+
+    public static getDataList():Learner[]{
+        return Learner.dataList;
+    }
 }

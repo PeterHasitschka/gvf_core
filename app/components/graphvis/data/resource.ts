@@ -14,4 +14,9 @@ export class Resource extends DataAbstract {
         Resource.dataList.push(this);
     }
 
+
+    public static getDataList():Resource[] {
+        return Resource.dataList;
+    }
+
 }

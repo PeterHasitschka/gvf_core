@@ -34,4 +34,8 @@ export abstract class DataAbstract {
         })
         return foundObj;
     }
+
+    public static getDataList():DataAbstract[]{
+        return DataAbstract.dataList;
+    }
 }

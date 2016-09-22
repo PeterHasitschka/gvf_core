@@ -11,6 +11,10 @@ export class Activity extends DataAbstract {
 
     public static TYPE_LEARNING = "learning";
     public static TYPE_COMMUNICATING = "communicating";
+    public static RESOURCE_ID = "resource_id";
+    public static LEARNER_ID = "learner_id";
+    public static LEARNER1_ID = "learner1_id";
+    public static LEARNER2_ID = "learner2_id";
 
     constructor(protected data:Object) {
         super(data);
@@ -19,6 +23,10 @@ export class Activity extends DataAbstract {
 
     public getType():string {
         return this.data["type"];
+    }
+
+    public static getDataList():Activity[]{
+        return Activity.dataList;
     }
 
 }

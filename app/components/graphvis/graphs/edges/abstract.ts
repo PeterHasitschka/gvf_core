@@ -40,11 +40,11 @@ export abstract class EdgeAbstract extends THREE.Line implements GraphObject{
 
 
     public onIntersectStart():void{
-        console.log("Intersected an edge");
+        //console.log("Intersected an edge");
     }
 
     public onIntersectLeave():void{
-        console.log("UN-Intersected an edge");
+        //console.log("UN-Intersected an edge");
     }
 }
 

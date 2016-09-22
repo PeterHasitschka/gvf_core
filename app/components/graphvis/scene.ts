@@ -18,7 +18,6 @@ export class GraphScene {
     private mouseInteractions:MouseInteractions;
 
 
-
     /**
      * @constructor of the GraphScene
      * @param{HTMLMElement} container - Container to hold the canvas
@@ -34,7 +33,7 @@ export class GraphScene {
 
         // create a WebGL renderer, camera
         // and a scene
-        this.threeRenderer = new THREE.WebGLRenderer({alpha: true});
+        this.threeRenderer = new THREE.WebGLRenderer({alpha: true, antialias: true});
 
 
         this.threeCamera = new THREE.OrthographicCamera(

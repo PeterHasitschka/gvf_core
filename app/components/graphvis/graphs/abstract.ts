@@ -71,4 +71,15 @@ export abstract class GraphAbstract {
         });
         return foundNode;
     }
+
+
+    protected getNodeByDataEntity(entity:DataAbstract):NodeAbstract[] {
+
+        let out:NodeAbstract[] = [];
+        this.nodes.forEach((node:NodeAbstract) => {
+            if (node.getDataEntity().getId() === entity.getId())
+                out.push(node);
+        });
+        return out;
+    }
 }

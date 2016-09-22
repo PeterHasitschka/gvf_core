@@ -53,8 +53,8 @@ export class ResourceGraph extends GraphAbstract {
         activities.forEach((activity:Activity) => {
             if (activity.getType() !== Activity.TYPE_LEARNING)
                 return;
-            let rId = activity.getData('resource_id');
-            let lId = activity.getData('learner_id');
+            let rId = activity.getData(Activity.RESOURCE_ID);
+            let lId = activity.getData(Activity.LEARNER_ID);
             if (typeof learnings[lId] == 'undefined')
                 learnings[lId] = [];
             learnings[lId].push(rId);

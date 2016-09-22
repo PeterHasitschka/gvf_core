@@ -17,8 +17,6 @@ export class NodeResource extends NodeSimple {
     }
 
     public onIntersectStart():void {
-
-        console.log("resource node");
         super.onIntersectStart();
     }
 

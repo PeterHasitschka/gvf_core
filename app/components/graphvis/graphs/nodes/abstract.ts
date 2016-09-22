@@ -63,13 +63,22 @@ export abstract class NodeAbstract extends THREE.Mesh implements GraphObject {
         return this.dataEntity;
     }
 
+
+    public highlightNode() {
+        this.threeMaterial.color.setHex(this.highlightColor);
+    }
+
+    public deHighlightNode() {
+        this.threeMaterial.color.setHex(this.color);
+    }
+
     public onIntersectStart():void {
         //console.log("Intersected a node " + this.dataEntity.getId());
-        this.threeMaterial.color.setHex(this.highlightColor);
+        this.highlightNode();
     }
 
     public onIntersectLeave():void {
         //console.log("UN-Intersected a node " + this.dataEntity.getId());
-        this.threeMaterial.color.setHex(this.color);
+        this.deHighlightNode();
     }
 }

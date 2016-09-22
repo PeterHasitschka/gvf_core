@@ -15,13 +15,13 @@ export class SideInfoComponent implements OnInit {
     @Input() private infomodel:SideInfoModel
 
     public types;
+
     constructor() {
         //Necessary since template can't handle global enums
         this.types = SideInfoContentType;
     }
 
     ngOnInit():void {
-        console.log(this.infomodel);
-
+        //console.log(this.infomodel);
     }
 }
