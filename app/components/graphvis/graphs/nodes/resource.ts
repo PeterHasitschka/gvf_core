@@ -17,11 +17,12 @@ export class NodeResource extends NodeSimple {
     }
 
     public onIntersectStart():void {
+        InterGraphEventService.getInstance().send(INTERGRAPH_EVENTS.RESOURCE_NODE_HOVERED, this);
         super.onIntersectStart();
     }
 
     public onIntersectLeave():void {
-        InterGraphEventService.getInstance().send(INTERGRAPH_EVENTS.RESOURCE_NODE_HOVERED, this);
+        InterGraphEventService.getInstance().send(INTERGRAPH_EVENTS.RESOURCE_NODE_LEFT, this);
         super.onIntersectLeave();
     }
 }

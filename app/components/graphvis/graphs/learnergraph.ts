@@ -28,13 +28,7 @@ export class LearnerGraph extends GraphAbstract {
         this.nodetype = NodeLearner;
         this.layout = GraphLayoutRandom;
 
-
         InterGraphEventService.getInstance().addListener(INTERGRAPH_EVENTS.RESOURCE_NODE_HOVERED, function (e) {
-
-            this.nodes.forEach((n:NodeLearner) => {
-                n.deHighlightNode();
-            });
-
             let node:NodeResource = e.detail;
             let affectedLearners:Learner[] = Learner.getLearnersByResource(node.getDataEntity());
             affectedLearners.forEach((l:Learner) => {
@@ -43,8 +37,15 @@ export class LearnerGraph extends GraphAbstract {
                     n.highlightNode();
                 })
             });
-
         }.bind(this));
+
+
+        InterGraphEventService.getInstance().addListener(INTERGRAPH_EVENTS.RESOURCE_NODE_LEFT, function (e) {
+            this.nodes.forEach((n:NodeLearner) => {
+                n.deHighlightNode();
+            });
+        }.bind(this));
+
     }
 
     /**
