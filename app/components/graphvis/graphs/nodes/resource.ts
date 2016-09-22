@@ -1,6 +1,7 @@
 import {NodeSimple} from './simple';
 import {GraphVisConfig} from '../../config';
 import {DataAbstract} from "../../data/abstract";
+import {InterGraphEventService, INTERGRAPH_EVENTS} from "../../../../services/intergraphevents.service";
 
 /**
  * A Resource node, derived from @see{NodeSimple}
@@ -16,12 +17,13 @@ export class NodeResource extends NodeSimple {
     }
 
     public onIntersectStart():void {
+
         console.log("resource node");
         super.onIntersectStart();
     }
 
     public onIntersectLeave():void {
-
+        InterGraphEventService.getInstance().send(INTERGRAPH_EVENTS.RESOURCE_NODE_HOVERED, this);
         super.onIntersectLeave();
     }
 }

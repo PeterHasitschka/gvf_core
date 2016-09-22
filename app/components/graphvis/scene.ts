@@ -1,6 +1,7 @@
 import {GraphVisConfig} from './config';
 import {MouseInteractions} from "./Mouseinteractions";
 
+
 //const THREE = require('../../../node_modules/three/build/three.js');
 
 /**
@@ -15,6 +16,8 @@ export class GraphScene {
     private threeCamera:THREE.Camera;
     private threeRaycaster:THREE.Raycaster;
     private mouseInteractions:MouseInteractions;
+
+
 
     /**
      * @constructor of the GraphScene
@@ -95,4 +98,5 @@ export class GraphScene {
     public getThreeRenderer():THREE.WebGLRenderer {
         return this.threeRenderer;
     }
+
 }

@@ -7,12 +7,13 @@ import {SideInfoModel, SideInfoPositions, SideInfoContentType} from "./sideinfo/
 import {Subscription} from "rxjs/Rx";
 
 import {SideInfoPositionPipe} from "./sideinfo/contentmodels/sideinfopipe";
+import {InterGraphEventService} from "../../services/intergraphevents.service";
 
 @Component({
     selector: 'afel-app',
     templateUrl: 'app/components/app/app.html',
     styleUrls: ['app/components/app/app.css'],
-    providers: [DataService, UiService]
+    providers: [DataService, UiService, InterGraphEventService]
 })
 /**
  * Overall component loaded in the index.html (<afel-app/>)

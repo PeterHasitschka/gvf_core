@@ -12,6 +12,7 @@ import {EdgeAbstract} from "./edges/abstract";
 import {NodeAbstract} from "./nodes/abstract";
 
 
+
 /**
  * The resource graph shows relations between Learning-Resources
  * Thus its Data consists of @see{Resource} data objects.
@@ -29,6 +30,8 @@ export class ResourceGraph extends GraphAbstract {
 
         this.nodetype = NodeResource;
         this.layout = GraphLayoutRandom;
+
+
     }
 
     /**

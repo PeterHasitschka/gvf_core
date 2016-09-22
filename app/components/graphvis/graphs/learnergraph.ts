@@ -6,6 +6,8 @@ import {DataService} from '../../../services/data.service';
 import {NodeLearner} from './nodes/learner';
 
 import {GraphLayoutRandom} from './layouts/random';
+import {InterGraphEventService, INTERGRAPH_EVENTS} from "../../../services/intergraphevents.service";
+import {NodeResource} from "./nodes/resource";
 
 
 /**
@@ -24,6 +26,12 @@ export class LearnerGraph extends GraphAbstract {
 
         this.nodetype = NodeLearner;
         this.layout = GraphLayoutRandom;
+
+
+        InterGraphEventService.getInstance().addListener(INTERGRAPH_EVENTS.RESOURCE_NODE_HOVERED, function (e) {
+            let node:NodeResource = e.detail;
+            console.log("I AM THE LEARNER GRAPH, JUST REGISTERED AN RESOURCE-HOVER EVENT ON ITS NODE " + node.getDataEntity().getId());
+        });
     }
 
     /**
