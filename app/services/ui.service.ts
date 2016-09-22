@@ -1,24 +1,30 @@
 import {Injectable} from "@angular/core";
 import {SideInfoComponent} from "../components/app/sideinfo/sideinfo.component";
-import {SideInfoModel} from "../components/app/sideinfo/sideinfomodel";
+import {SideInfoModel, SideInfoPositions} from "../components/app/sideinfo/sideinfomodel";
+import {BehaviorSubject} from "rxjs/Rx";
+
+
 @Injectable()
 /**
  * Service for allowing the UI elements to communicate.
+ * Optional singleton concept => Usage in non-components (where injection does not work): DataService.getInstance()
  * @author Peter Hasitschka
  */
 export class UiService {
 
-    private sideInfoElements:SideInfoModel[];
+    public sideInfoElements:SideInfoModel[];
 
     constructor() {
 
-        console.log("Created UI SERVICE");
         this.sideInfoElements = [];
+        console.log("Created UI SERVICE");
     }
 
 
     addSideInfoElement(sideInfo:SideInfoModel) {
-        this.sideInfoElements.push(sideInfo);
+        window.setTimeout(function () {
+            this.sideInfoElements.push(sideInfo);
+        }.bind(this));
     }
 
     getSideInfoElements():SideInfoModel[] {

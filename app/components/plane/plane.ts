@@ -3,6 +3,7 @@ import {GraphScene} from '../graphvis/scene';
 import {Learner} from '../graphvis/data/learner';
 import {GraphVisConfig} from '../graphvis/config';
 import {GraphAbstract} from '../graphvis/graphs/abstract';
+import {UiService} from "../../services/ui.service";
 
 /**
  * The Plane Object holds the @see{GraphScene} element and connects to the
@@ -23,7 +24,7 @@ export class Plane {
      * @param{string} name - Defining the graph's name
      * @param{string} graphtype - @see{GraphVisConfig} for possible strings
      */
-    constructor(private name:string, private graphtype:string) {
+    constructor(private name:string, private graphtype:string, public uiService:UiService) {
 
     }
 

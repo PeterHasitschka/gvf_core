@@ -3,6 +3,7 @@ import {OnInit} from '@angular/core';
 import {Plane} from '../plane/plane';
 import {GraphVisConfig} from '../graphvis/config';
 import {DataService} from "../../services/data.service";
+import {UiService} from "../../services/ui.service";
 
 @Component({
     selector: 'graphworkspace',
@@ -18,7 +19,7 @@ export class GraphworkspaceComponent implements OnInit {
     private planes:Plane[];
 
 
-    constructor(private dataService:DataService) {
+    constructor(private dataService:DataService, private uiService:UiService) {
         this.planes = [];
 
     }
@@ -29,8 +30,8 @@ export class GraphworkspaceComponent implements OnInit {
         this.dataService.fetchData().then(() => {
 
             console.log("Creating two basic planes");
-            this.addPlane(new Plane("Resource Graph", 'resource'));
-            this.addPlane(new Plane("Learner Graph", 'learner'));
+            this.addPlane(new Plane("Resource Graph", 'resource', this.uiService));
+            this.addPlane(new Plane("Learner Graph", 'learner', this.uiService));
         });
 
 

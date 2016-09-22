@@ -1,9 +1,12 @@
-import {Component, ViewChild} from '@angular/core';
+import {Component, ViewChild, OnInit} from '@angular/core';
 import {Plane} from '../plane/plane';
 import {GraphworkspaceComponent} from '../graphworkspace/graphworkspace.component';
 import {DataService} from '../../services/data.service';
 import {UiService} from "../../services/ui.service";
 import {SideInfoModel, SideInfoPositions, SideInfoContentType} from "./sideinfo/sideinfomodel";
+import {Subscription} from "rxjs/Rx";
+
+import {SideInfoPositionPipe} from "./sideinfo/contentmodels/sideinfopipe";
 
 @Component({
     selector: 'afel-app',
@@ -16,21 +19,31 @@ import {SideInfoModel, SideInfoPositions, SideInfoContentType} from "./sideinfo/
  * Defining the HTML/CSS Grid system and loading the @see{GraphworkspaceComponent} component
  * @author Peter Hasitschka
  */
-export class AppComponent {
+export class AppComponent implements OnInit {
 
     @ViewChild(GraphworkspaceComponent) graphworkspace:GraphworkspaceComponent;
+
+    private posEnum;
+    // private sideInfoElements;
+    // private sideInfoSubscription:Subscription;
 
     /**
      * Constructor
      */
     constructor(private dataService:DataService, private uiService:UiService) {
 
-        this.uiService.addSideInfoElement(new SideInfoModel(
-            "testLeftGraph",
-            SideInfoPositions.Left,
-            SideInfoContentType.GraphSettings
-            )
-        );
+        //this.sideInfoElements = this.uiService.sideInfoElements;
+
+        // this.sideInfoSubscription = this.uiService.sideInfoEvent.subscribe((data)=> {
+        //     console.log(data);
+        //     this.sideInfoElements = data;
+        // });
+
+        this.posEnum = SideInfoPositions;
+    }
+
+
+    ngOnInit() {
         this.uiService.addSideInfoElement(new SideInfoModel(
             "Prototype",
             SideInfoPositions.Left,
@@ -39,14 +52,16 @@ export class AppComponent {
             )
         );
 
+        //console.log(this.sideInfoElements);
     }
+
 
     /**
      * Dummy action to create a dummy plane triggered by button.
      * @todo: Remove if not necessary anymore
      */
     addDummyPlane():void {
-        this.graphworkspace.addPlane(new Plane("Plane something " + Math.random(), 'resource'));
+        this.graphworkspace.addPlane(new Plane("Plane something " + Math.random(), 'resource', this.uiService));
     }
 
     /**
@@ -54,17 +69,5 @@ export class AppComponent {
      * @todo: Remove if not necessary anymore
      */
     showData():void {
-        // this.dataService.getLearners().then(learners => {
-        //         console.log("LEARNERS:", learners);
-        //     }
-        // );
-        // this.dataService.getResources().then(resources => {
-        //         console.log("RESOURCES:", resources);
-        //     }
-        // );
-        // this.dataService.getActivities().then(activities => {
-        //         console.log("ACTIVITIES:", activities);
-        //     }
-        // );
     }
 }

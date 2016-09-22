@@ -2,6 +2,8 @@ import {Plane} from '../../plane/plane';
 import {DataAbstract} from '../data/abstract';
 import {NodeAbstract} from '../graphs/nodes/abstract';
 import {GraphLayoutAbstract} from '../graphs/layouts/abstract';
+import {UiService} from "../../../services/ui.service";
+import {SideInfoPositions, SideInfoContentType, SideInfoModel} from "../../app/sideinfo/sideinfomodel";
 /**
  * Abstract Graph Class
  * Holding the corresponding data and the plane

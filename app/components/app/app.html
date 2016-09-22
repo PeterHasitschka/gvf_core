@@ -10,20 +10,22 @@
     <div class="row mainrow">
         <div class="col-md-2 col-sm-12" id="mainleftcol">
             <!--<sideinfo title="Left Menu" identifier="firstleft"></sideinfo>-->
-            <sideinfo  *ngFor="let infomodel of uiService.getSideInfoElements()" [infomodel]="infomodel">
+            <sideinfo *ngFor="let infomodel of (uiService.sideInfoElements)"
+                      [infomodel]="infomodel">
             </sideinfo>
         </div>
         <div class="col-md-8  col-sm-12" id="mainmiddlecol">
             <graphworkspace></graphworkspace>
-        </div>      
-        <div class="col-md-2  col-sm-12"  id="mainrightcol">
-            <button (click)="addDummyPlane()"type="button" class="btn btn-success">Add new Dummy Plane</button><br/>
-            <button (click)="showData()"type="button" class="btn btn-success">Show Data</button>
-        </div>            
+        </div>
+        <div class="col-md-2  col-sm-12" id="mainrightcol">
+            <button (click)="addDummyPlane()" type="button" class="btn btn-success">Add new Dummy Plane</button>
+            <br/>
+            <button (click)="showData()" type="button" class="btn btn-success">Show Data</button>
+        </div>
     </div>
     <div class="row footerrow" style="">
         <div class="col-md-12">
             Footer
         </div>
-    </div>    
+    </div>
 </div>

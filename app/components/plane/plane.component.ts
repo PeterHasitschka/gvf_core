@@ -1,6 +1,8 @@
-import { Component, Input } from '@angular/core';
+import {Component, Input} from '@angular/core';
 import {Plane} from './plane';
 import {DataService} from '../../services/data.service';
+import {SideInfoPositions, SideInfoContentType, SideInfoModel} from "../app/sideinfo/sideinfomodel";
+import {UiService} from "../../services/ui.service";
 
 
 @Component({
@@ -15,7 +17,7 @@ import {DataService} from '../../services/data.service';
  */
 export class PlaneComponent {
 
-    private static counter: number = 0;
+    private static counter:number = 0;
 
     private allData = {
         learners: null,
@@ -24,11 +26,11 @@ export class PlaneComponent {
     }
 
     // The plane object
-    @Input() plane: Plane;
-    private id: number;
+    @Input() plane:Plane;
+    private id:number;
 
 
-    constructor() {
+    constructor(private uiService:UiService) {
         this.id = PlaneComponent.counter;
         PlaneComponent.counter++;
     }
@@ -37,12 +39,18 @@ export class PlaneComponent {
      * Initializing the scene on the @see{Plane} after making sure that
      * the container HTML element exists now
      */
-    ngAfterViewInit(): void {
+    ngAfterViewInit():void {
+        this.uiService.addSideInfoElement(new SideInfoModel(
+            this.plane.getName(),
+            SideInfoPositions.Left,
+            SideInfoContentType.GraphSettings
+            )
+        );
         this.plane.initScene(this.id);
     }
 
 
-    public getId(): number {
+    public getId():number {
         return this.id;
     }
 } 

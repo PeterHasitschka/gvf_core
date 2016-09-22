@@ -13,7 +13,7 @@ export class SideInfoModel {
 
     }
 
-    public getTitle():string {
+    public getTitle():String {
         return this.title;
     }
 
