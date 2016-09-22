@@ -7,9 +7,10 @@ import {GraphworkspaceComponent}  from './components/graphworkspace/graphworkspa
 import {PlaneComponent}  from './components/plane/plane.component';
 
 import {HttpModule} from '@angular/http'
+import {SideInfoContentGraphsettings} from "./components/app/sideinfo/contentmodels/graphsettings.component";
 @NgModule({
     imports: [BrowserModule, HttpModule],
-    declarations: [AppComponent, GraphworkspaceComponent, PlaneComponent, SideInfoComponent],
+    declarations: [AppComponent, GraphworkspaceComponent, PlaneComponent, SideInfoComponent, SideInfoContentGraphsettings],
     bootstrap: [AppComponent]
 })
 /**

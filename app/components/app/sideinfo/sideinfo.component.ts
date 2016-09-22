@@ -1,4 +1,5 @@
-import {Component, Input} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
+import {SideInfoModel, SideInfoContentType} from "./sideinfomodel";
 
 
 @Component({
@@ -9,13 +10,18 @@ import {Component, Input} from '@angular/core';
 /**
  * Little window in sidebars for showing information
  */
-export class SideInfoComponent {
+export class SideInfoComponent implements OnInit {
 
-    public text:string;
-    @Input() identifier:string;
-    @Input() title:string;
+    @Input() private infomodel:SideInfoModel
 
+    public types;
     constructor() {
-        this.text = "text";
+        //Necessary since template can't handle global enums
+        this.types = SideInfoContentType;
+    }
+
+    ngOnInit():void {
+        console.log(this.infomodel);
+
     }
 }

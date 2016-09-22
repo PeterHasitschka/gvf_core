@@ -9,7 +9,9 @@
     </div>
     <div class="row mainrow">
         <div class="col-md-2 col-sm-12" id="mainleftcol">
-            <sideinfo title="Left Menu" identifier="firstleft"></sideinfo>
+            <!--<sideinfo title="Left Menu" identifier="firstleft"></sideinfo>-->
+            <sideinfo  *ngFor="let infomodel of uiService.getSideInfoElements()" [infomodel]="infomodel">
+            </sideinfo>
         </div>
         <div class="col-md-8  col-sm-12" id="mainmiddlecol">
             <graphworkspace></graphworkspace>

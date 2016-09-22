@@ -4,6 +4,12 @@
     min-height: 200px;
     background: white;
     border: 1px solid gray;
-    color: black;
+    color: #484848;
+    font-size:13px;
     padding: 5px;
+}
+
+.sidebarinfo h3 {
+    font-size:18px;
+    margin-top: 7px;
 }
