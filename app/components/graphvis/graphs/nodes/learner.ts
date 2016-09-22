@@ -11,6 +11,7 @@ export class NodeLearner extends NodeSimple {
     constructor(x:number, y:number, protected dataEntity:DataAbstract) {
         super(x, y, dataEntity);
 
-        this.setColor(GraphVisConfig.nodes.learnernode.color);
+        this.color = GraphVisConfig.nodes.learnernode.color;
+        this.setColor(this.color);
     }
 }

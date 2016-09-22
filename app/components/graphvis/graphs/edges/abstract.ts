@@ -1,5 +1,6 @@
 import {GraphVisConfig} from '../../config';
 import {start} from "repl";
+import {GraphObject} from "../graphobjectinterface";
 
 
 /**
@@ -8,7 +9,7 @@ import {start} from "repl";
  * Thus, it holds a geometry and a material
  * @author Peter Hasitschka
  */
-export abstract class EdgeAbstract extends THREE.Line {
+export abstract class EdgeAbstract extends THREE.Line implements GraphObject{
 
 
     protected threeMaterial:THREE.LineBasicMaterial;
@@ -35,6 +36,15 @@ export abstract class EdgeAbstract extends THREE.Line {
         this.threeGeometry = geometry;
         this.threeMaterial = material;
         this.zPos = config.abstractedge.z_pos;
+    }
+
+
+    public onIntersectStart():void{
+        console.log("Intersected an edge");
+    }
+
+    public onIntersectLeave():void{
+        console.log("UN-Intersected an edge");
     }
 }
 

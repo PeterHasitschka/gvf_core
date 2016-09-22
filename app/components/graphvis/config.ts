@@ -24,7 +24,8 @@ export class GraphVisConfig {
         abstractnode: {
             size: 5,
             color: 0xff00ff,
-            z_pos: 0.0
+            highlight_color: 0xff0000,
+            z_pos: 0.0,
         },
 
         resourcenode: {

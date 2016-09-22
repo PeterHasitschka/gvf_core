@@ -8,11 +8,20 @@ import {DataAbstract} from "../../data/abstract";
  */
 export class NodeResource extends NodeSimple {
 
-    constructor(x: number, y: number, protected dataEntity:DataAbstract) {
+    constructor(x:number, y:number, protected dataEntity:DataAbstract) {
         super(x, y, dataEntity);
 
-        this.setColor(GraphVisConfig.nodes.resourcenode.color);
+        this.color = GraphVisConfig.nodes.resourcenode.color;
+        this.setColor(this.color);
     }
 
+    public onIntersectStart():void {
+        console.log("resource node");
+        super.onIntersectStart();
+    }
 
+    public onIntersectLeave():void {
+
+        super.onIntersectLeave();
+    }
 }

@@ -1,5 +1,6 @@
 import {GraphVisConfig} from '../../config';
 import {DataAbstract} from "../../data/abstract";
+import {GraphObject} from "../graphobjectinterface";
 
 
 /**
@@ -8,12 +9,14 @@ import {DataAbstract} from "../../data/abstract";
  * Thus, it holds a geometry and a material
  * @author Peter Hasitschka
  */
-export abstract class NodeAbstract extends THREE.Mesh {
+export abstract class NodeAbstract extends THREE.Mesh implements GraphObject {
 
     protected threeMaterial:THREE.MeshBasicMaterial;
     protected threeGeometry:THREE.Geometry;
     protected zPos;
     protected color:number;
+    protected highlightColor:number;
+
     protected dataEntity:DataAbstract;
 
     constructor(x:number, y:number) {
@@ -21,6 +24,7 @@ export abstract class NodeAbstract extends THREE.Mesh {
         var config = GraphVisConfig.nodes;
 
         let color = config.abstractnode.color;
+        let highlightColor = config.abstractnode.highlight_color;
 
         var geometry = new THREE.CircleGeometry(
             config.abstractnode.size,
@@ -34,6 +38,7 @@ export abstract class NodeAbstract extends THREE.Mesh {
         super(geometry, material);
 
         this.color = color;
+        this.highlightColor = highlightColor
         this.threeGeometry = geometry;
         this.threeMaterial = material;
         this.zPos = config.abstractnode.z_pos;
@@ -56,5 +61,15 @@ export abstract class NodeAbstract extends THREE.Mesh {
 
     public getDataEntity():DataAbstract {
         return this.dataEntity;
+    }
+
+    public onIntersectStart():void {
+        //console.log("Intersected a node " + this.dataEntity.getId());
+        this.threeMaterial.color.setHex(this.highlightColor);
+    }
+
+    public onIntersectLeave():void {
+        //console.log("UN-Intersected a node " + this.dataEntity.getId());
+        this.threeMaterial.color.setHex(this.color);
     }
 }

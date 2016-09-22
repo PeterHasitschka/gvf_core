@@ -1,4 +1,5 @@
 import {GraphVisConfig} from './config';
+import {MouseInteractions} from "./Mouseinteractions";
 
 //const THREE = require('../../../node_modules/three/build/three.js');
 
@@ -9,16 +10,18 @@ import {GraphVisConfig} from './config';
  */
 export class GraphScene {
 
-    private threeScene: THREE.Scene;
-    private threeRenderer: THREE.WebGLRenderer;
-    private threeCamera: THREE.Camera;
+    private threeScene:THREE.Scene;
+    private threeRenderer:THREE.WebGLRenderer;
+    private threeCamera:THREE.Camera;
+    private threeRaycaster:THREE.Raycaster;
+    private mouseInteractions:MouseInteractions;
 
     /**
      * @constructor of the GraphScene
      * @param{HTMLMElement} container - Container to hold the canvas
      * @param{Object} dimensions - Simple object holding 'x' and 'y' value, defining the size
      */
-    constructor(container: HTMLElement, dimensions: Object) {
+    constructor(private container:HTMLElement, dimensions:Object) {
 
         var config = GraphVisConfig.scene;
         // set the scene size
@@ -26,18 +29,16 @@ export class GraphScene {
             canvasH = dimensions["y"];
 
 
-
-
         // create a WebGL renderer, camera
         // and a scene
-        this.threeRenderer = new THREE.WebGLRenderer({ alpha: true });
+        this.threeRenderer = new THREE.WebGLRenderer({alpha: true});
 
 
         this.threeCamera = new THREE.OrthographicCamera(
-            canvasW / - 2,
+            canvasW / -2,
             canvasW / 2,
             canvasH / 2,
-            canvasH / - 2,
+            canvasH / -2,
             config.near,
             config.far);
 
@@ -56,25 +57,42 @@ export class GraphScene {
         this.threeRenderer.setClearColor(0xffffff, 0);
 
         // attach the render-supplied DOM element
-        container.appendChild(this.threeRenderer.domElement);
+        this.container.appendChild(this.threeRenderer.domElement);
 
-        this.render();
+        this.mouseInteractions = new MouseInteractions(this);
+        this.threeRaycaster = new THREE.Raycaster();
+        this.animate()
+
     }
 
+
+    public animate() {
+        requestAnimationFrame(this.animate.bind(this));
+        this.render();
+    }
 
     /**
      * Call the 'render' method of the THREE Renderer
      */
-    public render(): void {
+    public render():void {
+        this.mouseInteractions.handleIntersections();
         this.threeRenderer.render(this.threeScene, this.threeCamera);
     }
 
 
-    public getThreeScene(): THREE.Scene {
+    public getThreeCamera():THREE.Camera {
+        return this.threeCamera;
+    }
+
+    public getThreeRaycaster():THREE.Raycaster {
+        return this.threeRaycaster;
+    }
+
+    public getThreeScene():THREE.Scene {
         return this.threeScene;
     }
 
-    public getThreeRenderer(): THREE.WebGLRenderer {
+    public getThreeRenderer():THREE.WebGLRenderer {
         return this.threeRenderer;
     }
 }
