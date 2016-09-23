@@ -1,6 +1,7 @@
 import {GraphVisConfig} from '../../config';
 import {DataAbstract} from "../../data/abstract";
 import {GraphObject} from "../graphobjectinterface";
+import {Plane} from "../../../plane/plane";
 
 
 /**
@@ -16,10 +17,11 @@ export abstract class NodeAbstract extends THREE.Mesh implements GraphObject {
     protected zPos;
     protected color:number;
     protected highlightColor:number;
+    protected plane:Plane;
 
     protected dataEntity:DataAbstract;
 
-    constructor(x:number, y:number) {
+    constructor(x:number, y:number, plane:Plane) {
 
         var config = GraphVisConfig.nodes;
 
@@ -37,6 +39,7 @@ export abstract class NodeAbstract extends THREE.Mesh implements GraphObject {
 
         super(geometry, material);
 
+        this.plane = plane;
         this.color = color;
         this.highlightColor = highlightColor
         this.threeGeometry = geometry;
@@ -66,10 +69,12 @@ export abstract class NodeAbstract extends THREE.Mesh implements GraphObject {
 
     public highlightNode() {
         this.threeMaterial.color.setHex(this.highlightColor);
+        this.plane.getGraphScene().render();
     }
 
     public deHighlightNode() {
         this.threeMaterial.color.setHex(this.color);
+        this.plane.getGraphScene().render();
     }
 
     public onIntersectStart():void {

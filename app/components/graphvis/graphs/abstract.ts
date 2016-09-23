@@ -45,7 +45,7 @@ export abstract class GraphAbstract {
         this.data = this.dataGetterMethod();
 
         this.data.forEach((data:DataAbstract) => {
-            let n = new this.nodetype(0, 0, data);
+            let n = new this.nodetype(0, 0, data, this.plane);
             this.plane.getGraphScene().addObject(n);
             this.nodes.push(n);
         });

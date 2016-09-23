@@ -68,12 +68,15 @@ export class GraphScene {
 
         this.objectGroup = new THREE.Object3D();
         this.threeScene.add(this.objectGroup);
-        this.animate()
+        this.render()
 
     }
 
 
-
+    /**
+     * @TODO: Not perfect due to performance...
+     * Thus not used currently...
+     */
     public animate() {
         requestAnimationFrame(this.animate.bind(this));
         this.render();
@@ -88,7 +91,6 @@ export class GraphScene {
      * Call the 'render' method of the THREE Renderer
      */
     public render():void {
-        this.mouseInteractions.handleIntersections();
         this.threeRenderer.render(this.threeScene, this.threeCamera);
     }
 

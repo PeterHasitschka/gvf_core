@@ -2,6 +2,8 @@ import {NodeAbstract} from './abstract';
 import {GraphVisConfig} from '../../config';
 import {DataAbstract} from "../../data/abstract";
 import {Data} from "@angular/router";
+import {GraphScene} from "../../scene";
+import {Plane} from "../../../plane/plane";
 
 /**
  * A simple node, derived from @see{NodeAbstract}
@@ -9,14 +11,14 @@ import {Data} from "@angular/router";
  */
 export class NodeSimple extends NodeAbstract {
 
-    constructor(x: number, y: number, protected dataEntity:DataAbstract) {
-        super(x, y);
+    constructor(x:number, y:number, protected dataEntity:DataAbstract, plane:Plane) {
+        super(x, y, plane);
     }
 
     /**
      * Setting the color of the simple node (e.g. 0xffffff)
      */
-    public setColor(color: number): void {
+    public setColor(color:number):void {
         this.threeMaterial.color.setHex(color);
     }
 }

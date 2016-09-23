@@ -49,5 +49,6 @@ export class MouseInteractions {
     private onDocumentMouseMove(event) {
         this.mouseContainerPos.x = ( event.offsetX / this.scene.getThreeRenderer().getSize()["width"] ) * 2 - 1;
         this.mouseContainerPos.y = -( event.offsetY / this.scene.getThreeRenderer().getSize()["height"] ) * 2 + 1;
+        this.handleIntersections();
     }
 }

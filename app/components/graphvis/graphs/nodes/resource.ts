@@ -2,6 +2,8 @@ import {NodeSimple} from './simple';
 import {GraphVisConfig} from '../../config';
 import {DataAbstract} from "../../data/abstract";
 import {InterGraphEventService, INTERGRAPH_EVENTS} from "../../../../services/intergraphevents.service";
+import {GraphScene} from "../../scene";
+import {Plane} from "../../../plane/plane";
 
 /**
  * A Resource node, derived from @see{NodeSimple}
@@ -9,8 +11,8 @@ import {InterGraphEventService, INTERGRAPH_EVENTS} from "../../../../services/in
  */
 export class NodeResource extends NodeSimple {
 
-    constructor(x:number, y:number, protected dataEntity:DataAbstract) {
-        super(x, y, dataEntity);
+    constructor(x:number, y:number, protected dataEntity:DataAbstract, plane:Plane) {
+        super(x, y, dataEntity, plane);
 
         this.color = GraphVisConfig.nodes.resourcenode.color;
         this.setColor(this.color);

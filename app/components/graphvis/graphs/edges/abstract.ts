@@ -1,6 +1,7 @@
 import {GraphVisConfig} from '../../config';
 import {start} from "repl";
 import {GraphObject} from "../graphobjectinterface";
+import {Plane} from "../../../plane/plane";
 
 
 /**
@@ -9,15 +10,16 @@ import {GraphObject} from "../graphobjectinterface";
  * Thus, it holds a geometry and a material
  * @author Peter Hasitschka
  */
-export abstract class EdgeAbstract extends THREE.Line implements GraphObject{
+export abstract class EdgeAbstract extends THREE.Line implements GraphObject {
 
 
     protected threeMaterial:THREE.LineBasicMaterial;
     protected threeGeometry:THREE.Geometry;
     protected zPos;
     protected color:number;
+    protected plane:Plane;
 
-    constructor(startx:number, starty:number, endx:number, endy:number) {
+    constructor(startx:number, starty:number, endx:number, endy:number, plane:Plane) {
         let config = GraphVisConfig.edges;
         let color = config.abstractedge.color;
 
@@ -30,7 +32,7 @@ export abstract class EdgeAbstract extends THREE.Line implements GraphObject{
 
 
         super(geometry, material);
-
+        this.plane = plane;
 
         this.color = color;
         this.threeGeometry = geometry;
@@ -39,11 +41,11 @@ export abstract class EdgeAbstract extends THREE.Line implements GraphObject{
     }
 
 
-    public onIntersectStart():void{
+    public onIntersectStart():void {
         //console.log("Intersected an edge");
     }
 
-    public onIntersectLeave():void{
+    public onIntersectLeave():void {
         //console.log("UN-Intersected an edge");
     }
 }
