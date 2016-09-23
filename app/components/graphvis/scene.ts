@@ -16,6 +16,7 @@ export class GraphScene {
     private threeCamera:THREE.Camera;
     private threeRaycaster:THREE.Raycaster;
     private mouseInteractions:MouseInteractions;
+    private objectGroup:THREE.Object3D;
 
 
     /**
@@ -23,7 +24,7 @@ export class GraphScene {
      * @param{HTMLMElement} container - Container to hold the canvas
      * @param{Object} dimensions - Simple object holding 'x' and 'y' value, defining the size
      */
-    constructor(private container:HTMLElement, dimensions:Object) {
+    constructor(private container:HTMLElement, private dimensions:Object) {
 
         var config = GraphVisConfig.scene;
         // set the scene size
@@ -36,14 +37,15 @@ export class GraphScene {
         this.threeRenderer = new THREE.WebGLRenderer({alpha: true, antialias: true});
 
 
-        this.threeCamera = new THREE.OrthographicCamera(
-            canvasW / -2,
-            canvasW / 2,
-            canvasH / 2,
-            canvasH / -2,
-            config.near,
-            config.far);
+        // this.threeCamera = new THREE.OrthographicCamera(
+        //     canvasW / -2,
+        //     canvasW / 2,
+        //     canvasH / 2,
+        //     canvasH / -2,
+        //     config.near,
+        //     config.far);
 
+        this.threeCamera = new THREE.PerspectiveCamera(45, canvasW / canvasH, config.near, config.far);
 
         this.threeScene = new THREE.Scene();
 
@@ -63,14 +65,23 @@ export class GraphScene {
 
         this.mouseInteractions = new MouseInteractions(this);
         this.threeRaycaster = new THREE.Raycaster();
+
+        this.objectGroup = new THREE.Object3D();
+        this.threeScene.add(this.objectGroup);
         this.animate()
 
     }
 
 
+
     public animate() {
         requestAnimationFrame(this.animate.bind(this));
         this.render();
+    }
+
+
+    public addObject(obj:THREE.Object3D) {
+        this.objectGroup.add(obj);
     }
 
     /**
@@ -98,7 +109,11 @@ export class GraphScene {
         return this.threeRenderer;
     }
 
-    public getContainer():HTMLElement{
+    public getContainer():HTMLElement {
         return this.container;
+    }
+
+    public getObjectGroup():THREE.Object3D {
+        return this.objectGroup;
     }
 }

@@ -17,12 +17,17 @@ export class MouseInteractions {
             return;
 
         this.scene.getThreeRaycaster().setFromCamera(this.mouseContainerPos, this.scene.getThreeCamera());
-        var intersects = this.scene.getThreeRaycaster().intersectObjects(this.scene.getThreeScene().children);
+        var intersects = this.scene.getThreeRaycaster().intersectObjects(this.scene.getObjectGroup().children);
 
         //Check for new
         let newIntersected = {};
         intersects.forEach((intersectedObj) => {
             let obj:any = intersectedObj['object'];
+
+            if (typeof obj.onIntersectStart === 'undefined') {
+                return;
+            }
+
             let id = obj['uuid'];
             if (typeof this.currentlyIntersected[id] === 'undefined') {
                 obj.onIntersectStart();

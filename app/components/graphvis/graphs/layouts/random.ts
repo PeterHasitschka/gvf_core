@@ -11,8 +11,8 @@ export class GraphLayoutRandom extends GraphLayoutAbstract {
     public calculatePositions(nodes: NodeAbstract[], onFinish): void {
 
         let dimensions = this.plane.calculateCanvasSize();
-        let xRange = dimensions['x'] - 20;
-        let yRange = dimensions['y'] - 20;
+        let xRange = dimensions['x'] - 30;
+        let yRange = dimensions['y'] - 30;
         nodes.forEach(function(node: NodeAbstract, idx: number) {
             var posX = Math.random() * xRange - xRange / 2;
             var posY = Math.random() * yRange - yRange / 2;

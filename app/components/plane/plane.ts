@@ -19,6 +19,7 @@ export class Plane {
     private scene:GraphScene;
     static containerPrefix:string = "graphvisplanecontainer_";
     private graph:GraphAbstract;
+    private canvasDimensions;
 
     /**
      * @param{string} name - Defining the graph's name
@@ -43,14 +44,14 @@ export class Plane {
          * Determine HTML container
          */
         this.containerId = containerId;
-        var canvasDimensions = this.calculateCanvasSize();
+        this.canvasDimensions = this.calculateCanvasSize();
         var container = document.getElementById(Plane.containerPrefix + this.containerId);
 
         /**
          * Create THREE.js Scene within GraphScene Container
          */
-        this.scene = new GraphScene(container, canvasDimensions);
-
+        this.scene = new GraphScene(container, this.canvasDimensions);
+        this.createBackPlane();
         /**
          * Create Graph, depending on graphtype-string
          */
@@ -71,6 +72,45 @@ export class Plane {
     public calculateCanvasSize():Object {
         var container = document.getElementById(Plane.containerPrefix + this.containerId);
         return {x: container.clientWidth - 10, y: container.clientHeight - 30};
+    }
+
+    /**
+     * Creating a plane behind all nodes. Useful when rotating etc.
+     */
+    private createBackPlane() {
+        var squareGeometry = new THREE.Geometry();
+        let config = GraphVisConfig.scene.backplane;
+        let padding = config.padding;
+        let z = config.z;
+        let halfW = this.canvasDimensions['x'] / 2 - padding;
+        let halfH = this.canvasDimensions['y'] / 2 - padding;
+
+        squareGeometry.vertices.push(new THREE.Vector3(0 - halfW, halfH, 0));
+        squareGeometry.vertices.push(new THREE.Vector3(halfW, halfH, 0));
+        squareGeometry.vertices.push(new THREE.Vector3(halfW, 0 - halfH, 0));
+        squareGeometry.vertices.push(new THREE.Vector3(0 - halfW, 0 - halfH, 0));
+        squareGeometry.faces.push(new THREE.Face3(0, 1, 2));
+        squareGeometry.faces.push(new THREE.Face3(0, 2, 3));
+
+        var squareMaterial = new THREE.MeshBasicMaterial({
+            color: config.color,
+            side: THREE.DoubleSide
+        });
+
+        var squareMesh = new THREE.Mesh(squareGeometry, squareMaterial);
+        squareMesh.position.set(0, 0.0, z);
+        //this.dummyRotate(this.scene.getObjectGroup(), new THREE.Vector3(0, 0 - halfW, z), -0.3);
+        this.scene.addObject(squareMesh);
+    }
+
+    private dummyRotate(object, axis, radians) {
+        var rotationMatrix = new THREE.Matrix4();
+
+        rotationMatrix.makeRotationAxis(axis.normalize(), radians);
+        rotationMatrix.multiply(object.matrix);                       // pre-multiply
+        object.matrix = rotationMatrix;
+        object.rotation.setFromRotationMatrix(object.matrix);
+
     }
 
 

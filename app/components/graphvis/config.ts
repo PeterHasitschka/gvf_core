@@ -16,6 +16,12 @@ export class GraphVisConfig {
 
         camera: {
             z: 300
+        },
+
+        backplane: {
+            color: 0xccccdd,
+            padding: 0,
+            z: -1
         }
     }
 

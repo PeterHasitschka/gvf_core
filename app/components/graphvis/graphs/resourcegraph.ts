@@ -76,7 +76,7 @@ export class ResourceGraph extends GraphAbstract {
                         n2.getPosition().x,
                         n2.getPosition().y);
 
-                    this.plane.getGraphScene().getThreeScene().add(resourceConnection);
+                    this.plane.getGraphScene().addObject(resourceConnection);
                 }
             });
 
