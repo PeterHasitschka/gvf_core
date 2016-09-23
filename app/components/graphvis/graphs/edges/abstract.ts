@@ -40,6 +40,10 @@ export abstract class EdgeAbstract extends THREE.Line implements GraphObject {
         this.zPos = config.abstractedge.z_pos;
     }
 
+    public setColor(color:number) {
+        this.color = color;
+        this.threeMaterial.color.setHex(color);
+    }
 
     public onIntersectStart():void {
         //console.log("Intersected an edge");

@@ -2,7 +2,6 @@ import {NodeSimple} from './simple';
 import {GraphVisConfig} from '../../config';
 import {DataAbstract} from "../../data/abstract";
 import {InterGraphEventService, INTERGRAPH_EVENTS} from "../../../../services/intergraphevents.service";
-import {GraphScene} from "../../scene";
 import {Plane} from "../../../plane/plane";
 
 /**
