@@ -24,7 +24,8 @@ export abstract class EdgeAbstract extends THREE.Line implements GraphObject {
         let color = config.abstractedge.color;
 
         let material = new THREE.LineBasicMaterial({
-            color: color
+            color: color,
+            linewidth : config.abstractedge.thickness
         });
         let geometry = new THREE.Geometry();
         geometry.vertices.push(new THREE.Vector3(startx, starty, config.abstractedge.z_pos));

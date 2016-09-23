@@ -76,5 +76,11 @@
     "type": "learning",
     "learner_id": 9,
     "resource_id": 6
+  },
+  {
+    "id": 13,
+    "type": "learning",
+    "learner_id": 5,
+    "resource_id": 0
   }
 ]

@@ -39,18 +39,20 @@ export class ResourceGraph extends GraphAbstract {
 
     private addEventListeners() {
         InterGraphEventService.getInstance().addListener(INTERGRAPH_EVENTS.LEARNER_NODE_HOVERED, function (e) {
+
             let node:NodeLearner = e.detail;
             let affectedResources:Resource[] = Resource.getResourcesByLearner(<Learner>node.getDataEntity());
             affectedResources.forEach((r:Resource) => {
                 let affectedResourceNodes = this.getNodeByDataEntity(r);
                 affectedResourceNodes.forEach((n:NodeResource) => {
                     n.highlightNode();
-                })
+                });
             });
         }.bind(this));
 
 
         InterGraphEventService.getInstance().addListener(INTERGRAPH_EVENTS.LEARNER_NODE_LEFT, function (e) {
+
             this.nodes.forEach((n:NodeResource) => {
                 n.deHighlightNode();
             });

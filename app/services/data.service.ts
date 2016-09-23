@@ -15,11 +15,13 @@ import 'rxjs/add/operator/toPromise'
  */
 export class DataService {
 
+    static USE_SERVER_DATA = false;
 
     static instance:DataService;
     static isCreating:Boolean = false;
 
     private data;
+
 
     constructor(private http:Http) {
 
@@ -46,6 +48,54 @@ export class DataService {
 
 
     fetchData() {
+        var ret = null;
+
+
+        if (DataService.USE_SERVER_DATA)
+            ret = this.fetchDataFromServer();
+        else
+            ret = this.fetchGeneratedDummyData().then(()=> {
+                "Ready fetch data"
+            });
+
+        console.log(this.data);
+        return ret;
+    }
+
+    fetchGeneratedDummyData() {
+
+        let USER_LENGTH = 500;
+        let RESOURCE_LENGTH = 100;
+        let ACTIVITY_LEARN_LENGTH = 100;
+        let ACTIVITY_COMMUNICATE_LENGTH = 100;
+
+        for (let i = 0; i < USER_LENGTH; i++) {
+            this.data.learners.push(new Learner({id: i, name: "Your mum"}));
+        }
+        for (let i = 0; i < RESOURCE_LENGTH; i++) {
+            this.data.resources.push(new Resource({id: i, title: "Soemthing", compexity: Math.random()}));
+        }
+        for (let i = 0; i < ACTIVITY_LEARN_LENGTH; i++) {
+            this.data.activities.push(new Activity({
+                id: i, type: "learning",
+                learner_id: Math.floor(Math.random() * USER_LENGTH),
+                resource_id: Math.floor(Math.random() * RESOURCE_LENGTH),
+            }));
+        }
+        for (let i = 0; i < ACTIVITY_COMMUNICATE_LENGTH; i++) {
+            this.data.activities.push(new Activity({
+                id: i, type: "communicating",
+                learner1_id: Math.floor(Math.random() * USER_LENGTH),
+                learner2_id: Math.floor(Math.random() * USER_LENGTH),
+            }));
+        }
+
+        return Promise.resolve(true);
+
+
+    }
+
+    fetchDataFromServer() {
         console.log("Fetching learning-platform data from server...");
         return this.fetchLearners()
             .then(() => {

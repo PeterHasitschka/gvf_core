@@ -16,6 +16,7 @@ export abstract class NodeAbstract extends THREE.Mesh implements GraphObject {
     protected threeGeometry:THREE.Geometry;
     protected zPos;
     protected color:number;
+    protected isHighlighted = false;
     protected highlightColor:number;
     protected plane:Plane;
 
@@ -68,11 +69,17 @@ export abstract class NodeAbstract extends THREE.Mesh implements GraphObject {
 
 
     public highlightNode() {
+        if (this.isHighlighted)
+            return;
+        this.isHighlighted = true;
         this.threeMaterial.color.setHex(this.highlightColor);
         this.plane.getGraphScene().render();
     }
 
     public deHighlightNode() {
+        if (!this.isHighlighted)
+            return;
+        this.isHighlighted = false;
         this.threeMaterial.color.setHex(this.color);
         this.plane.getGraphScene().render();
     }

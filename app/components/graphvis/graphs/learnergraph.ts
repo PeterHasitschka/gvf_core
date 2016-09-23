@@ -111,18 +111,19 @@ export class LearnerGraph extends GraphAbstract {
                     n1.getPosition().y,
                     n2.getPosition().x,
                     n2.getPosition().y,
-                    this.plane, 0xff00ff);
+                    this.plane, 0xaa00aa);
 
                 this.plane.getGraphScene().addObject(learningConnection);
             }
         }
+        //this.plane.getGraphScene().render();
 
         for (let l1Id in communications) {
             let l1Communicators = communications[l1Id];
 
             for (let l2Key in l1Communicators) {
                 let l2Id = l1Communicators[l2Key];
-                
+
                 let n1:NodeAbstract = this.getNodeByDataId(parseInt(l1Id));
                 let n2:NodeAbstract = this.getNodeByDataId(l2Id);
 
@@ -131,7 +132,7 @@ export class LearnerGraph extends GraphAbstract {
                     n1.getPosition().y,
                     n2.getPosition().x,
                     n2.getPosition().y,
-                    this.plane, 0xffff00);
+                    this.plane, 0xaaaa00);
                 this.plane.getGraphScene().addObject(communicationConnection);
             }
         }

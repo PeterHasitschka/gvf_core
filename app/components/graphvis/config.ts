@@ -19,7 +19,7 @@ export class GraphVisConfig {
         },
 
         backplane: {
-            color: 0xccccdd,
+            color: 0xEEEEFF,
             padding: 0,
             z: -1
         }
@@ -28,14 +28,14 @@ export class GraphVisConfig {
     public static nodes = {
         segments: 32,
         abstractnode: {
-            size: 5,
-            color: 0xff00ff,
-            highlight_color: 0xff0000,
+            size: 3,
+            color: 0xff33ff,
+            highlight_color: 0xff3333,
             z_pos: 0.0,
         },
 
         resourcenode: {
-            color: 0x0000ff
+            color: 0x5555bb
         },
         learnernode: {
             color: 0x00aa00
@@ -45,7 +45,8 @@ export class GraphVisConfig {
     public static edges = {
         abstractedge: {
             color: 0xff0000,
-            z_pos: -1.0
+            z_pos: -1.0,
+            thickness: 0.7
         }
     }
 
