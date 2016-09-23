@@ -5,7 +5,7 @@ export class MouseInteractions {
     private currentlyIntersected = {};
 
     constructor(private scene:GraphScene) {
-        window.addEventListener('mousemove', this.onDocumentMouseMove.bind(this), false);
+        scene.getContainer().addEventListener('mousemove', this.onDocumentMouseMove.bind(this), false);
     }
 
     /**

@@ -24,7 +24,7 @@ export class Learner extends DataAbstract {
             if (activitiy.getType() !== Activity.TYPE_LEARNING)
                 return;
             if(activitiy.getData(Activity.RESOURCE_ID) === resource.getId())
-                outList.push(Learner.getObject(activitiy.getData(Activity.LEARNER_ID)));
+                outList.push(<Learner>Learner.getObject(activitiy.getData(Activity.LEARNER_ID)));
         });
 
         return outList;

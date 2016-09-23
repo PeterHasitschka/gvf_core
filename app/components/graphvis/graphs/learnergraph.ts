@@ -30,7 +30,7 @@ export class LearnerGraph extends GraphAbstract {
 
         InterGraphEventService.getInstance().addListener(INTERGRAPH_EVENTS.RESOURCE_NODE_HOVERED, function (e) {
             let node:NodeResource = e.detail;
-            let affectedLearners:Learner[] = Learner.getLearnersByResource(node.getDataEntity());
+            let affectedLearners:Learner[] = Learner.getLearnersByResource(<Resource>node.getDataEntity());
             affectedLearners.forEach((l:Learner) => {
                 let affectedLearnerNodes = this.getNodeByDataEntity(l);
                 affectedLearnerNodes.forEach((n:NodeLearner) => {

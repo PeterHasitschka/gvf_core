@@ -1,5 +1,5 @@
 import {GraphVisConfig} from './config';
-import {MouseInteractions} from "./Mouseinteractions";
+import {MouseInteractions} from "./mouseinteractions";
 
 
 //const THREE = require('../../../node_modules/three/build/three.js');
@@ -98,4 +98,7 @@ export class GraphScene {
         return this.threeRenderer;
     }
 
+    public getContainer():HTMLElement{
+        return this.container;
+    }
 }

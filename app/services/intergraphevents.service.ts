@@ -4,7 +4,9 @@ import {Injectable} from "@angular/core";
 
 export enum INTERGRAPH_EVENTS {
     RESOURCE_NODE_HOVERED,
-    RESOURCE_NODE_LEFT
+    RESOURCE_NODE_LEFT,
+    LEARNER_NODE_HOVERED,
+    LEARNER_NODE_LEFT
 }
 
 @Injectable()

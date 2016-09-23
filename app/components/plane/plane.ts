@@ -88,4 +88,8 @@ export class Plane {
         return this.scene;
     }
 
+    public getGraphType():string {
+        return this.graphtype;
+    }
+
 }

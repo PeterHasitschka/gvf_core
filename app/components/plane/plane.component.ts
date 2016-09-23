@@ -43,7 +43,10 @@ export class PlaneComponent {
         this.uiService.addSideInfoElement(new SideInfoModel(
             this.plane.getName(),
             SideInfoPositions.Left,
-            SideInfoContentType.GraphSettings
+            SideInfoContentType.GraphSettings,
+            {
+                graphtype: this.plane.getGraphType()
+            }
             )
         );
         this.plane.initScene(this.id);
