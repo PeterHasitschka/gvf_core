@@ -68,7 +68,7 @@ export class GraphScene {
 
         this.objectGroup = new THREE.Object3D();
         this.threeScene.add(this.objectGroup);
-        this.render()
+        //this.render()
 
     }
 
@@ -92,7 +92,8 @@ export class GraphScene {
      */
     public render():void {
         this.threeRenderer.render(this.threeScene, this.threeCamera);
-        console.info("Rendering called");
+        // var err = new Error();
+         console.log("rendering");
     }
 
 

@@ -49,11 +49,11 @@ export abstract class GraphAbstract {
             this.plane.getGraphScene().addObject(n);
             this.nodes.push(n);
         });
-        this.plane.getGraphScene().render();
+        //this.plane.getGraphScene().render();
 
         let layout = new this.layout(this.plane);
         layout.calculatePositions(this.nodes, () => {
-            this.plane.getGraphScene().render();
+            //this.plane.getGraphScene().render();
         });
     }
 
