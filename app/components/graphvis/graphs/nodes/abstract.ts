@@ -2,6 +2,7 @@ import {GraphVisConfig} from '../../config';
 import {DataAbstract} from "../../data/abstract";
 import {GraphObject} from "../graphobjectinterface";
 import {Plane} from "../../../plane/plane";
+import {EdgeAbstract} from "../edges/abstract";
 
 
 /**
@@ -21,6 +22,7 @@ export abstract class NodeAbstract extends THREE.Mesh implements GraphObject {
     protected plane:Plane;
 
     protected dataEntity:DataAbstract;
+    protected edges = [];
 
     constructor(x:number, y:number, plane:Plane) {
 
@@ -56,10 +58,17 @@ export abstract class NodeAbstract extends THREE.Mesh implements GraphObject {
     public setPosition(x:number, y:number):void {
         this.position.setX(x);
         this.position.setY(y);
+        this.edges.forEach((edge:EdgeAbstract) => {
+            edge.updatePositions();
+        });
     }
 
     public getPosition():THREE.Vector3 {
         return this.position;
+    }
+
+    public addEdge(edge:EdgeAbstract) {
+        this.edges.push(edge);
     }
 
     public getDataEntity():DataAbstract {

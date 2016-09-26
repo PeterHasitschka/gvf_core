@@ -2,6 +2,7 @@ import {GraphVisConfig} from '../../config';
 import {start} from "repl";
 import {GraphObject} from "../graphobjectinterface";
 import {Plane} from "../../../plane/plane";
+import {NodeAbstract} from "../nodes/abstract";
 
 
 /**
@@ -18,18 +19,26 @@ export abstract class EdgeAbstract extends THREE.Line implements GraphObject {
     protected zPos;
     protected color:number;
     protected plane:Plane;
+    private sourceNode:NodeAbstract;
+    private destNode:NodeAbstract;
 
-    constructor(startx:number, starty:number, endx:number, endy:number, plane:Plane) {
+    constructor(sourceNode:NodeAbstract, destNode:NodeAbstract, plane:Plane) {
+
+        let startX:number = sourceNode.getPosition()['x'];
+        let startY:number = sourceNode.getPosition()['y'];
+        let endX:number = destNode.getPosition()['x'];
+        let endY:number = destNode.getPosition()['y'];
+
         let config = GraphVisConfig.edges;
         let color = config.abstractedge.color;
 
         let material = new THREE.LineBasicMaterial({
             color: color,
-            linewidth : config.abstractedge.thickness
+            linewidth: config.abstractedge.thickness
         });
         let geometry = new THREE.Geometry();
-        geometry.vertices.push(new THREE.Vector3(startx, starty, config.abstractedge.z_pos));
-        geometry.vertices.push(new THREE.Vector3(endx, endy, config.abstractedge.z_pos));
+        geometry.vertices.push(new THREE.Vector3(startX, startY, config.abstractedge.z_pos));
+        geometry.vertices.push(new THREE.Vector3(endX, endY, config.abstractedge.z_pos));
 
 
         super(geometry, material);
@@ -44,6 +53,10 @@ export abstract class EdgeAbstract extends THREE.Line implements GraphObject {
     public setColor(color:number) {
         this.color = color;
         this.threeMaterial.color.setHex(color);
+    }
+
+    public updatePositions(){
+        console.warn("Implement");
     }
 
     public onIntersectStart():void {

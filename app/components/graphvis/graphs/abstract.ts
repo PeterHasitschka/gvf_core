@@ -4,6 +4,8 @@ import {NodeAbstract} from '../graphs/nodes/abstract';
 import {GraphLayoutAbstract} from '../graphs/layouts/abstract';
 import {UiService} from "../../../services/ui.service";
 import {SideInfoPositions, SideInfoContentType, SideInfoModel} from "../../app/sideinfo/sideinfomodel";
+import {EdgeAbstract} from "./edges/abstract";
+import {LayoutInterface} from "./layouts/layoutinterface";
 /**
  * Abstract Graph Class
  * Holding the corresponding data and the plane
@@ -20,7 +22,8 @@ export abstract class GraphAbstract {
     protected dataGetterMethod;
 
     protected nodetype:any;
-    protected layout:any;
+    protected layoutClass:any;
+    protected layout:LayoutInterface = null;
     protected nodes:NodeAbstract[];
 
 
@@ -32,7 +35,24 @@ export abstract class GraphAbstract {
      * Init method for loading data and creating the layout and nodes
      */
     public init():void {
+        this.layout = new this.layoutClass(this.plane);
         this.loadData();
+
+        let edges:EdgeAbstract[] = this.createEdges();
+        edges.forEach((edge:EdgeAbstract) => {
+            this.plane.getGraphScene().addObject(edge);
+        });
+
+        this.layout.calculateLayout(this.nodes, function () {
+            console.log("Finished calculating layout");
+        });
+
+        this.plane.getGraphScene().render();
+    }
+
+
+    protected createEdges():EdgeAbstract[] {
+        return []
     }
 
 
@@ -51,8 +71,7 @@ export abstract class GraphAbstract {
         });
         //this.plane.getGraphScene().render();
 
-        let layout = new this.layout(this.plane);
-        layout.calculatePositions(this.nodes, () => {
+        this.layout.setInitPositions(this.nodes, () => {
             //this.plane.getGraphScene().render();
         });
     }

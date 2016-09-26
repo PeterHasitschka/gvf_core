@@ -31,7 +31,7 @@ export class ResourceGraph extends GraphAbstract {
         this.dataGetterMethod = DataService.getInstance().getResources.bind(DataService.getInstance());
 
         this.nodetype = NodeResource;
-        this.layout = GraphLayoutRandom;
+        this.layoutClass = GraphLayoutRandom;
 
         this.addEventListeners();
     }
@@ -62,18 +62,15 @@ export class ResourceGraph extends GraphAbstract {
     }
 
 
-    /**
-     * Init method. Super class calls loadData()
-     * After loading data the afterLoad callback is called
-     */
+
     public init():void {
         super.init();
-        this.connectResources();
     }
 
 
-    private connectResources() {
+    protected createEdges():EdgeAbstract[] {
         let activities = DataService.getInstance().getActivities();
+        let edges:EdgeAbstract[] = [];
 
         let learnings = {};
         activities.forEach((activity:Activity) => {
@@ -96,19 +93,19 @@ export class ResourceGraph extends GraphAbstract {
                     let n1:NodeAbstract = this.getNodeByDataId(rKey);
                     let n2:NodeAbstract = this.getNodeByDataId(learnings[lKey][i + 1]);
 
-                    let resourceConnection = new EdgeBasic(
-                        n1.getPosition().x,
-                        n1.getPosition().y,
-                        n2.getPosition().x,
-                        n2.getPosition().y,
-                        this.plane);
-
-                    this.plane.getGraphScene().addObject(resourceConnection);
+                    let resourceConnection = new EdgeBasic(n1, n2, this.plane);
+                    n1.addEdge(resourceConnection);
+                    n2.addEdge(resourceConnection);
+                    //this.plane.getGraphScene().addObject(resourceConnection);
+                    edges.push(resourceConnection);
                 }
             });
 
         }
 
-        this.plane.getGraphScene().render();
+
+
+        //this.plane.getGraphScene().render();
+        return edges;
     }
 }

@@ -93,7 +93,7 @@ export class GraphScene {
     public render():void {
         this.threeRenderer.render(this.threeScene, this.threeCamera);
         // var err = new Error();
-         console.log("rendering");
+        //console.log("rendering");
     }
 
 

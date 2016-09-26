@@ -13,6 +13,7 @@ import {Activity} from "../data/activity";
 import {NodeAbstract} from "./nodes/abstract";
 import {EdgeColored} from "./edges/colored";
 import log1p = require("core-js/fn/math/log1p");
+import {EdgeAbstract} from "./edges/abstract";
 
 
 /**
@@ -30,7 +31,7 @@ export class LearnerGraph extends GraphAbstract {
         this.dataGetterMethod = DataService.getInstance().getLearners.bind(DataService.getInstance());
 
         this.nodetype = NodeLearner;
-        this.layout = GraphLayoutRandom;
+        this.layoutClass = GraphLayoutRandom;
 
         this.addEventListeners();
 
@@ -61,18 +62,16 @@ export class LearnerGraph extends GraphAbstract {
         }.bind(this));
     }
 
-    /**
-     * Init method. Super class calls loadData()
-     * After loading data the afterLoad callback is called
-     */
+
+
     public init():void {
         super.init();
-        this.connectLearnersMultiples();
     }
 
 
-    private connectLearnersMultiples() {
+    protected createEdges():EdgeAbstract[] {
         let activities = DataService.getInstance().getActivities();
+        let edges:EdgeAbstract[] = [];
 
         let resources = {};
         let communications = {};
@@ -109,15 +108,11 @@ export class LearnerGraph extends GraphAbstract {
                 let lId2 = learners[lKey + 1];
                 let n1:NodeAbstract = this.getNodeByDataId(lId1);
                 let n2:NodeAbstract = this.getNodeByDataId(lId2);
-
-                let learningConnection = new EdgeColored(
-                    n1.getPosition().x,
-                    n1.getPosition().y,
-                    n2.getPosition().x,
-                    n2.getPosition().y,
-                    this.plane, 0xaa00aa);
-
-                this.plane.getGraphScene().addObject(learningConnection);
+                let learningConnection = new EdgeColored(n1, n2, this.plane, 0xaa00aa);
+                n1.addEdge(learningConnection);
+                n2.addEdge(learningConnection);
+                edges.push(learningConnection);
+                //this.plane.getGraphScene().addObject(learningConnection);
             }
         }
         //this.plane.getGraphScene().render();
@@ -131,17 +126,17 @@ export class LearnerGraph extends GraphAbstract {
                 let n1:NodeAbstract = this.getNodeByDataId(parseInt(l1Id));
                 let n2:NodeAbstract = this.getNodeByDataId(l2Id);
 
-                let communicationConnection = new EdgeColored(
-                    n1.getPosition().x,
-                    n1.getPosition().y,
-                    n2.getPosition().x,
-                    n2.getPosition().y,
-                    this.plane, 0xaaaa00);
-                this.plane.getGraphScene().addObject(communicationConnection);
+                let communicationConnection = new EdgeColored(n1, n2, this.plane, 0xaaaa00);
+                n1.addEdge(communicationConnection);
+                n2.addEdge(communicationConnection);
+                edges.push(communicationConnection);
+                //this.plane.getGraphScene().addObject(communicationConnection);
             }
         }
 
-        this.plane.getGraphScene().render();
+        //this.plane.getGraphScene().render();
+
+        return edges;
     }
 
 }

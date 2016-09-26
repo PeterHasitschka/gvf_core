@@ -1,11 +1,16 @@
 import {EdgeAbstract} from "./abstract";
 import {Plane} from "../../../plane/plane";
+import {NodeAbstract} from "../nodes/abstract";
 
 
 export class EdgeBasic extends EdgeAbstract {
 
 
-    constructor(startx:number, starty:number, endx:number, endy:number, plane:Plane) {
-        super(startx, starty, endx, endy, plane);
+
+    constructor(sourceNode:NodeAbstract, destNode:NodeAbstract, plane:Plane)  {
+        super(sourceNode, destNode, plane);
     }
+
+
+
 }
