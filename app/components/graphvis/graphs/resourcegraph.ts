@@ -48,6 +48,7 @@ export class ResourceGraph extends GraphAbstract {
                     n.highlightNode();
                 });
             });
+            this.plane.getGraphScene().render();
         }.bind(this));
 
 
@@ -56,6 +57,7 @@ export class ResourceGraph extends GraphAbstract {
             this.nodes.forEach((n:NodeResource) => {
                 n.deHighlightNode();
             });
+            this.plane.getGraphScene().render();
         }.bind(this));
     }
 

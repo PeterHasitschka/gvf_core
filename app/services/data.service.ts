@@ -15,12 +15,19 @@ import 'rxjs/add/operator/toPromise'
  */
 export class DataService {
 
-    static USE_SERVER_DATA = false;
 
     static instance:DataService;
     static isCreating:Boolean = false;
 
     private data;
+
+
+    static USE_SERVER_DATA = true;
+    static DUMMYDATA = {
+        learners: 'dummydata/frenchcourse/learners.json',
+        resources: 'dummydata/frenchcourse/resources.json',
+        activities: 'dummydata/frenchcourse/activities.json',
+    };
 
 
     constructor(private http:Http) {
@@ -109,7 +116,7 @@ export class DataService {
 
     fetchLearners() {
         console.log("Fetching learners data from server...");
-        return this.http.get('dummydata/dummy-learners.json')
+        return this.http.get(DataService.DUMMYDATA.learners)
             .map(res => res.json())
             .toPromise()
             .then((r) => {
@@ -123,7 +130,7 @@ export class DataService {
 
     fetchResources() {
         console.log("Fetching resource data from server...");
-        return this.http.get('dummydata/dummy-resources.json')
+        return this.http.get(DataService.DUMMYDATA.resources)
             .map(res => res.json())
             .toPromise()
             .then((r) => {
@@ -137,7 +144,7 @@ export class DataService {
 
     fetchActivities() {
         console.log("Fetching activities data from server...");
-        return this.http.get('dummydata/dummy-activities.json')
+        return this.http.get(DataService.DUMMYDATA.activities)
             .map(res => res.json())
             .toPromise()
             .then((r) => {

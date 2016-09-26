@@ -39,14 +39,17 @@ export class LearnerGraph extends GraphAbstract {
 
     private addEventListeners() {
         InterGraphEventService.getInstance().addListener(INTERGRAPH_EVENTS.RESOURCE_NODE_HOVERED, function (e) {
+
             let node:NodeResource = e.detail;
             let affectedLearners:Learner[] = Learner.getLearnersByResource(<Resource>node.getDataEntity());
             affectedLearners.forEach((l:Learner) => {
                 let affectedLearnerNodes = this.getNodeByDataEntity(l);
+
                 affectedLearnerNodes.forEach((n:NodeLearner) => {
                     n.highlightNode();
                 })
             });
+            this.plane.getGraphScene().render();
         }.bind(this));
 
 
@@ -54,6 +57,7 @@ export class LearnerGraph extends GraphAbstract {
             this.nodes.forEach((n:NodeLearner) => {
                 n.deHighlightNode();
             });
+            this.plane.getGraphScene().render();
         }.bind(this));
     }
 

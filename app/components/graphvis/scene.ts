@@ -92,6 +92,7 @@ export class GraphScene {
      */
     public render():void {
         this.threeRenderer.render(this.threeScene, this.threeCamera);
+        console.info("Rendering called");
     }
 
 

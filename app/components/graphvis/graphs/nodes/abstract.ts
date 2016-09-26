@@ -24,27 +24,26 @@ export abstract class NodeAbstract extends THREE.Mesh implements GraphObject {
 
     constructor(x:number, y:number, plane:Plane) {
 
+        /**
+         * SUPER call must be first statement, thus extract geometry and material afterwards
+         */
+        super(new THREE.CircleGeometry(
+            GraphVisConfig.nodes.abstractnode.size,
+            GraphVisConfig.nodes.segments), new THREE.MeshBasicMaterial(
+            {
+                color: GraphVisConfig.nodes.abstractnode.color
+            }));
+
         var config = GraphVisConfig.nodes;
 
         let color = config.abstractnode.color;
         let highlightColor = config.abstractnode.highlight_color;
 
-        var geometry = new THREE.CircleGeometry(
-            config.abstractnode.size,
-            config.segments);
-
-        var material = new THREE.MeshBasicMaterial(
-            {
-                color: color
-            });
-
-        super(geometry, material);
-
         this.plane = plane;
         this.color = color;
         this.highlightColor = highlightColor
-        this.threeGeometry = geometry;
-        this.threeMaterial = material;
+        this.threeGeometry = <THREE.Geometry>this.geometry;
+        this.threeMaterial = <THREE.MeshBasicMaterial>this.material;
         this.zPos = config.abstractnode.z_pos;
 
         x = x === undefined ? 0.0 : x;
@@ -73,7 +72,7 @@ export abstract class NodeAbstract extends THREE.Mesh implements GraphObject {
             return;
         this.isHighlighted = true;
         this.threeMaterial.color.setHex(this.highlightColor);
-        this.plane.getGraphScene().render();
+        //this.plane.getGraphScene().render();
     }
 
     public deHighlightNode() {
@@ -81,7 +80,7 @@ export abstract class NodeAbstract extends THREE.Mesh implements GraphObject {
             return;
         this.isHighlighted = false;
         this.threeMaterial.color.setHex(this.color);
-        this.plane.getGraphScene().render();
+        //this.plane.getGraphScene().render();
     }
 
     public onIntersectStart():void {

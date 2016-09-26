@@ -23,7 +23,7 @@ export class GraphVisConfig {
             padding: 0,
             z: -1
         }
-    }
+    };
 
     public static nodes = {
         segments: 32,
@@ -40,15 +40,15 @@ export class GraphVisConfig {
         learnernode: {
             color: 0x00aa00
         }
-    }
+    };
 
     public static edges = {
         abstractedge: {
-            color: 0xff0000,
+            color: 0xaaaaff,
             z_pos: -1.0,
             thickness: 0.7
         }
-    }
+    };
 
     /**
      * Defines the numbers of planes in a row
@@ -59,13 +59,13 @@ export class GraphVisConfig {
         sm: 1,
         md: 2,
         lg: 2
-    }
+    };
 
 
     public static active_graphs = {
         'resource': ResourceGraph,
         'learner': LearnerGraph
-    }
+    };
 
 
 }
