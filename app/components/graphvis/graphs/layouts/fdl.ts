@@ -3,7 +3,7 @@ import {NodeAbstract} from '../nodes/abstract';
 import {Plane} from '../../../plane/plane';
 import {EdgeAbstract} from "../edges/abstract";
 
-export class GraphLayoutRandom extends GraphLayoutAbstract {
+export class GraphLayoutFdl extends GraphLayoutAbstract {
 
     constructor(protected plane:Plane, nodes:NodeAbstract[], edges:EdgeAbstract[]) {
         super(plane, nodes, edges);

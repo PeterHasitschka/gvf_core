@@ -14,6 +14,7 @@ import {NodeAbstract} from "./nodes/abstract";
 import {EdgeColored} from "./edges/colored";
 import log1p = require("core-js/fn/math/log1p");
 import {EdgeAbstract} from "./edges/abstract";
+import {GraphLayoutFdl} from "./layouts/fdl";
 
 /**
  * The resource graph shows relations between Learning-Resources
@@ -30,7 +31,7 @@ export class LearnerGraph extends GraphAbstract {
         this.dataGetterMethod = DataService.getInstance().getLearners.bind(DataService.getInstance());
 
         this.nodetype = NodeLearner;
-        this.layoutClass = GraphLayoutRandom;
+        this.layoutClass = GraphLayoutFdl;
 
         this.addEventListeners();
 

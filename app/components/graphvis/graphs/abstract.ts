@@ -36,20 +36,20 @@ export abstract class GraphAbstract {
      * Init method for loading data and creating the layout and nodes
      */
     public init():void {
-        this.layout = new this.layoutClass(this.plane);
         this.loadData();
-
         this.edges = this.createEdges();
+        this.layout = new this.layoutClass(this.plane, this.nodes, this.edges);
+
         this.edges.forEach((edge:EdgeAbstract) => {
             this.plane.getGraphScene().addObject(edge);
         });
-        //this.plane.getGraphScene().render();
-        this.layout.calculateLayout(this.nodes, function () {
-            console.log("Finished calculating layout");
-            this.plane.getGraphScene().render();
-        }.bind(this));
-
-
+        this.layout.setInitPositions(() => {
+            //this.plane.getGraphScene().render();
+            this.layout.calculateLayout(function () {
+                console.log("Finished calculating layout");
+                this.plane.getGraphScene().render();
+            }.bind(this));
+        });
     }
 
 
@@ -72,10 +72,6 @@ export abstract class GraphAbstract {
             this.nodes.push(n);
         });
         //this.plane.getGraphScene().render();
-
-        this.layout.setInitPositions(this.nodes, () => {
-            //this.plane.getGraphScene().render();
-        });
     }
 
 
