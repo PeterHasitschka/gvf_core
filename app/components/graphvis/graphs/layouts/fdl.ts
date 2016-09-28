@@ -3,6 +3,9 @@ import {NodeAbstract} from '../nodes/abstract';
 import {Plane} from '../../../plane/plane';
 import {EdgeAbstract} from "../edges/abstract";
 
+/**
+ * Force-Directed-Layout for Graphs
+ */
 export class GraphLayoutFdl extends GraphLayoutAbstract {
 
     constructor(protected plane:Plane, nodes:NodeAbstract[], edges:EdgeAbstract[]) {

@@ -22,6 +22,5 @@ export class SideInfoComponent implements OnInit {
     }
 
     ngOnInit():void {
-        //console.log(this.infomodel);
     }
 }

@@ -8,6 +8,9 @@ export enum SideInfoContentType {
     Text
 }
 
+/**
+ * Model holding the title, the content-type and optional data for side-info content
+ */
 export class SideInfoModel {
     constructor(private title:String, private position:SideInfoPositions, private type:SideInfoContentType, private data?:{}) {
 

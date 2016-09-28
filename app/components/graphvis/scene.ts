@@ -25,42 +25,33 @@ export class GraphScene {
      * @param{Object} dimensions - Simple object holding 'x' and 'y' value, defining the size
      */
     constructor(private container:HTMLElement, private dimensions:Object) {
-
         var config = GraphVisConfig.scene;
-        // set the scene size
         var canvasW = dimensions["x"],
             canvasH = dimensions["y"];
 
-
-        // create a WebGL renderer, camera
-        // and a scene
         this.threeRenderer = new THREE.WebGLRenderer({alpha: true, antialias: true});
 
-
-        // this.threeCamera = new THREE.OrthographicCamera(
-        //     canvasW / -2,
-        //     canvasW / 2,
-        //     canvasH / 2,
-        //     canvasH / -2,
-        //     config.near,
-        //     config.far);
+        /**
+         this.threeCamera = new THREE.OrthographicCamera(
+         canvasW / -2,
+         canvasW / 2,
+         canvasH / 2,
+         canvasH / -2,
+         config.near,
+         config.far);
+         **/
 
         this.threeCamera = new THREE.PerspectiveCamera(45, canvasW / canvasH, config.near, config.far);
-
         this.threeScene = new THREE.Scene();
 
-        // add the camera to the scene
+
         this.threeScene.add(this.threeCamera);
 
-        // the camera starts at 0,0,0
-        // so pull it back
         this.threeCamera.position.z = config.camera.z;
 
-        // start the renderer
         this.threeRenderer.setSize(canvasW, canvasH);
         this.threeRenderer.setClearColor(0xffffff, 0);
 
-        // attach the render-supplied DOM element
         this.container.appendChild(this.threeRenderer.domElement);
 
         this.mouseInteractions = new MouseInteractions(this);
@@ -68,21 +59,12 @@ export class GraphScene {
 
         this.objectGroup = new THREE.Object3D();
         this.threeScene.add(this.objectGroup);
-        //this.render()
-
     }
-
 
     /**
-     * @TODO: Not perfect due to performance...
-     * Thus not used currently...
+     * Adding an object to the scene's container
+     * @param obj
      */
-    public animate() {
-        requestAnimationFrame(this.animate.bind(this));
-        this.render();
-    }
-
-
     public addObject(obj:THREE.Object3D) {
         this.objectGroup.add(obj);
     }
@@ -92,8 +74,6 @@ export class GraphScene {
      */
     public render():void {
         this.threeRenderer.render(this.threeScene, this.threeCamera);
-        // var err = new Error();
-        //console.log("rendering");
     }
 
 
@@ -117,6 +97,10 @@ export class GraphScene {
         return this.container;
     }
 
+    /**
+     * Returning the container that holds all the scene's objects
+     * @returns {THREE.Object3D}
+     */
     public getObjectGroup():THREE.Object3D {
         return this.objectGroup;
     }

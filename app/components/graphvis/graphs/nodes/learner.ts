@@ -18,12 +18,19 @@ export class NodeLearner extends NodeSimple {
         this.setColor(this.color);
     }
 
-
+    /**
+     * On Mouse-Hover
+     * Sending an Event for notifying that node was intersected
+     */
     public onIntersectStart():void {
         InterGraphEventService.getInstance().send(INTERGRAPH_EVENTS.LEARNER_NODE_HOVERED, this);
         super.onIntersectStart();
     }
 
+    /**
+     * On Mouse-Leave
+     * Sending an Event for notifying that node was left
+     */
     public onIntersectLeave():void {
         InterGraphEventService.getInstance().send(INTERGRAPH_EVENTS.LEARNER_NODE_LEFT, this);
         super.onIntersectLeave();

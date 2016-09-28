@@ -1,4 +1,10 @@
 import {GraphScene} from "./scene";
+
+/**
+ * Class that manages mouse interactions by recognizing intersections on THREE Objects and
+ * calling registered methods on them
+ * It holds all currently intersected objects to further allow recognize if objects are left
+ */
 export class MouseInteractions {
 
     private mouseContainerPos = {x: null, y: null};
@@ -46,6 +52,10 @@ export class MouseInteractions {
         this.currentlyIntersected = newIntersected;
     }
 
+    /**
+     * Setting the current mouse position
+     * @param event
+     */
     private onDocumentMouseMove(event) {
         this.mouseContainerPos.x = ( event.offsetX / this.scene.getThreeRenderer().getSize()["width"] ) * 2 - 1;
         this.mouseContainerPos.y = -( event.offsetY / this.scene.getThreeRenderer().getSize()["height"] ) * 2 + 1;

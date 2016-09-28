@@ -24,6 +24,12 @@ export abstract class NodeAbstract extends THREE.Mesh implements GraphObject {
     protected dataEntity:DataAbstract;
     protected edges = [];
 
+    /**
+     * Constructor of the abstract node
+     * @param x X-Position on the Plane
+     * @param y Y-Position on the Plane
+     * @param plane Plane Instance
+     */
     constructor(x:number, y:number, plane:Plane) {
 
         /**
@@ -54,7 +60,13 @@ export abstract class NodeAbstract extends THREE.Mesh implements GraphObject {
         this.setPosition(x, y);
     }
 
-
+    /**
+     * Set the position of the node.
+     * Edges are getting updated automatically.
+     * NO Render-Call is made
+     * @param x
+     * @param y
+     */
     public setPosition(x:number, y:number):void {
         this.position.setX(x);
         this.position.setY(y);
@@ -63,42 +75,66 @@ export abstract class NodeAbstract extends THREE.Mesh implements GraphObject {
         });
     }
 
+    /**
+     * Returns object containing x,y,z position
+     * @returns {Vector3}
+     */
     public getPosition():THREE.Vector3 {
         return this.position;
     }
 
+    /**
+     * Add an edge to the object.
+     * The edge's nodes are NOT affected by this
+     * @param edge
+     */
     public addEdge(edge:EdgeAbstract) {
         this.edges.push(edge);
     }
 
+    /**
+     * Return the node's data
+     * @returns {DataAbstract}
+     */
     public getDataEntity():DataAbstract {
         return this.dataEntity;
     }
 
-
+    /**
+     * Abstract of highlighting a node
+     * The defined highlight-color is applied
+     * No rendering is made
+     */
     public highlightNode() {
         if (this.isHighlighted)
             return;
         this.isHighlighted = true;
         this.threeMaterial.color.setHex(this.highlightColor);
-        //this.plane.getGraphScene().render();
     }
 
+    /**
+     * Abstract of De-highlighting a node
+     * The defined standard-color is applied
+     * No rendering is made
+     */
     public deHighlightNode() {
         if (!this.isHighlighted)
             return;
         this.isHighlighted = false;
         this.threeMaterial.color.setHex(this.color);
-        //this.plane.getGraphScene().render();
     }
 
+    /**
+     * Callback called when node is intersected the first time (Mouse-Hover)
+     */
     public onIntersectStart():void {
-        //console.log("Intersected a node " + this.dataEntity.getId());
         this.highlightNode();
     }
 
+    /**
+     * Callback called when node is not intersected anymore (Mouse-Leave)
+     */
     public onIntersectLeave():void {
-        //console.log("UN-Intersected a node " + this.dataEntity.getId());
         this.deHighlightNode();
     }
 }

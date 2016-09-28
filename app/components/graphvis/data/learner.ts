@@ -11,12 +11,20 @@ export class Learner extends DataAbstract {
 
     protected static dataList:Learner[] = [];
 
+    /**
+     * Learner constructor
+     * @param data Holds an id and at least a 'name' property by current definition
+     */
     constructor(protected data: Object) {
         super(data);
         Learner.dataList.push(this);
     }
 
-
+    /**
+     * Static method to get all learners that share a specific resource
+     * @param resource {Resource}
+     * @returns {Learner[]}
+     */
     public static getLearnersByResource(resource:Resource):Learner[]{
 
         let outList:Learner[] = [];
@@ -30,6 +38,10 @@ export class Learner extends DataAbstract {
         return outList;
     }
 
+    /**
+     * Get all Learners
+     * @returns {Learner[]}
+     */
     public static getDataList():Learner[]{
         return Learner.dataList;
     }

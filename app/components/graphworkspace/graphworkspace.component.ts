@@ -18,23 +18,18 @@ export class GraphworkspaceComponent implements OnInit {
 
     private planes:Plane[];
 
-
     constructor(private dataService:DataService, private uiService:UiService) {
         this.planes = [];
-
     }
 
     ngOnInit():void {
 
-        //Add two simple planes
         this.dataService.fetchData().then(() => {
 
             console.log("Creating two basic planes");
             this.addPlane(new Plane("Resource Graph", 'resource', this.uiService));
             this.addPlane(new Plane("Learner Graph", 'learner', this.uiService));
         });
-
-
     }
 
     /**
@@ -60,7 +55,6 @@ export class GraphworkspaceComponent implements OnInit {
         var c = GraphVisConfig.plane_grid;
         var out = "col-xs-" + (12 / c.xs) + " col-sm-" + (12 / c.sm) +
             " col-md-" + (12 / c.md) + " col-lg-" + (12 / c.lg);
-
         return out;
     }
 

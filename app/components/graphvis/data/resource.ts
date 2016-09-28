@@ -11,17 +11,21 @@ export class Resource extends DataAbstract {
 
     protected static dataList:Resource[] = [];
 
+    /**
+     * Resource constructor
+     * @param data Holds an ID, and at least a 'title' property by current definition
+     */
     constructor(protected data:Object) {
         super(data);
         Resource.dataList.push(this);
     }
 
 
-    public static getDataList():Resource[] {
-        return Resource.dataList;
-    }
-
-
+    /**
+     * Static function to get all resources that have a specific learner
+     * @param learner {Learner}
+     * @returns {Resource[]}
+     */
     public static getResourcesByLearner(learner:Learner):Resource[] {
 
         let outList:Resource[] = [];
@@ -35,4 +39,11 @@ export class Resource extends DataAbstract {
         return outList;
     }
 
+    /**
+     * Get all resources
+     * @returns {Resource[]}
+     */
+    public static getDataList():Resource[] {
+        return Resource.dataList;
+    }
 }

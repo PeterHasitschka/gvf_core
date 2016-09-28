@@ -15,13 +15,16 @@ import 'rxjs/add/operator/toPromise'
  */
 export class DataService {
 
-
     static instance:DataService;
     static isCreating:Boolean = false;
 
     private data;
 
-
+    /**
+     * If true, the server is used for retrieving data (also dummy data).
+     * Else data is generated on the fly (e.g. for performance benchmarks)
+     * @type {boolean}
+     */
     static USE_SERVER_DATA = true;
     static DUMMYDATA = {
         learners: 'dummydata/frenchcourse/learners.json',
@@ -29,21 +32,27 @@ export class DataService {
         activities: 'dummydata/frenchcourse/activities.json',
     };
 
-
+    /**
+     * Creating the singleton instance
+     * @param http
+     * @returns {DataService}
+     */
     constructor(private http:Http) {
-
         this.data = {
             learners: [],
             resources: [],
             activities: []
         };
-
         if (!DataService.isCreating) {
-            //throw new Error("You can't call new in Singleton instances!");
             return DataService.getInstance(http);
         }
     }
 
+    /**
+     * Getting the singleton instance of the DataSErvice
+     * @param http
+     * @returns {DataService}
+     */
     static getInstance(http?) {
         if (DataService.instance == null) {
             DataService.isCreating = true;
@@ -53,22 +62,27 @@ export class DataService {
         return DataService.instance;
     }
 
-
-    fetchData() {
+    /**
+     * Fetching data.
+     * @param cb {Function} Optional Callback when ready
+     * @returns {null}
+     */
+    fetchData(cb?:Function) {
         var ret = null;
-
-
         if (DataService.USE_SERVER_DATA)
             ret = this.fetchDataFromServer();
         else
             ret = this.fetchGeneratedDummyData().then(()=> {
-                "Ready fetch data"
+                if (cb)
+                    cb();
             });
-
-        console.log(this.data);
         return ret;
     }
 
+    /**
+     * Generating and retrieving Dummy-Data
+     * @returns {Promise<boolean>}
+     */
     fetchGeneratedDummyData() {
 
         let USER_LENGTH = 500;
@@ -96,12 +110,14 @@ export class DataService {
                 learner2_id: Math.floor(Math.random() * USER_LENGTH),
             }));
         }
-
         return Promise.resolve(true);
-
-
     }
 
+    /**
+     * Fetching and returning learners, resources, and activities from the server.
+     * Returned as Promise.
+     * @returns {Promise<TResult>}
+     */
     fetchDataFromServer() {
         console.log("Fetching learning-platform data from server...");
         return this.fetchLearners()
@@ -114,6 +130,10 @@ export class DataService {
     }
 
 
+    /**
+     * Fetching the learners from server, returning as promise
+     * @returns {Promise<TResult>}
+     */
     fetchLearners() {
         console.log("Fetching learners data from server...");
         return this.http.get(DataService.DUMMYDATA.learners)
@@ -128,6 +148,10 @@ export class DataService {
             });
     }
 
+    /**
+     * Fetching the resources from server, returning as promise
+     * @returns {Promise<TResult>}
+     */
     fetchResources() {
         console.log("Fetching resource data from server...");
         return this.http.get(DataService.DUMMYDATA.resources)
@@ -142,6 +166,10 @@ export class DataService {
             });
     }
 
+    /**
+     * Fetching the activities from server, returning as promise
+     * @returns {Promise<TResult>}
+     */
     fetchActivities() {
         console.log("Fetching activities data from server...");
         return this.http.get(DataService.DUMMYDATA.activities)
@@ -156,14 +184,26 @@ export class DataService {
             });
     }
 
+    /**
+     * Return the (stored) learners
+     * @returns {Array}
+     */
     getLearners():Learner[] {
         return this.data.learners;
     }
 
+    /**
+     * Return the (stored) resources
+     * @returns {Array}
+     */
     getResources():Resource[] {
         return this.data.resources;
     }
 
+    /**
+     * Return the (stored) activities
+     * @returns {Array}
+     */
     getActivities():Activity[] {
         return this.data.activities;
     }

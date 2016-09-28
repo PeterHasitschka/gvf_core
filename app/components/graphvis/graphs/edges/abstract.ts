@@ -9,6 +9,7 @@ import {NodeAbstract} from "../nodes/abstract";
  * Abstract class of an Edge for the GraphVis
  * Derived from the @see{THREE.Line} class.
  * Thus, it holds a geometry and a material
+ * but also its two connecting nodes
  * @author Peter Hasitschka
  */
 export abstract class EdgeAbstract extends THREE.Line implements GraphObject {
@@ -22,7 +23,13 @@ export abstract class EdgeAbstract extends THREE.Line implements GraphObject {
     protected sourceNode:NodeAbstract;
     protected destNode:NodeAbstract;
 
-
+    /**
+     * Creating an edge by taking the nodes and the plane
+     * Nodes and config-values define the geometry and material
+     * @param sourceNode
+     * @param destNode
+     * @param plane
+     */
     constructor(sourceNode:NodeAbstract, destNode:NodeAbstract, plane:Plane) {
 
         let startX:number = sourceNode.getPosition()['x'];
@@ -54,13 +61,21 @@ export abstract class EdgeAbstract extends THREE.Line implements GraphObject {
         this.zPos = config.abstractedge.z_pos;
     }
 
+    /**
+     * Setting a (hexadecimal) color
+     * No rendering is performed!
+     * @param color
+     */
     public setColor(color:number) {
         this.color = color;
         this.threeMaterial.color.setHex(color);
     }
 
+    /**
+     * Updating the position of the edge by taking its nodes' position
+     * No rendering is performed!
+     */
     public updatePositions() {
-        //console.warn("Implement");
         this.threeGeometry.vertices[0]['x'] = this.sourceNode.getPosition()['x'];
         this.threeGeometry.vertices[0]['y'] = this.sourceNode.getPosition()['y'];
         this.threeGeometry.vertices[1]['x'] = this.destNode.getPosition()['x'];
@@ -70,18 +85,32 @@ export abstract class EdgeAbstract extends THREE.Line implements GraphObject {
 
     }
 
+    /**
+     * Callback on hovering the edge
+     */
     public onIntersectStart():void {
         //console.log("Intersected an edge");
     }
 
+    /**
+     * Callback on leaving the edge
+     */
     public onIntersectLeave():void {
         //console.log("UN-Intersected an edge");
     }
 
+    /**
+     * Return the Source-Node
+     * @returns {NodeAbstract}
+     */
     public getSourceNode():NodeAbstract {
         return this.sourceNode;
     }
 
+    /**
+     * Return the Destination-Node
+     * @returns {NodeAbstract}
+     */
     public getDestNode():NodeAbstract {
         return this.destNode;
     }

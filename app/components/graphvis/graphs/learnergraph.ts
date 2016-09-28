@@ -25,7 +25,7 @@ export class LearnerGraph extends GraphAbstract {
 
     protected data:Resource[];
 
-    constructor(plane:Plane, private dataService:DataService) {
+    constructor(plane:Plane) {
         super(plane);
 
         this.dataGetterMethod = DataService.getInstance().getLearners.bind(DataService.getInstance());
@@ -34,10 +34,11 @@ export class LearnerGraph extends GraphAbstract {
         this.layoutClass = GraphLayoutFdl;
 
         this.addEventListeners();
-
     }
 
-
+    /**
+     * Adding event listeners for hovered and un-hovered resource(!) nodes
+     */
     private addEventListeners() {
         InterGraphEventService.getInstance().addListener(INTERGRAPH_EVENTS.RESOURCE_NODE_HOVERED, function (e) {
 
@@ -63,12 +64,14 @@ export class LearnerGraph extends GraphAbstract {
     }
 
 
-
     public init():void {
         super.init();
     }
 
-
+    /**
+     * Creating edges that connect learners with others that share resources and those who communicate
+     * @returns {EdgeAbstract[]}
+     */
     protected createEdges():EdgeAbstract[] {
         let activities = DataService.getInstance().getActivities();
         let edges:EdgeAbstract[] = [];
@@ -112,10 +115,8 @@ export class LearnerGraph extends GraphAbstract {
                 n1.addEdge(learningConnection);
                 n2.addEdge(learningConnection);
                 edges.push(learningConnection);
-                //this.plane.getGraphScene().addObject(learningConnection);
             }
         }
-        //this.plane.getGraphScene().render();
 
         for (let l1Id in communications) {
             let l1Communicators = communications[l1Id];
@@ -130,11 +131,8 @@ export class LearnerGraph extends GraphAbstract {
                 n1.addEdge(communicationConnection);
                 n2.addEdge(communicationConnection);
                 edges.push(communicationConnection);
-                //this.plane.getGraphScene().addObject(communicationConnection);
             }
         }
-
-        //this.plane.getGraphScene().render();
 
         return edges;
     }

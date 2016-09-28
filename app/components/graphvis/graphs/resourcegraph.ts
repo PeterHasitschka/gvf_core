@@ -36,7 +36,9 @@ export class ResourceGraph extends GraphAbstract {
         this.addEventListeners();
     }
 
-
+    /**
+     * Adding event listeners for hovered and un-hovered learner(!) nodes
+     */
     private addEventListeners() {
         InterGraphEventService.getInstance().addListener(INTERGRAPH_EVENTS.LEARNER_NODE_HOVERED, function (e) {
 
@@ -62,12 +64,14 @@ export class ResourceGraph extends GraphAbstract {
     }
 
 
-
     public init():void {
         super.init();
     }
 
-
+    /**
+     * Create edges that connect resources that share learners
+     * @returns {EdgeAbstract[]}
+     */
     protected createEdges():EdgeAbstract[] {
         let activities = DataService.getInstance().getActivities();
         let edges:EdgeAbstract[] = [];
@@ -96,16 +100,12 @@ export class ResourceGraph extends GraphAbstract {
                     let resourceConnection = new EdgeBasic(n1, n2, this.plane);
                     n1.addEdge(resourceConnection);
                     n2.addEdge(resourceConnection);
-                    //this.plane.getGraphScene().addObject(resourceConnection);
                     edges.push(resourceConnection);
                 }
             });
 
         }
 
-
-
-        //this.plane.getGraphScene().render();
         return edges;
     }
 }

@@ -50,12 +50,10 @@ export class PlaneComponent {
             )
         );
 
-        window.setTimeout(function(){
+        window.setTimeout(function () {
             this.plane.initScene(this.id);
-        }.bind(this),0)
-
+        }.bind(this), 0)
     }
-
 
     public getId():number {
         return this.id;

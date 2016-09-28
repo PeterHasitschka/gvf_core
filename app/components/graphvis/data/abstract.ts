@@ -9,6 +9,10 @@ export abstract class DataAbstract {
 
     protected id:number;
 
+    /**
+     * Data object, which at least holds an ID taken as parameter on constructor
+     * @param data
+     */
     constructor(protected data:Object) {
         this.id = data["id"];
     }
@@ -17,6 +21,11 @@ export abstract class DataAbstract {
         return this.id;
     }
 
+    /**
+     * Getting a data value
+     * @param key {string} Key of the property
+     * @returns {any} null if not existing, else value
+     */
     public getData(key:string) {
 
         if (typeof this.data[key] === 'undefined')
@@ -24,7 +33,13 @@ export abstract class DataAbstract {
         return this.data[key];
     }
 
-    public static getObject(id:number){
+    /**
+     * Static function to get a data object by its ID
+     * Returns null if not found
+     * @param id {number} ID to find
+     * @returns {DataAbstract|null}
+     */
+    public static getObject(id:number) {
         let foundObj:DataAbstract = null;
         this.dataList.forEach((obj:DataAbstract) => {
             if (foundObj)
@@ -35,7 +50,11 @@ export abstract class DataAbstract {
         return foundObj;
     }
 
-    public static getDataList():DataAbstract[]{
+    /**
+     * Get all data objects of the derived entity-type as list
+     * @returns {DataAbstract[]}
+     */
+    public static getDataList():DataAbstract[] {
         return DataAbstract.dataList;
     }
 }

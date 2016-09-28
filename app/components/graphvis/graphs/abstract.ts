@@ -52,7 +52,10 @@ export abstract class GraphAbstract {
         });
     }
 
-
+    /**
+     * Abstract for creating edges, which is called after loading data
+     * @returns {Array}
+     */
     protected createEdges():EdgeAbstract[] {
         return []
     }
@@ -71,10 +74,14 @@ export abstract class GraphAbstract {
             this.plane.getGraphScene().addObject(n);
             this.nodes.push(n);
         });
-        //this.plane.getGraphScene().render();
     }
 
-
+    /**
+     * Get a @see{NodeAbstract} Object by its data-id
+     * If not found, null is returned
+     * @param id
+     * @returns {NodeAbstract}
+     */
     protected getNodeByDataId(id:number):NodeAbstract {
         let foundNode:NodeAbstract = null;
         this.nodes.forEach((node:NodeAbstract) => {
@@ -89,7 +96,11 @@ export abstract class GraphAbstract {
         return foundNode;
     }
 
-
+    /**
+     * Get a node by its Data-Entity
+     * @param entity
+     * @returns {NodeAbstract[]}
+     */
     protected getNodeByDataEntity(entity:DataAbstract):NodeAbstract[] {
 
         let out:NodeAbstract[] = [];
@@ -100,7 +111,10 @@ export abstract class GraphAbstract {
         return out;
     }
 
-
+    /**
+     * Edge Getter
+     * @returns {EdgeAbstract[]}
+     */
     public getEdges():EdgeAbstract[] {
         return this.edges;
     }

@@ -13,13 +13,16 @@ import {LearnerGraph} from "../../../graphvis/graphs/learnergraph";
     templateUrl: 'app/components/app/sideinfo/contentmodels/graph.html',
     // styleUrls: ['app/components/app/sideinfo/sideinfo.css']
 })
+
+/**
+ * Side-Info-Component-Content for graphs
+ */
 export class SideInfoContentGraphsettingsComponent implements OnDestroy {
 
     @Input() data:{};
     private nodeInfo = false;
 
     constructor(private intergraphEventService:InterGraphEventService) {
-
 
         this.intergraphEventService.addListener(INTERGRAPH_EVENTS.RESOURCE_NODE_HOVERED, function (e) {
             if (typeof this.data.graphtype === "undefined") {

@@ -1,4 +1,3 @@
-
 import {Injectable} from "@angular/core";
 
 
@@ -10,6 +9,10 @@ export enum INTERGRAPH_EVENTS {
 }
 
 @Injectable()
+/**
+ * Service responsible for handling events that are sent and catched by different graphs
+ * Also callable via singleton if not used in angular-logic as injected service
+ */
 export class InterGraphEventService {
 
     static instance:InterGraphEventService;
@@ -18,11 +21,14 @@ export class InterGraphEventService {
 
     constructor() {
         if (!InterGraphEventService.isCreating) {
-            //throw new Error("You can't call new in Singleton instances!");
             return InterGraphEventService.getInstance();
         }
     }
 
+    /**
+     * Getting the service instance
+     * @returns {InterGraphEventService}
+     */
     static getInstance() {
         if (InterGraphEventService.instance == null) {
             InterGraphEventService.isCreating = true;
@@ -32,12 +38,22 @@ export class InterGraphEventService {
         return InterGraphEventService.instance;
     }
 
+    /**
+     * Sending an event with specific data
+     * @param evtKey
+     * @param data
+     */
     public send(evtKey:INTERGRAPH_EVENTS, data) {
 
-        let evt = new CustomEvent(INTERGRAPH_EVENTS[evtKey], {detail : data});
+        let evt = new CustomEvent(INTERGRAPH_EVENTS[evtKey], {detail: data});
         window.dispatchEvent(evt);
     }
 
+    /**
+     * Adding a listener for an event
+     * @param evtKey
+     * @param fct
+     */
     public addListener(evtKey:INTERGRAPH_EVENTS, fct) {
         window.addEventListener(INTERGRAPH_EVENTS[evtKey], fct, false);
     }
