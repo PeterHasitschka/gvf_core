@@ -49,7 +49,11 @@ export class PlaneComponent {
             }
             )
         );
-        this.plane.initScene(this.id);
+
+        window.setTimeout(function(){
+            this.plane.initScene(this.id);
+        }.bind(this),0)
+
     }
 
 

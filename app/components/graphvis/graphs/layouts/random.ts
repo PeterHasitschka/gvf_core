@@ -23,9 +23,35 @@ export class GraphLayoutRandom extends GraphLayoutAbstract {
     }
 
 
-    public calculateLayout(nodes:NodeAbstract[], onFinish):void{
+    public calculateLayout(nodes:NodeAbstract[], onFinish):void {
 
         onFinish();
+
+        // let i = 0;
+        // var calcFct = function () {
+        //     if (i >= 40) {
+        //         this.plane.getGraphScene().render();
+        //         onFinish();
+        //         return;
+        //     }
+        //     requestAnimationFrame(calcFct);
+        //
+        //     i++;
+        //     nodes.forEach((node:NodeAbstract) => {
+        //         let pos = node.getPosition();
+        //
+        //
+        //         let x = pos['x'] / 100;
+        //         let y = pos['y'] / 100;
+        //         node.setPosition(pos['x'] - x, pos['y'] + y);
+        //     });
+        //     if (i % 10 == 0)
+        //         this.plane.getGraphScene().render();
+        // }.bind(this);
+        // calcFct();
+
+
     }
 
 }
+

@@ -15,7 +15,6 @@ import {EdgeColored} from "./edges/colored";
 import log1p = require("core-js/fn/math/log1p");
 import {EdgeAbstract} from "./edges/abstract";
 
-
 /**
  * The resource graph shows relations between Learning-Resources
  * Thus its Data consists of @see{Resource} data objects.

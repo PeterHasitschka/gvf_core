@@ -19,8 +19,9 @@ export abstract class EdgeAbstract extends THREE.Line implements GraphObject {
     protected zPos;
     protected color:number;
     protected plane:Plane;
-    private sourceNode:NodeAbstract;
-    private destNode:NodeAbstract;
+    protected sourceNode:NodeAbstract;
+    protected destNode:NodeAbstract;
+
 
     constructor(sourceNode:NodeAbstract, destNode:NodeAbstract, plane:Plane) {
 
@@ -44,6 +45,9 @@ export abstract class EdgeAbstract extends THREE.Line implements GraphObject {
         super(geometry, material);
         this.plane = plane;
 
+        this.sourceNode = sourceNode;
+        this.destNode = destNode;
+
         this.color = color;
         this.threeGeometry = geometry;
         this.threeMaterial = material;
@@ -55,8 +59,15 @@ export abstract class EdgeAbstract extends THREE.Line implements GraphObject {
         this.threeMaterial.color.setHex(color);
     }
 
-    public updatePositions(){
-        console.warn("Implement");
+    public updatePositions() {
+        //console.warn("Implement");
+        this.threeGeometry.vertices[0]['x'] = this.sourceNode.getPosition()['x'];
+        this.threeGeometry.vertices[0]['y'] = this.sourceNode.getPosition()['y'];
+        this.threeGeometry.vertices[1]['x'] = this.destNode.getPosition()['x'];
+        this.threeGeometry.vertices[1]['y'] = this.destNode.getPosition()['y'];
+        this.threeGeometry.verticesNeedUpdate = true;
+
+
     }
 
     public onIntersectStart():void {
@@ -65,6 +76,14 @@ export abstract class EdgeAbstract extends THREE.Line implements GraphObject {
 
     public onIntersectLeave():void {
         //console.log("UN-Intersected an edge");
+    }
+
+    public getSourceNode():NodeAbstract {
+        return this.sourceNode;
+    }
+
+    public getDestNode():NodeAbstract {
+        return this.destNode;
     }
 }
 

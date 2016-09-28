@@ -52,6 +52,7 @@ export class Plane {
          */
         this.scene = new GraphScene(container, this.canvasDimensions);
         this.createBackPlane();
+
         /**
          * Create Graph, depending on graphtype-string
          */
@@ -127,6 +128,11 @@ export class Plane {
             console.error("Could not get Graph Scene - Not initialized yet?");
         return this.scene;
     }
+
+    public getGraph():GraphAbstract{
+        return this.graph;
+    }
+
 
     public getGraphType():string {
         return this.graphtype;

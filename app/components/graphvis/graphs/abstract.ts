@@ -25,6 +25,7 @@ export abstract class GraphAbstract {
     protected layoutClass:any;
     protected layout:LayoutInterface = null;
     protected nodes:NodeAbstract[];
+    protected edges:EdgeAbstract[];
 
 
     constructor(protected plane:Plane) {
@@ -38,16 +39,17 @@ export abstract class GraphAbstract {
         this.layout = new this.layoutClass(this.plane);
         this.loadData();
 
-        let edges:EdgeAbstract[] = this.createEdges();
-        edges.forEach((edge:EdgeAbstract) => {
+        this.edges = this.createEdges();
+        this.edges.forEach((edge:EdgeAbstract) => {
             this.plane.getGraphScene().addObject(edge);
         });
-
+        //this.plane.getGraphScene().render();
         this.layout.calculateLayout(this.nodes, function () {
             console.log("Finished calculating layout");
-        });
+            this.plane.getGraphScene().render();
+        }.bind(this));
 
-        this.plane.getGraphScene().render();
+
     }
 
 
@@ -100,5 +102,10 @@ export abstract class GraphAbstract {
                 out.push(node);
         });
         return out;
+    }
+
+
+    public getEdges():EdgeAbstract[] {
+        return this.edges;
     }
 }
