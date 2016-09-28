@@ -37,9 +37,21 @@ export class LearnerGraph extends GraphAbstract {
     }
 
     /**
-     * Adding event listeners for hovered and un-hovered resource(!) nodes
+     * Adding event listeners for hovered and un-hovered resource(!) nodes but also for same nodes
      */
     private addEventListeners() {
+        InterGraphEventService.getInstance().addListener(INTERGRAPH_EVENTS.LEARNER_NODE_HOVERED, function (e) {
+            let node:NodeLearner = e.detail;
+            node.highlightNode();
+            this.plane.getGraphScene().render();
+        }.bind(this));
+
+        InterGraphEventService.getInstance().addListener(INTERGRAPH_EVENTS.LEARNER_NODE_LEFT, function (e) {
+            let node:NodeLearner = e.detail;
+            node.deHighlightNode();
+            this.plane.getGraphScene().render();
+        }.bind(this));
+
         InterGraphEventService.getInstance().addListener(INTERGRAPH_EVENTS.RESOURCE_NODE_HOVERED, function (e) {
 
             let node:NodeResource = e.detail;
