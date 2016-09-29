@@ -99,6 +99,8 @@ export class ResourceGraph extends GraphAbstract {
             learnings[lId].push(rId);
         });
 
+        let existingEdgeList = {};
+
         for (let lKey in learnings) {
             if (learnings[lKey].length < 2)
                 continue;
@@ -109,15 +111,27 @@ export class ResourceGraph extends GraphAbstract {
                     let n1:NodeAbstract = this.getNodeByDataId(rKey);
                     let n2:NodeAbstract = this.getNodeByDataId(learnings[lKey][i + 1]);
 
+                    /**
+                     * Prevent same connection again.
+                     */
+                    let min = Math.min(n1.getDataEntity().getId(), n2.getDataEntity().getId());
+                    let max = Math.max(n1.getDataEntity().getId(), n2.getDataEntity().getId());
+                    if (typeof existingEdgeList[min] === "undefined")
+                        existingEdgeList[min] = [];
+                    if (existingEdgeList[min].indexOf(max) !== -1) {
+                        return;
+                    }
+                    existingEdgeList[min].push(max);
+
+
                     let resourceConnection = new EdgeBasic(n1, n2, this.plane);
                     n1.addEdge(resourceConnection);
                     n2.addEdge(resourceConnection);
                     edges.push(resourceConnection);
                 }
             });
-
         }
-        console.log("Resource Graph has an amount of edges:" + edges.length)
+        console.log("# of edges in resource graph:" + edges.length);
         return edges;
     }
 }
