@@ -117,7 +117,7 @@ export class ResourceGraph extends GraphAbstract {
             });
 
         }
-
+        console.log("Resource Graph has an amount of edges:" + edges.length)
         return edges;
     }
 }

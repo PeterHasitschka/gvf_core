@@ -22,7 +22,7 @@ export abstract class EdgeAbstract extends THREE.Line implements GraphObject {
     protected plane:Plane;
     protected sourceNode:NodeAbstract;
     protected destNode:NodeAbstract;
-    protected addRandom = false;
+    protected addRandom;
 
     /**
      * Creating an edge by taking the nodes and the plane
@@ -41,8 +41,8 @@ export abstract class EdgeAbstract extends THREE.Line implements GraphObject {
         let config = GraphVisConfig.edges;
         let color = config.abstractedge.color;
 
-        if (this.addRandom)
-            color = this.addRandomColorValue(color);
+        // if (this.addRandom)
+        //     color = this.addRandomColorValue(color);
 
         let material = new THREE.LineBasicMaterial({
             color: color,
