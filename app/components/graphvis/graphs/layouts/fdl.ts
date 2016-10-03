@@ -29,7 +29,28 @@ export class GraphLayoutFdl extends GraphLayoutAbstract {
 
     public calculateLayout(onFinish):void {
 
-        onFinish();
+
+        let iterations = 1000;
+
+        let i = 0;
+        var loopFct = function () {
+            this.reCalcPositions();
+
+            i++;
+
+            this.edges.forEach((edge:EdgeAbstract) => {
+                edge.updatePositions();
+            });
+            this.plane.getGraphScene().render();
+
+            if (i < iterations)
+                requestAnimationFrame(loopFct);
+            else {
+                onFinish()
+            }
+        }.bind(this);
+        loopFct();
+
 
         // let i = 0;
         // var calcFct = function () {
@@ -41,7 +62,7 @@ export class GraphLayoutFdl extends GraphLayoutAbstract {
         //     requestAnimationFrame(calcFct);
         //
         //     i++;
-        //     nodes.forEach((node:NodeAbstract) => {
+        //     this.nodes.forEach((node:NodeAbstract) => {
         //         let pos = node.getPosition();
         //
         //
@@ -57,5 +78,88 @@ export class GraphLayoutFdl extends GraphLayoutAbstract {
 
     }
 
+
+    private reCalcPositions() {
+
+        let NODE_REPULSION_FACTOR = 50;
+        let EDGE_FORCE_FACTOR = 1;
+        let VELOCITY_DAMPING = 0.1;
+
+        /**
+         * Template for this simple FDL algorithm:
+         * http://blog.ivank.net/force-based-graph-drawing-in-as3.html
+         */
+
+        /**
+         * Loop through all nodes
+         */
+        this.nodes.forEach((nodeV:NodeAbstract) => {
+
+            /**
+             * Init force and velocity
+             */
+
+            nodeV['force'] = {
+                x: 0,
+                y: 0
+            };
+
+                nodeV['velocity'] = {
+                    x: 0,
+                    y: 0
+                };
+
+            // if (nodeV.getEdges().length === 0) {
+            //     nodeV.setColor(0xAAFFAA);
+            //     return;
+            // }
+
+            /**
+             * Go through all other nodes to calculate distances
+             */
+            this.nodes.forEach((nodeU:NodeAbstract) => {
+
+                if (nodeV.getDataEntity().getId() === nodeU.getDataEntity().getId())
+                    return;
+
+                if (nodeU.getEdges().length === 0)
+                    return;
+
+                let distance = nodeV.getDistance(nodeU);
+                nodeV['force'].x += NODE_REPULSION_FACTOR * nodeV.getDistance(nodeU, 'x') / distance;
+                nodeV['force'].y += NODE_REPULSION_FACTOR * nodeV.getDistance(nodeU, 'y') / distance;
+            });
+
+            /**
+             * Calculate force between V and all its CONNECTED nodes
+             */
+            nodeV.getEdges().forEach((edge:EdgeAbstract) => {
+                let n1:NodeAbstract = edge.getSourceNode();
+                let n2:NodeAbstract = edge.getDestNode();
+
+                let nodeU:NodeAbstract = n1.getDataEntity().getId() === nodeV.getDataEntity().getId() ? n2 : n1;
+                nodeV['force'].x += nodeU.getDistance(nodeV, 'x') * EDGE_FORCE_FACTOR;
+                nodeV['force'].y += nodeU.getDistance(nodeV, 'y') * EDGE_FORCE_FACTOR;
+            });
+
+            /**
+             * Finally calculate V's velocity
+             */
+            nodeV['velocity'].x = (nodeV['velocity'].x + nodeV['force'].x) * VELOCITY_DAMPING;
+            nodeV['velocity'].y = (nodeV['velocity'].y + nodeV['force'].y) * VELOCITY_DAMPING;
+
+
+        });
+
+        /**
+         * Add velocity to position
+         */
+        this.nodes.forEach((nodeV:NodeAbstract) => {
+            let pos = nodeV.getPosition();
+            nodeV.setPosition(pos['x'] + nodeV['velocity'].x, pos['y'] + nodeV['velocity'].y);
+        });
+
+
+    }
 }
 

@@ -76,6 +76,13 @@ export abstract class NodeAbstract extends THREE.Mesh implements GraphObject {
     }
 
     /**
+     * Setting the color of the simple node (e.g. 0xffffff)
+     */
+    public setColor(color:number):void {
+        this.threeMaterial.color.setHex(color);
+    }
+
+    /**
      * Returns object containing x,y,z position
      * @returns {Vector3}
      */
@@ -90,6 +97,14 @@ export abstract class NodeAbstract extends THREE.Mesh implements GraphObject {
      */
     public addEdge(edge:EdgeAbstract) {
         this.edges.push(edge);
+    }
+
+    /**
+     * Get All Edges
+     * @returns {Array}
+     */
+    public getEdges():EdgeAbstract[] {
+        return this.edges;
     }
 
     /**
@@ -136,5 +151,24 @@ export abstract class NodeAbstract extends THREE.Mesh implements GraphObject {
      */
     public onIntersectLeave():void {
         this.deHighlightNode();
+    }
+
+    /**
+     * Calculate and return the distance to another node
+     * @param nodeU Node to compare
+     * @param dimension Optional: null or undefined => Squared distance, 'x' => X-Distance, 'y' => Y-Distance
+     *
+     */
+    public getDistance(nodeU:NodeAbstract, dimension?:string):number {
+        let posVX = this.getPosition()['x'];
+        let posVY = this.getPosition()['y'];
+        let posUX = nodeU.getPosition()['x'];
+        let posUY = nodeU.getPosition()['y'];
+
+        if (dimension === 'x')
+            return posVX - posUX;
+        if (dimension === 'y')
+            return posVY - posUY;
+        return Math.pow((posVX - posUX), 2) + Math.pow((posVY - posUY), 2);
     }
 }
