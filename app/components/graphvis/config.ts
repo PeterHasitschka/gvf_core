@@ -15,7 +15,7 @@ export class GraphVisConfig {
         far: 10000,
 
         camera: {
-            z: 300
+            z: 330
         },
 
         backplane: {

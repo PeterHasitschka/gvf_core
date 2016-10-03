@@ -152,8 +152,8 @@ export class GraphLayoutFdl extends GraphLayoutAbstract {
              * Calculate wall repulsion
              *
              */
-            let canvWHalf = this.plane.getCanvasSize()['x'] / 2.0 - 30;
-            let canvHHalf = this.plane.getCanvasSize()['y'] / 2.0 - 30;
+            let canvWHalf = this.plane.getCanvasSize()['x'] / 2.0;
+            let canvHHalf = this.plane.getCanvasSize()['y'] / 2.0;
             let posX = nodeV.getPosition()['x'];
             let posY = nodeV.getPosition()['y'];
             let wallDistX = posX <= 0 ? 0 - (canvWHalf) - posX : (canvWHalf) - posX;
