@@ -28,7 +28,7 @@ export abstract class GraphLayoutAbstract implements LayoutInterface {
             node.setPosition(posX, posY);
         });
         onFinish();
-    } 
+    }
 
     /**
      * Called at first to initialize the nodes' positions

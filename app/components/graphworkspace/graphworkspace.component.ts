@@ -8,6 +8,7 @@ import {UiService} from "../../services/ui.service";
 @Component({
     selector: 'graphworkspace',
     templateUrl: 'app/components/graphworkspace/graphworkspace.component.html',
+    styleUrls: ['app/components/graphworkspace/graphworkspace.css'],
 })
 /**
  * Component holding all @see{PlaneComponent} elements.
