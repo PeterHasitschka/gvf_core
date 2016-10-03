@@ -13,6 +13,7 @@ import {NodeAbstract} from "./nodes/abstract";
 import {InterGraphEventService, INTERGRAPH_EVENTS} from "../../../services/intergraphevents.service";
 import {NodeLearner} from "./nodes/learner";
 import {Learner} from "../data/learner";
+import {GraphLayoutFdl} from "./layouts/fdl";
 
 
 /**
@@ -31,7 +32,7 @@ export class ResourceGraph extends GraphAbstract {
         this.dataGetterMethod = DataService.getInstance().getResources.bind(DataService.getInstance());
 
         this.nodetype = NodeResource;
-        this.layoutClass = GraphLayoutRandom;
+        this.layoutClass = GraphLayoutFdl;
 
         this.addEventListeners();
     }

@@ -21,7 +21,7 @@ export class GraphLayoutRandom extends GraphLayoutAbstract {
     public setInitPositions(onFinish):void {
 
         let padding = 50;
-        let dimensions = this.plane.calculateCanvasSize();
+        let dimensions = this.plane.getCanvasSize();
         let xRange = dimensions['x'] - padding;
         let yRange = dimensions['y'] - padding;
         this.nodes.forEach(function (node:NodeAbstract, idx:number) {

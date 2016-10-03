@@ -15,7 +15,7 @@ export class GraphLayoutFdl extends GraphLayoutAbstract {
     public setInitPositions(onFinish):void {
 
         let padding = 50;
-        let dimensions = this.plane.calculateCanvasSize();
+        let dimensions = this.plane.getCanvasSize();
         let xRange = dimensions['x'] - padding;
         let yRange = dimensions['y'] - padding;
         this.nodes.forEach(function (node:NodeAbstract, idx:number) {
@@ -36,16 +36,20 @@ export class GraphLayoutFdl extends GraphLayoutAbstract {
         var loopFct = function () {
             this.reCalcPositions();
 
-            i++;
-
             this.edges.forEach((edge:EdgeAbstract) => {
                 edge.updatePositions();
             });
             this.plane.getGraphScene().render();
 
+            i++;
+            if (i % 50 === 0)
+                console.log(i);
+
             if (i < iterations)
                 requestAnimationFrame(loopFct);
+            //loopFct();
             else {
+
                 onFinish()
             }
         }.bind(this);
@@ -81,9 +85,10 @@ export class GraphLayoutFdl extends GraphLayoutAbstract {
 
     private reCalcPositions() {
 
-        let NODE_REPULSION_FACTOR = 50;
+        let NODE_REPULSION_FACTOR = 90;
         let EDGE_FORCE_FACTOR = 1;
         let VELOCITY_DAMPING = 0.1;
+        let WALL_REPULSION_FACTOR = 200;
 
         /**
          * Template for this simple FDL algorithm:
@@ -104,10 +109,10 @@ export class GraphLayoutFdl extends GraphLayoutAbstract {
                 y: 0
             };
 
-                nodeV['velocity'] = {
-                    x: 0,
-                    y: 0
-                };
+            nodeV['velocity'] = {
+                x: 0,
+                y: 0
+            };
 
             // if (nodeV.getEdges().length === 0) {
             //     nodeV.setColor(0xAAFFAA);
@@ -122,8 +127,8 @@ export class GraphLayoutFdl extends GraphLayoutAbstract {
                 if (nodeV.getDataEntity().getId() === nodeU.getDataEntity().getId())
                     return;
 
-                if (nodeU.getEdges().length === 0)
-                    return;
+                // if (nodeU.getEdges().length === 0)
+                //     return;
 
                 let distance = nodeV.getDistance(nodeU);
                 nodeV['force'].x += NODE_REPULSION_FACTOR * nodeV.getDistance(nodeU, 'x') / distance;
@@ -142,13 +147,46 @@ export class GraphLayoutFdl extends GraphLayoutAbstract {
                 nodeV['force'].y += nodeU.getDistance(nodeV, 'y') * EDGE_FORCE_FACTOR;
             });
 
+
+            /**
+             * Calculate wall repulsion
+             *
+             */
+            let canvWHalf = this.plane.getCanvasSize()['x'] / 2.0 - 30;
+            let canvHHalf = this.plane.getCanvasSize()['y'] / 2.0 - 30;
+            let posX = nodeV.getPosition()['x'];
+            let posY = nodeV.getPosition()['y'];
+            let wallDistX = posX <= 0 ? 0 - (canvWHalf) - posX : (canvWHalf) - posX;
+            let wallDistY = posY <= 0 ? 0 - canvHHalf - posY : canvHHalf - posY;
+
+            //Check if already outside of the wall
+            if (posX < (0 - canvWHalf)) {
+                wallDistX = 10;
+                //console.log("X < left edge", wallDistX);
+            }
+            else if (posX > canvWHalf) {
+                wallDistX = 10;
+                //console.log("X > right edge", wallDistX);
+            }
+            if (posY < (0 - canvHHalf)) {
+                wallDistY = -10;
+            }
+            else if (posY > canvHHalf) {
+                wallDistY = 10;
+                //console.log("Y > upper edge", wallDistY);
+            }
+
+            let wallRepX = 0 - Math.pow(wallDistX, -1) * WALL_REPULSION_FACTOR;
+            let wallRepY = 0 - Math.pow(wallDistY, -1) * WALL_REPULSION_FACTOR;
+
             /**
              * Finally calculate V's velocity
              */
-            nodeV['velocity'].x = (nodeV['velocity'].x + nodeV['force'].x) * VELOCITY_DAMPING;
-            nodeV['velocity'].y = (nodeV['velocity'].y + nodeV['force'].y) * VELOCITY_DAMPING;
+            nodeV['velocity'].x = (nodeV['velocity'].x + nodeV['force'].x + wallRepX) * VELOCITY_DAMPING;
+            nodeV['velocity'].y = (nodeV['velocity'].y + nodeV['force'].y + wallRepY) * VELOCITY_DAMPING;
 
 
+            //console.log(nodeV['velocity']);
         });
 
         /**
