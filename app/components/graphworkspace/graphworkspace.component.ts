@@ -29,7 +29,7 @@ export class GraphworkspaceComponent implements OnInit {
 
     ngOnInit():void {
         // Necessary for mousemoves
-        UiService.getInstance().setGraphWorkSpaceSvgElement(this.svgElement.nativeElement);
+        this.uiService.setGraphWorkSpaceSvgElement(this.svgElement.nativeElement);
 
         this.dataService.fetchData().then(() => {
             console.log("Creating two basic planes");

@@ -1,9 +1,13 @@
-<p>Graph Workspace</p>
 <div class="container-fluid">
     <div class="row">
-        <svg #graphworkspace_svgoverlay id="graphworkspace_svgoverlay" viewPort="0 0 1000 500"
+        <svg [ngClass]="{hidden: !uiService.graphWorkSpaceSvgElementVisible}" #graphworkspace_svgoverlay
+             id="graphworkspace_svgoverlay" viewPort="0 0 1000 500"
              xmlns="http://www.w3.org/2000/svg">
-            <line x1="20" y1="100" x2="100" y2="20" stroke-width="2" stroke="black"></line>
+
+                <line intergraphconnection [node1]="" [node2]=""></line>
+
+
+
 
         </svg>
         <graph-plane [class]="getGridClasses()" *ngFor="let p of getPlanes()" [plane]="p">

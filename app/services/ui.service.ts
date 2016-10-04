@@ -1,8 +1,5 @@
 import {Injectable} from "@angular/core";
-import {SideInfoComponent} from "../components/app/sideinfo/sideinfo.component";
-import {SideInfoModel, SideInfoPositions} from "../components/app/sideinfo/sideinfomodel";
-import {BehaviorSubject} from "rxjs/Rx";
-import {GraphworkspaceComponent} from "../components/graphworkspace/graphworkspace.component";
+import {SideInfoModel} from "../components/app/sideinfo/sideinfomodel";
 
 
 @Injectable()
@@ -19,10 +16,9 @@ export class UiService {
     static isCreating:Boolean = false;
 
     private graphWorkSpaceSvgElement:HTMLElement = null;
-    private graphWorkSpaceSvgElementVisible = false;
+    public graphWorkSpaceSvgElementVisible = false;
 
     constructor() {
-
         this.sideInfoElements = [];
         console.log("Created UI SERVICE");
         if (!UiService.isCreating) {
@@ -53,12 +49,12 @@ export class UiService {
         return this.graphWorkSpaceSvgElement;
     }
 
-    public showGraphWorkSpaceSvgElement(){
-        this.graphWorkSpaceSvgElementVisible = true;
+    public setGraphWorkSpaceSvgElementVisible(visible:boolean) {
+        this.graphWorkSpaceSvgElementVisible = visible;
     }
 
-    public hideGraphWorkSpaceSvgElement(){
-        this.graphWorkSpaceSvgElementVisible = false;
+    public getGraphWorkSpaceSvgElementVisible():boolean {
+        return this.graphWorkSpaceSvgElementVisible;
     }
 
 
