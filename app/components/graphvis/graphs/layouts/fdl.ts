@@ -29,7 +29,6 @@ export class GraphLayoutFdl extends GraphLayoutAbstract {
 
     public calculateLayout(onFinish):void {
 
-
         let iterations = 1000;
 
         let i = 0;
@@ -42,9 +41,6 @@ export class GraphLayoutFdl extends GraphLayoutAbstract {
             this.plane.getGraphScene().render();
 
             i++;
-            if (i % 50 === 0)
-                console.log(i);
-
             if (i < iterations)
                 requestAnimationFrame(loopFct);
             //loopFct();
@@ -54,31 +50,6 @@ export class GraphLayoutFdl extends GraphLayoutAbstract {
             }
         }.bind(this);
         loopFct();
-
-
-        // let i = 0;
-        // var calcFct = function () {
-        //     if (i >= 40) {
-        //         this.plane.getGraphScene().render();
-        //         onFinish();
-        //         return;
-        //     }
-        //     requestAnimationFrame(calcFct);
-        //
-        //     i++;
-        //     this.nodes.forEach((node:NodeAbstract) => {
-        //         let pos = node.getPosition();
-        //
-        //
-        //         let x = pos['x'] / 100;
-        //         let y = pos['y'] / 100;
-        //         node.setPosition(pos['x'] - x, pos['y'] + y);
-        //     });
-        //     if (i % 10 == 0)
-        //         this.plane.getGraphScene().render();
-        // }.bind(this);
-        // calcFct();
-
 
     }
 
@@ -114,11 +85,6 @@ export class GraphLayoutFdl extends GraphLayoutAbstract {
                 y: 0
             };
 
-            // if (nodeV.getEdges().length === 0) {
-            //     nodeV.setColor(0xAAFFAA);
-            //     return;
-            // }
-
             /**
              * Go through all other nodes to calculate distances
              */
@@ -127,8 +93,6 @@ export class GraphLayoutFdl extends GraphLayoutAbstract {
                 if (nodeV.getDataEntity().getId() === nodeU.getDataEntity().getId())
                     return;
 
-                // if (nodeU.getEdges().length === 0)
-                //     return;
 
                 let distance = nodeV.getDistance(nodeU);
                 nodeV['force'].x += NODE_REPULSION_FACTOR * nodeV.getDistance(nodeU, 'x') / distance;
