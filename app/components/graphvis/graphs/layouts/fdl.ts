@@ -13,17 +13,7 @@ export class GraphLayoutFdl extends GraphLayoutAbstract {
     }
 
     public setInitPositions(onFinish):void {
-
-        let padding = 50;
-        let dimensions = this.plane.getCanvasSize();
-        let xRange = dimensions['x'] - padding;
-        let yRange = dimensions['y'] - padding;
-        this.nodes.forEach(function (node:NodeAbstract, idx:number) {
-            var posX = Math.random() * xRange - xRange / 2;
-            var posY = Math.random() * yRange - yRange / 2;
-            node.setPosition(posX, posY);
-        });
-        onFinish();
+        this.distributeRandom(onFinish);
     }
 
 
