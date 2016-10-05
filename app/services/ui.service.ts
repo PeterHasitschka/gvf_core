@@ -18,6 +18,8 @@ export class UiService {
     private graphWorkSpaceSvgElement:HTMLElement = null;
     public graphWorkSpaceSvgElementVisible = false;
 
+    public intergraphConnections = [];
+
     constructor() {
         this.sideInfoElements = [];
         console.log("Created UI SERVICE");

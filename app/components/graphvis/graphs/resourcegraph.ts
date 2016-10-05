@@ -14,6 +14,7 @@ import {InterGraphEventService, INTERGRAPH_EVENTS} from "../../../services/inter
 import {NodeLearner} from "./nodes/learner";
 import {Learner} from "../data/learner";
 import {GraphLayoutFdl} from "./layouts/fdl";
+import {UiService} from "../../../services/ui.service";
 
 
 /**
@@ -61,9 +62,12 @@ export class ResourceGraph extends GraphAbstract {
                 let affectedResourceNodes = this.getNodeByDataEntity(r);
                 affectedResourceNodes.forEach((n:NodeResource) => {
                     n.highlightNode();
+                    UiService.getInstance().intergraphConnections.push([node, n]);
                 });
             });
             this.plane.getGraphScene().render();
+
+            console.log(UiService.getInstance().intergraphConnections);
         }.bind(this));
 
 
@@ -73,6 +77,8 @@ export class ResourceGraph extends GraphAbstract {
                 n.deHighlightNode();
             });
             this.plane.getGraphScene().render();
+
+            UiService.getInstance().intergraphConnections = [];
         }.bind(this));
     }
 
