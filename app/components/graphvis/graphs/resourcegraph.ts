@@ -62,12 +62,12 @@ export class ResourceGraph extends GraphAbstract {
                 let affectedResourceNodes = this.getNodeByDataEntity(r);
                 affectedResourceNodes.forEach((n:NodeResource) => {
                     n.highlightNode();
-                    UiService.getInstance().intergraphConnections.push([node, n]);
+
+                    // Add to integraph connections
+                    UiService.getInstance().addNodesToIntergraphConnection(node, n);
                 });
             });
             this.plane.getGraphScene().render();
-
-            //console.log(UiService.getInstance().intergraphConnections);
         }.bind(this));
 
 
@@ -78,7 +78,7 @@ export class ResourceGraph extends GraphAbstract {
             });
             this.plane.getGraphScene().render();
 
-            UiService.getInstance().intergraphConnections = [];
+            UiService.getInstance().clearIntergraphConnections();
         }.bind(this));
     }
 

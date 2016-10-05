@@ -70,4 +70,13 @@ export class UiService {
         return this.sideInfoElements;
     }
 
+
+    addNodesToIntergraphConnection(node1, node2) {
+        if (this.getGraphWorkSpaceSvgElementVisible())
+            this.intergraphConnections.push([node1, node2]);
+    }
+
+    clearIntergraphConnections(){
+        this.intergraphConnections = [];
+    }
 }
