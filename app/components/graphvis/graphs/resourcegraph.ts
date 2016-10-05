@@ -67,7 +67,7 @@ export class ResourceGraph extends GraphAbstract {
             });
             this.plane.getGraphScene().render();
 
-            console.log(UiService.getInstance().intergraphConnections);
+            //console.log(UiService.getInstance().intergraphConnections);
         }.bind(this));
 
 

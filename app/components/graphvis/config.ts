@@ -61,6 +61,11 @@ export class GraphVisConfig {
         lg: 2
     };
 
+    public static intergraph_connections = {
+        width : 0.1,
+        color : "grey"
+    }
+
 
     public static active_graphs = {
         'resource': ResourceGraph,
