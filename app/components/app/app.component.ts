@@ -41,7 +41,7 @@ export class AppComponent implements OnInit {
             "Prototype",
             SideInfoPositions.Left,
             SideInfoContentType.Text,
-            {text: "Prototype Version for demonstrating and planning feature described in D3.1"}
+            {text: "Prototype of GVF. Work in progress: Separating framework from specific project."}
             )
         );
 
