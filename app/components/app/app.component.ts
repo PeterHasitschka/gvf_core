@@ -45,7 +45,6 @@ export class AppComponent implements OnInit {
             {text: "Prototype of GVF. Work in progress: Separating framework from specific project."}
             )
         );
-
         //console.log(this.sideInfoElements);
     }
 

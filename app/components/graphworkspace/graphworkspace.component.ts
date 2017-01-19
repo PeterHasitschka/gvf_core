@@ -6,7 +6,7 @@ import {DataService} from "../../services/data.service";
 import {UiService} from "../../services/ui.service";
 import {SceneMouseInteractions} from "../graphvis/scenemouseinteractions";
 import {ApiService} from "../../services/apiservice";
-import {AfelDataFetcher} from "../../../afel/datafetcher";
+
 
 @Component({
     selector: 'graphworkspace',

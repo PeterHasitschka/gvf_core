@@ -1,7 +1,4 @@
 import {Injectable} from '@angular/core';
-import {Learner} from '../../afel/data/learner'
-import {Resource} from '../../afel/data/resource'
-import {Activity} from '../../afel/data/activity'
 import {Http} from '@angular/http';
 
 import 'rxjs/add/operator/map'
