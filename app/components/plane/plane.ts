@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
 import {GraphScene} from '../graphvis/scene';
-import {Learner} from '../graphvis/data/learner';
+import {Learner} from '../../../afel/data/learner';
 import {GraphVisConfig} from '../graphvis/config';
 import {GraphAbstract} from '../graphvis/graphs/abstract';
 import {UiService} from "../../services/ui.service";

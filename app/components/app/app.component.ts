@@ -55,7 +55,7 @@ export class AppComponent implements OnInit {
      * @todo: Remove if not necessary anymore
      */
     addDummyPlane():void {
-        this.graphworkspace.addPlane(new Plane("Plane something " + Math.random(), 'resource', this.uiService));
+        this.graphworkspace.addPlane(new Plane("Plane something " + Math.random(), 'basic', this.uiService));
     }
 
     /**

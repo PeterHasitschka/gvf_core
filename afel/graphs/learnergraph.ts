@@ -1,20 +1,21 @@
-import {Plane} from '../../plane/plane';
-import {GraphAbstract} from './abstract';
+import {Plane} from '../../app/components/plane/plane';
+import {GraphAbstract} from '../../app/components/graphvis/graphs/abstract';
 import {Resource} from '../data/resource';
-import {DataService} from '../../../services/data.service';
+import {DataService} from '../../app/services/data.service';
 
 import {NodeLearner} from './nodes/learner';
 
-import {GraphLayoutRandom} from './layouts/random';
-import {InterGraphEventService, INTERGRAPH_EVENTS} from "../../../services/intergraphevents.service";
+import {GraphLayoutRandom} from '../../app/components/graphvis/graphs/layouts/random';
+import {InterGraphEventService, INTERGRAPH_EVENTS} from "../../app/services/intergraphevents.service";
 import {NodeResource} from "./nodes/resource";
 import {Learner} from "../data/learner";
 import {Activity} from "../data/activity";
-import {NodeAbstract} from "./nodes/abstract";
-import {EdgeColored} from "./edges/colored";
+import {NodeAbstract} from "../../app/components/graphvis/graphs/nodes/abstract";
+import {EdgeColored} from "../../app/components/graphvis/graphs/edges/colored";
 import log1p = require("core-js/fn/math/log1p");
-import {EdgeAbstract} from "./edges/abstract";
-import {GraphLayoutFdl} from "./layouts/fdl";
+import {EdgeAbstract} from "../../app/components/graphvis/graphs/edges/abstract";
+import {GraphLayoutFdl} from "../../app/components/graphvis/graphs/layouts/fdl";
+import {AfelDataFetcher} from "../datafetcher";
 
 /**
  * The resource graph shows relations between Learning-Resources
@@ -28,7 +29,7 @@ export class LearnerGraph extends GraphAbstract {
     constructor(plane:Plane) {
         super(plane);
 
-        this.dataGetterMethod = DataService.getInstance().getLearners.bind(DataService.getInstance());
+        this.dataGetterMethod = AfelDataFetcher.getInstance().getLearners.bind(DataService.getInstance());
 
         this.nodetype = NodeLearner;
         this.layoutClass = GraphLayoutFdl;
@@ -85,7 +86,7 @@ export class LearnerGraph extends GraphAbstract {
      * @returns {EdgeAbstract[]}
      */
     protected createEdges():EdgeAbstract[] {
-        let activities = DataService.getInstance().getActivities();
+        let activities = AfelDataFetcher.getInstance().getActivities();
         let edges:EdgeAbstract[] = [];
 
         let resources = {};

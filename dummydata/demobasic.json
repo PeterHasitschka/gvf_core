@@ -1,0 +1,70 @@
+{
+  "nodes": [
+    {
+      "id": 0,
+      "name": "Austria"
+    },
+    {
+      "id": 1,
+      "name": "Germany"
+    },
+    {
+      "id": 2,
+      "name": "Switzerland"
+    },
+    {
+      "id": 3,
+      "name": "Netherlands"
+    },
+    {
+      "id": 4,
+      "name": "France"
+    },
+    {
+      "id": 5,
+      "name": "Czech Republic"
+    }
+  ],
+  "edges": [
+    {
+      "id": 0,
+      "src": 0,
+      "dst": 1
+    },
+    {
+      "id": 1,
+      "src": 1,
+      "dst": 2
+    },
+    {
+      "id": 2,
+      "src": 0,
+      "dst": 2
+    },
+    {
+      "id": 4,
+      "src": 1,
+      "dst": 3
+    },
+    {
+      "id": 5,
+      "src": 1,
+      "dst": 4
+    },
+    {
+      "id": 6,
+      "src": 1,
+      "dst": 5
+    },
+    {
+      "id": 7,
+      "src": 2,
+      "dst": 4
+    },
+    {
+      "id": 8,
+      "src": 0,
+      "dst": 5
+    }
+  ]
+}

@@ -1,8 +1,8 @@
-import {NodeSimple} from './simple';
-import {GraphVisConfig} from '../../config';
-import {DataAbstract} from "../../data/abstract";
-import {InterGraphEventService, INTERGRAPH_EVENTS} from "../../../../services/intergraphevents.service";
-import {Plane} from "../../../plane/plane";
+import {NodeSimple} from '../../../app/components/graphvis/graphs/nodes/simple';
+import {GraphVisConfig} from '../../../app/components/graphvis/config';
+import {DataAbstract} from "../../../app/components/graphvis/data/abstract";
+import {InterGraphEventService, INTERGRAPH_EVENTS} from "../../../app/services/intergraphevents.service";
+import {Plane} from "../../../app/components/plane/plane";
 
 /**
  * A Resource node, derived from @see{NodeSimple}

@@ -1,5 +1,6 @@
-import {ResourceGraph} from './graphs/resourcegraph';
-import {LearnerGraph} from './graphs/learnergraph';
+import {ResourceGraph} from '../../../afel/graphs/resourcegraph';
+import {LearnerGraph} from '../../../afel/graphs/learnergraph';
+import {BasicGraph} from "./graphs/basic";
 
 /**
  * Configurations related to the Graph Visualization
@@ -68,6 +69,7 @@ export class GraphVisConfig {
 
 
     public static active_graphs = {
+        'basic' : BasicGraph,
         'resource': ResourceGraph,
         'learner': LearnerGraph
     };

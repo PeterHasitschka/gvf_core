@@ -1,4 +1,4 @@
-import {DataAbstract} from './abstract';
+import {DataAbstract} from '../../app/components/graphvis/data/abstract';
 
 /**
  * Activity Data object

@@ -1,4 +1,4 @@
-import {DataAbstract} from './abstract';
+import {DataAbstract} from '../../app/components/graphvis/data/abstract';
 import {Learner} from "./learner";
 import {Activity} from "./activity";
 

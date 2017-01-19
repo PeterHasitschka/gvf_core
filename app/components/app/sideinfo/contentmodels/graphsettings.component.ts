@@ -3,10 +3,10 @@ import {OnDestroy, Component, Input} from "@angular/core";
 import {GraphAbstract} from "../../../graphvis/graphs/abstract";
 import {InterGraphEventService, INTERGRAPH_EVENTS} from "../../../../services/intergraphevents.service";
 import {NodeAbstract} from "../../../graphvis/graphs/nodes/abstract";
-import {NodeResource} from "../../../graphvis/graphs/nodes/resource";
+import {NodeResource} from "../../../../../afel/graphs/nodes/resource";
 import {GraphVisConfig} from "../../../graphvis/config";
-import {ResourceGraph} from "../../../graphvis/graphs/resourcegraph";
-import {LearnerGraph} from "../../../graphvis/graphs/learnergraph";
+import {ResourceGraph} from "../../../../../afel/graphs/resourcegraph";
+import {LearnerGraph} from "../../../../../afel/graphs/learnergraph";
 
 @Component({
     selector: 'sideinfocontentgraph',

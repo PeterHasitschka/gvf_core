@@ -1,20 +1,21 @@
-import {Plane} from '../../plane/plane';
-import {GraphAbstract} from './abstract';
+import {Plane} from '../../app/components/plane/plane';
+import {GraphAbstract} from '../../app/components/graphvis/graphs/abstract';
 import {Resource} from '../data/resource';
-import {DataService} from '../../../services/data.service';
+
 
 import {NodeResource} from './nodes/resource';
 
-import {GraphLayoutRandom} from './layouts/random';
-import {EdgeBasic} from "./edges/basic";
+import {GraphLayoutRandom} from '../../app/components/graphvis/graphs/layouts/random';
+import {EdgeBasic} from "../../app/components/graphvis/graphs/edges/basic";
 import {Activity} from "../data/activity";
-import {EdgeAbstract} from "./edges/abstract";
-import {NodeAbstract} from "./nodes/abstract";
-import {InterGraphEventService, INTERGRAPH_EVENTS} from "../../../services/intergraphevents.service";
+import {EdgeAbstract} from "../../app/components/graphvis/graphs/edges/abstract";
+import {NodeAbstract} from "../../app/components/graphvis/graphs/nodes/abstract";
+import {InterGraphEventService, INTERGRAPH_EVENTS} from "../../app/services/intergraphevents.service";
 import {NodeLearner} from "./nodes/learner";
 import {Learner} from "../data/learner";
-import {GraphLayoutFdl} from "./layouts/fdl";
-import {UiService} from "../../../services/ui.service";
+import {GraphLayoutFdl} from "../../app/components/graphvis/graphs/layouts/fdl";
+import {UiService} from "../../app/services/ui.service";
+import {AfelDataFetcher} from "../datafetcher";
 
 
 /**
@@ -30,7 +31,7 @@ export class ResourceGraph extends GraphAbstract {
     constructor(protected plane:Plane) {
         super(plane);
 
-        this.dataGetterMethod = DataService.getInstance().getResources.bind(DataService.getInstance());
+        this.dataGetterMethod = AfelDataFetcher.getInstance().getResources.bind(AfelDataFetcher.getInstance());
 
         this.nodetype = NodeResource;
         this.layoutClass = GraphLayoutFdl;
@@ -92,7 +93,7 @@ export class ResourceGraph extends GraphAbstract {
      * @returns {EdgeAbstract[]}
      */
     protected createEdges():EdgeAbstract[] {
-        let activities = DataService.getInstance().getActivities();
+        let activities = AfelDataFetcher.getInstance().getActivities();
         let edges:EdgeAbstract[] = [];
 
         let learnings = {};

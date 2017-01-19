@@ -6,6 +6,7 @@ import {DataService} from "../../services/data.service";
 import {UiService} from "../../services/ui.service";
 import {SceneMouseInteractions} from "../graphvis/scenemouseinteractions";
 import {ApiService} from "../../services/apiservice";
+import {AfelDataFetcher} from "../../../afel/datafetcher";
 
 @Component({
     selector: 'graphworkspace',
@@ -34,10 +35,11 @@ export class GraphworkspaceComponent implements OnInit {
 
         this.apiService.sendEvent("initready", null);
 
-        this.dataService.fetchData().then(() => {
-            console.log("Creating two basic planes");
-            this.addPlane(new Plane("Resource Graph", 'resource', this.uiService));
-            this.addPlane(new Plane("Learner Graph", 'learner', this.uiService));
+
+
+
+        DataService.getInstance().fetchData().then(() => {
+           console.log("Fetched Demo Data", DataService.getInstance().getDemoEntities());
         });
     }
 
