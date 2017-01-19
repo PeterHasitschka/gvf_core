@@ -8,10 +8,9 @@ h1 {
     margin-top: 10px;
 }
 
-
 .headerrow {
-    background:#F3F0F0;
-    color:#525252;
+    background: #F3F0F0;
+    color: #525252;
 }
 
 .mainrow {
@@ -19,6 +18,7 @@ h1 {
     color: black;
     padding-top: 5px;
     padding-bottom: 5px;
+    min-height: calc(100% - 70px);
 }
 
 #mainleftcol {
@@ -27,32 +27,30 @@ h1 {
 
 #mainmiddlecol {
     /*background:#EDF8FF;*/
-    padding-bottom: 21px;        
+    padding-bottom: 21px;
 }
 
 #mainrightcol {
 
 }
 
-#mainleftcol,#mainrightcol {
-    padding-left:5px;
-    padding-right:5px;
-
+#mainleftcol, #mainrightcol {
+    padding-left: 5px;
+    padding-right: 5px;
 
 }
 
-#mainleftcol,#mainrightcol  label{
+#mainleftcol, #mainrightcol label {
     font-size: 10px;
-    font-weight:normal;
+    font-weight: normal;
 }
 
 #mainrightcol button {
     margin-top: 9px;
 }
 
-
 .footerrow {
-    background:#F3F0F0;
-    color:#525252;
-    padding:5px;
+    background: #F3F0F0;
+    color: #525252;
+    padding: 5px;
 }

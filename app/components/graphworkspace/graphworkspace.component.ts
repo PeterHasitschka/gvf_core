@@ -5,6 +5,7 @@ import {GraphVisConfig} from '../graphvis/config';
 import {DataService} from "../../services/data.service";
 import {UiService} from "../../services/ui.service";
 import {SceneMouseInteractions} from "../graphvis/scenemouseinteractions";
+import {ApiService} from "../../services/apiservice";
 
 @Component({
     selector: 'graphworkspace',
@@ -23,13 +24,15 @@ export class GraphworkspaceComponent implements OnInit {
 
     @ViewChild('graphworkspace_svgoverlay') svgElement;
 
-    constructor(private dataService:DataService, private uiService:UiService) {
+    constructor(private dataService:DataService, private uiService:UiService, private apiService:ApiService) {
         this.planes = [];
     }
 
     ngOnInit():void {
         // Necessary for mousemoves
         this.uiService.setGraphWorkSpaceSvgElement(this.svgElement.nativeElement);
+
+        this.apiService.sendEvent("initready", null);
 
         this.dataService.fetchData().then(() => {
             console.log("Creating two basic planes");

@@ -76,7 +76,7 @@ export class UiService {
             this.intergraphConnections.push([node1, node2]);
     }
 
-    clearIntergraphConnections(){
+    clearIntergraphConnections() {
         this.intergraphConnections = [];
     }
 }

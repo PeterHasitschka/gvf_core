@@ -1,31 +1,30 @@
-<html>
+<!DOCTYPE html>
+<html lang="en" style="background: #E5E6F1; color:gray">
 <head>
-    <title>GVF Prototype</title>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="assets/css/styles.css">
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
-    <!-- 1. Load libraries -->
-    <!-- Polyfill(s) for older browsers -->
+    <title>GVF</title>
 
-    <!-- necessary to include here due to require problems on extended classes deriving three classes -->
-    <script src="node_modules/three/build/three.js"></script>
-    <script src="node_modules/core-js/client/shim.min.js"></script>
-    <script src="node_modules/zone.js/dist/zone.js"></script>
-    <script src="node_modules/reflect-metadata/Reflect.js"></script>
-    <script src="node_modules/systemjs/dist/system.src.js"></script>
-    <!-- 2. Configure SystemJS -->
-    <script src="systemjs.config.js"></script>
+    <script src="build/api/gvfapi.js"></script>
+
     <script>
-        System.import('build/main').catch(function (err) {
-            console.error(err);
-        });
+
+        var GVF = new GvfApi();
+
     </script>
 </head>
-<!-- 3. Display the application -->
 <body>
-<afel-app class="container-fluid">Loading GVF...</afel-app>
 
+<div id="iframecontainer" style="position:relative; height:100%; padding-bottom: 730px;">
+    <iframe src="gvf.html" style="
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            border: 1px solid red;
+    ">
 
+    </iframe>
+</div>
+
+<p>Demo Application with GVF included as IFrame</p>
 </body>
 </html>

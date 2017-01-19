@@ -8,15 +8,16 @@ import {Subscription} from "rxjs/Rx";
 
 import {SideInfoPositionPipe} from "./sideinfo/contentmodels/sideinfopipe";
 import {InterGraphEventService} from "../../services/intergraphevents.service";
+import {ApiService} from "../../services/apiservice";
 
 @Component({
-    selector: 'afel-app',
+    selector: 'gvf-app',
     templateUrl: 'app/components/app/app.html',
     styleUrls: ['app/components/app/app.css'],
-    providers: [DataService, UiService, InterGraphEventService]
+    providers: [DataService, UiService, InterGraphEventService, ApiService]
 })
 /**
- * Overall component loaded in the index.html (<afel-app/>)
+ * Overall component loaded in the index.html (<gvf-app/>)
  * Defining the HTML/CSS Grid system and loading the @see{GraphworkspaceComponent} component
  * @author Peter Hasitschka
  */
