@@ -1,6 +1,6 @@
 {
-  "name": "afel-graphvis",
-  "version": "0.0.1",
+  "name": "gvf",
+  "version": "0.0.2",
   "scripts": {
     "start": "tsc && concurrently \"npm run tsc:w\" \"npm run lite\" ",
     "lite": "lite-server",
