@@ -9,6 +9,8 @@ import {Subscription} from "rxjs/Rx";
 import {SideInfoPositionPipe} from "./sideinfo/contentmodels/sideinfopipe";
 import {InterGraphEventService} from "../../services/intergraphevents.service";
 import {ApiService} from "../../services/apiservice";
+import {GvfPlugins} from "../../../plugins/plugins";
+import {GvfPluginInterface} from "../../../plugins/plugininterface";
 
 @Component({
     selector: 'gvf-app',
@@ -46,6 +48,23 @@ export class AppComponent implements OnInit {
             )
         );
         //console.log(this.sideInfoElements);
+
+        this.loadPlugins();
+    }
+
+
+    /**
+     * Simple Plugin Loader.
+     */
+    loadPlugins() {
+        console.log("Loading plugins");
+
+        let pluginList = GvfPlugins.plugins.onInit;
+        console.log("Loading plugins");
+        for (let pluginClass of pluginList) {
+            let plugin = new pluginClass();
+            plugin.runAfterInit();
+        }
     }
 
 
@@ -65,7 +84,7 @@ export class AppComponent implements OnInit {
     }
 
 
-    onShowInterConnectionsClick(evt){
+    onShowInterConnectionsClick(evt) {
         //console.log(evt);
         this.uiService.setGraphWorkSpaceSvgElementVisible(evt.target.checked);
     }
