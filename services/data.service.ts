@@ -36,7 +36,7 @@ export class DataService {
      * @returns {DataService}
      */
     constructor(private http:Http) {
-        this.data = {entities:[], connections:[]};
+        this.data = {entities: [], connections: []};
         if (!DataService.isCreating) {
             return DataService.getInstance(http);
         }
@@ -54,6 +54,10 @@ export class DataService {
             DataService.isCreating = false;
         }
         return DataService.instance;
+    }
+
+    getHttp():Http {
+        return this.http;
     }
 
     /**
@@ -136,7 +140,7 @@ export class DataService {
 
 
     fetchDemoEntities() {
-        console.log("Fetching Demo Nodes data from server...",DataService.DUMMYDATA.data);
+        console.log("Fetching Demo Nodes data from server...", DataService.DUMMYDATA.data);
         return this.http.get(DataService.DUMMYDATA.data)
             .map(res => res.json())
             .toPromise()
@@ -255,6 +259,7 @@ export class DataService {
     getDemoEntities():NodeSimple[] {
         return this.data.entities;
     }
+
     getDemoConnections():BasicConnection[] {
         return this.data.connections;
     }

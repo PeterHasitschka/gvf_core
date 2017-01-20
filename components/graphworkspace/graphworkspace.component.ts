@@ -27,6 +27,7 @@ export class GraphworkspaceComponent implements OnInit {
 
     constructor(private dataService:DataService, private uiService:UiService, private apiService:ApiService) {
         this.planes = [];
+        this.uiService.setGraphWorkSpace(this);
     }
 
     ngOnInit():void {
