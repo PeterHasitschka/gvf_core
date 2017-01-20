@@ -6,8 +6,8 @@ import {GraphVisConfig} from "../../../graphvis/config";
 
 @Component({
     selector: 'sideinfocontentgraph',
-    templateUrl: 'app/components/app/sideinfo/contentmodels/graph.html',
-    // styleUrls: ['app/components/app/sideinfo/sideinfo.css']
+    templateUrl: 'gvfcore/components/app/sideinfo/contentmodels/graph.html',
+    // styleUrls: ['gvfcore/components/app/sideinfo/sideinfo.css']
 })
 
 /**

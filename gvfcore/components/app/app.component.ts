@@ -12,8 +12,8 @@ import {ApiService} from "../../services/apiservice";
 
 @Component({
     selector: 'gvf-app',
-    templateUrl: 'app/components/app/app.html',
-    styleUrls: ['app/components/app/app.css'],
+    templateUrl: 'gvfcore/components/app/app.html',
+    styleUrls: ['gvfcore/components/app/app.css'],
     providers: [DataService, UiService, InterGraphEventService, ApiService]
 })
 /**

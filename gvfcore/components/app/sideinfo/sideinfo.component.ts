@@ -4,8 +4,8 @@ import {SideInfoModel, SideInfoContentType} from "./sideinfomodel";
 
 @Component({
     selector: 'sideinfo',
-    templateUrl: 'app/components/app/sideinfo/sideinfo.html',
-    styleUrls: ['app/components/app/sideinfo/sideinfo.css']
+    templateUrl: 'gvfcore/components/app/sideinfo/sideinfo.html',
+    styleUrls: ['gvfcore/components/app/sideinfo/sideinfo.css']
 })
 /**
  * Little window in sidebars for showing information

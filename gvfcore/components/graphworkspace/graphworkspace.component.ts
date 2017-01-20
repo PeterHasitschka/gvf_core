@@ -10,8 +10,8 @@ import {ApiService} from "../../services/apiservice";
 
 @Component({
     selector: 'graphworkspace',
-    templateUrl: 'app/components/graphworkspace/graphworkspace.component.html',
-    styleUrls: ['app/components/graphworkspace/graphworkspace.css'],
+    templateUrl: 'gvfcore/components/graphworkspace/graphworkspace.component.html',
+    styleUrls: ['gvfcore/components/graphworkspace/graphworkspace.css'],
 })
 
 /**

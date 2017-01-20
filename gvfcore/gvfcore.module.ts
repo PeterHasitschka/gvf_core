@@ -17,5 +17,5 @@ import {InterGraphConnectionDirective} from "./components/graphworkspace/intergr
 /**
  * App Module loaded in main.ts
  */
-export class AppModule {
+export class GvfCoreModule {
 }

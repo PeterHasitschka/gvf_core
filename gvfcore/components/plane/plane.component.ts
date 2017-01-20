@@ -7,8 +7,8 @@ import {UiService} from "../../services/ui.service";
 
 @Component({
     selector: 'graph-plane',
-    templateUrl: 'app/components/plane/plane.component.html',
-    styleUrls: ['app/components/plane/plane.css'],
+    templateUrl: 'gvfcore/components/plane/plane.component.html',
+    styleUrls: ['gvfcore/components/plane/plane.css'],
 })
 /**
  * Component holding a @see{Plane} object
