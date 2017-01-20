@@ -1,5 +1,6 @@
 import {Injectable} from "@angular/core";
 import {SideInfoModel} from "../components/app/sideinfo/sideinfomodel";
+import {GraphworkspaceComponent} from "../components/graphworkspace/graphworkspace.component";
 
 
 @Injectable()
@@ -17,6 +18,7 @@ export class UiService {
 
     private graphWorkSpaceSvgElement:HTMLElement = null;
     public graphWorkSpaceSvgElementVisible = false;
+    private graphWorkSpace:GraphworkspaceComponent = null;
 
     public intergraphConnections = [];
 
@@ -43,6 +45,14 @@ export class UiService {
     }
 
 
+    public setGraphWorkSpace(gws:GraphworkspaceComponent) {
+        this.graphWorkSpace = gws;
+    }
+
+    public getGraphWorkSpace():GraphworkspaceComponent {
+        return this.graphWorkSpace;
+    }
+
     public setGraphWorkSpaceSvgElement(el:HTMLElement) {
         this.graphWorkSpaceSvgElement = el;
     }
@@ -58,7 +68,6 @@ export class UiService {
     public getGraphWorkSpaceSvgElementVisible():boolean {
         return this.graphWorkSpaceSvgElementVisible;
     }
-
 
     addSideInfoElement(sideInfo:SideInfoModel) {
         window.setTimeout(function () {

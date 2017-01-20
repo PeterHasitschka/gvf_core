@@ -33,13 +33,6 @@ export class GraphVisConfig {
             color: 0xff33ff,
             highlight_color: 0xff3333,
             z_pos: 0.0,
-        },
-
-        resourcenode: {
-            color: 0x5555bb
-        },
-        learnernode: {
-            color: 0x00aa00
         }
     };
 
@@ -70,8 +63,6 @@ export class GraphVisConfig {
 
     public static active_graphs = {
         'basic' : BasicGraph
-        // 'resource': ResourceGraph,
-        // 'learner': LearnerGraph
     };
 
 
