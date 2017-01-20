@@ -1,7 +1,7 @@
 .graphvisplanecontainer{
     height:300px;
     background:white;
-    border: 1px solid black;
+    border: 1px solid #BBBBBB;
     padding:5px;
     margin-top: 5px;
     margin-bottom: 5px;
@@ -10,4 +10,12 @@
 .graphvisplanecontainer p {
     color:#777777;
     margin:0;
+    background: #F9F9F9;
+    border-bottom: 1px solid #E6E6E6;
+}
+
+.graphvisplanecontainer canvas {
+    width:100%;
+    height:100%;
+    margin-left:-5px;
 }

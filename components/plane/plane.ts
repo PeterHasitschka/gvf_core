@@ -71,7 +71,7 @@ export class Plane {
      */
     private calculateCanvasSize():Object {
         var container = document.getElementById(Plane.containerPrefix + this.containerId);
-        return {x: container.clientWidth - 10, y: container.clientHeight - 30};
+        return {x: container.clientWidth - 0, y: container.clientHeight - 30};
     }
 
     public getCanvasSize():Object {

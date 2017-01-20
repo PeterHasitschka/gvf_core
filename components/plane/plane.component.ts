@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {Component, Input, ViewEncapsulation} from '@angular/core';
 import {Plane} from './plane';
 import {DataService} from '../../services/data.service';
 import {SideInfoPositions, SideInfoContentType, SideInfoModel} from "../app/sideinfo/sideinfomodel";
@@ -9,6 +9,7 @@ import {UiService} from "../../services/ui.service";
     selector: 'graph-plane',
     templateUrl: 'gvfcore/components/plane/plane.component.html',
     styleUrls: ['gvfcore/components/plane/plane.css'],
+    encapsulation: ViewEncapsulation.None,  //To allow applying css on dynamically created canvas
 })
 /**
  * Component holding a @see{Plane} object
