@@ -19,7 +19,17 @@ export abstract class GroupAbstract extends ElementAbstract {
                     color: GraphVisConfig.graphelements.abstractgroup.color
                 })
         );
+        this.color = GraphVisConfig.graphelements.abstractgroup.color;
+        this.setColor(this.color);
+    }
 
-        this.setColor(GraphVisConfig.graphelements.abstractgroup.color);
+    public onIntersectStart():void {
+        super.onIntersectStart();
+        this.plane.getGraphScene().render();
+    }
+
+    public onIntersectLeave():void {
+        super.onIntersectLeave();
+        this.plane.getGraphScene().render();
     }
 }
