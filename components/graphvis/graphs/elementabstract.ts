@@ -1,19 +1,19 @@
-import {GraphVisConfig} from '../../config';
-import {DataAbstract} from "../../data/abstract";
-import {GraphObject} from "../graphobjectinterface";
-import {Plane} from "../../../plane/plane";
-import {EdgeAbstract} from "../edges/abstract";
+import {GraphVisConfig} from '../config';
+import {DataAbstract} from "../data/abstract";
+import {GraphObject} from "./graphobjectinterface";
+import {Plane} from "../../plane/plane";
+import {EdgeAbstract} from "./edges/abstract";
 import {WORKER_UI_STARTABLE_MESSAGING_SERVICE} from "@angular/platform-browser";
-import {UiService} from "../../../../services/ui.service";
+import {UiService} from "../../../services/ui.service";
 
 
 /**
- * Abstract class of a Node for the GraphVis
+ * Abstract class of a Node or Group for the GraphVis
  * Derived from the @see{THREE.Mesh} class.
  * Thus, it holds a geometry and a material
  * @author Peter Hasitschka
  */
-export abstract class NodeAbstract extends THREE.Mesh implements GraphObject {
+export abstract class ElementAbstract extends THREE.Mesh implements GraphObject {
 
     protected threeMaterial:THREE.MeshBasicMaterial;
     protected threeGeometry:THREE.Geometry;
@@ -32,19 +32,14 @@ export abstract class NodeAbstract extends THREE.Mesh implements GraphObject {
      * @param y Y-Position on the Plane
      * @param plane Plane Instance
      */
-    constructor(x:number, y:number, plane:Plane) {
+    constructor(x:number, y:number, plane:Plane, geometry:THREE.Geometry, material:THREE.MeshBasicMaterial) {
 
         /**
          * SUPER call must be first statement, thus extract geometry and material afterwards
          */
-        super(new THREE.CircleGeometry(
-            GraphVisConfig.nodes.abstractnode.size,
-            GraphVisConfig.nodes.segments), new THREE.MeshBasicMaterial(
-            {
-                color: GraphVisConfig.nodes.abstractnode.color
-            }));
+        super(geometry, material);
 
-        var config = GraphVisConfig.nodes;
+        var config = GraphVisConfig.graphelements;
 
         let color = config.abstractnode.color;
         let highlightColor = config.abstractnode.highlight_color;
@@ -161,7 +156,7 @@ export abstract class NodeAbstract extends THREE.Mesh implements GraphObject {
      * @param dimension Optional: null or undefined => Squared distance, 'x' => X-Distance, 'y' => Y-Distance
      *
      */
-    public getDistance(nodeU:NodeAbstract, dimension?:string):number {
+    public getDistance(nodeU:ElementAbstract, dimension?:string):number {
         let posVX = this.getPosition()['x'];
         let posVY = this.getPosition()['y'];
         let posUX = nodeU.getPosition()['x'];

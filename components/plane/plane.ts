@@ -79,7 +79,7 @@ export class Plane {
     }
 
     /**
-     * Creating a plane behind all nodes. Useful when rotating etc.
+     * Creating a plane behind all graphelements. Useful when rotating etc.
      */
     private createBackPlane() {
         var squareGeometry = new THREE.Geometry();

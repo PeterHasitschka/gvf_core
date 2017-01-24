@@ -1,7 +1,7 @@
 import {DataAbstract} from "./abstract";
 /**
  * Entity Data object
- * Holding data of a single Learner
+ * Holding data of a single Entity
  * @author Peter Hasitschka
  */
 export class BasicEntity extends DataAbstract {

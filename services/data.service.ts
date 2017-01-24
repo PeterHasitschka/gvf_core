@@ -6,6 +6,7 @@ import 'rxjs/add/operator/toPromise'
 import {BasicEntity} from "../components/graphvis/data/basicentity";
 import {NodeSimple} from "../components/graphvis/graphs/nodes/simple";
 import {BasicConnection} from "../components/graphvis/data/basicconnection";
+import {BasicGroup} from "../components/graphvis/data/basicgroup";
 
 @Injectable()
 /**
@@ -115,6 +116,7 @@ export class DataService {
             .map(res => res.json())
             .toPromise()
             .then((r) => {
+                console.log(r);
                 r.nodes.forEach((resultdata) => {
                     let entity = new BasicEntity(resultdata['id'], resultdata);
                     this.data.entities.push(entity);
@@ -145,6 +147,11 @@ export class DataService {
 
     getDemoEntities():NodeSimple[] {
         return this.data.entities;
+    }
+
+    getDemoGroups():BasicGroup[] {
+
+        return [];
     }
 
     getDemoConnections():BasicConnection[] {

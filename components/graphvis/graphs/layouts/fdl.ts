@@ -1,7 +1,7 @@
 import {GraphLayoutAbstract} from './abstract';
-import {NodeAbstract} from '../nodes/abstract';
 import {Plane} from '../../../plane/plane';
 import {EdgeAbstract} from "../edges/abstract";
+import {NodeAbstract} from "../nodes/nodeabstract";
 
 /**
  * Force-Directed-Layout for Graphs
@@ -57,7 +57,7 @@ export class GraphLayoutFdl extends GraphLayoutAbstract {
          */
 
         /**
-         * Loop through all nodes
+         * Loop through all graphelements
          */
         this.nodes.forEach((nodeV:NodeAbstract) => {
 
@@ -76,7 +76,7 @@ export class GraphLayoutFdl extends GraphLayoutAbstract {
             };
 
             /**
-             * Go through all other nodes to calculate distances
+             * Go through all other graphelements to calculate distances
              */
             this.nodes.forEach((nodeU:NodeAbstract) => {
 
@@ -90,7 +90,7 @@ export class GraphLayoutFdl extends GraphLayoutAbstract {
             });
 
             /**
-             * Calculate force between V and all its CONNECTED nodes
+             * Calculate force between V and all its CONNECTED graphelements
              */
             nodeV.getEdges().forEach((edge:EdgeAbstract) => {
                 let n1:NodeAbstract = edge.getSourceNode();

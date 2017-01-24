@@ -76,6 +76,10 @@ export class AppComponent implements OnInit {
         this.graphworkspace.addPlane(new Plane("Plane something " + Math.random(), 'basic', this.uiService));
     }
 
+    addDummyGroupPlane(){
+        this.graphworkspace.addPlane(new Plane("Dummy Groups (Communities)", 'basicgroups', this.uiService));
+    }
+
     /**
      * Console.log the data from the @see{DataService} Service.
      * @todo: Remove if not necessary anymore

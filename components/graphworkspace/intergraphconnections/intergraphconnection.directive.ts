@@ -1,6 +1,6 @@
 import {Input, Directive, Renderer, ElementRef, OnInit} from "@angular/core";
-import {NodeAbstract} from "../../graphvis/graphs/nodes/abstract";
 import {GraphVisConfig} from "../../graphvis/config";
+import {NodeAbstract} from "../../graphvis/graphs/nodes/nodeabstract";
 
 @Directive({
     selector: '[intergraphconnection]',

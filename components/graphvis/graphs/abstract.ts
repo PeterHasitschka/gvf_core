@@ -1,11 +1,12 @@
 import {Plane} from '../../plane/plane';
 import {DataAbstract} from '../data/abstract';
-import {NodeAbstract} from '../graphs/nodes/abstract';
 import {GraphLayoutAbstract} from '../graphs/layouts/abstract';
 import {UiService} from "../../../services/ui.service";
 import {SideInfoPositions, SideInfoContentType, SideInfoModel} from "../../app/sideinfo/sideinfomodel";
 import {EdgeAbstract} from "./edges/abstract";
 import {LayoutInterface} from "./layouts/layoutinterface";
+import {BasicGroup} from "../data/basicgroup";
+import {NodeAbstract} from "./nodes/nodeabstract";
 /**
  * Abstract Graph Class
  * Holding the corresponding data and the plane
@@ -25,6 +26,7 @@ export abstract class GraphAbstract {
     protected layoutClass:any;
     protected layout:LayoutInterface = null;
     protected nodes:NodeAbstract[];
+    protected groups:BasicGroup[];
     protected edges:EdgeAbstract[];
 
 
@@ -33,7 +35,7 @@ export abstract class GraphAbstract {
     }
 
     /**
-     * Init method for loading data and creating the layout and nodes
+     * Init method for loading data and creating the layout and graphelements
      */
     public init():void {
         this.loadData();

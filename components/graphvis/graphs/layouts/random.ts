@@ -1,10 +1,10 @@
 import {GraphLayoutAbstract} from './abstract';
-import {NodeAbstract} from '../nodes/abstract';
 import {Plane} from '../../../plane/plane';
 import {EdgeAbstract} from "../edges/abstract";
+import {NodeAbstract} from "../nodes/nodeabstract";
 
 /**
- * Dummy-Random layout. The nodes just get set randomly on the plane
+ * Dummy-Random layout. The graphelements just get set randomly on the plane
  */
 export class GraphLayoutRandom extends GraphLayoutAbstract {
 

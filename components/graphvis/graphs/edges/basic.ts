@@ -1,6 +1,7 @@
 import {EdgeAbstract} from "./abstract";
 import {Plane} from "../../../plane/plane";
-import {NodeAbstract} from "../nodes/abstract";
+import {NodeAbstract} from "../nodes/nodeabstract";
+
 
 /**
  * Basic Edge class, Derived from @see{EdgeAbstract}

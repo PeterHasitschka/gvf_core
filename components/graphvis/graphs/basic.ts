@@ -5,13 +5,13 @@ import {DataService} from '../../../services/data.service';
 import {GraphLayoutRandom} from './layouts/random';
 import {EdgeBasic} from "./edges/basic";
 import {EdgeAbstract} from "./edges/abstract";
-import {NodeAbstract} from "./nodes/abstract";
 import {InterGraphEventService, INTERGRAPH_EVENTS} from "../../../services/intergraphevents.service";
 import {GraphLayoutFdl} from "./layouts/fdl";
 import {UiService} from "../../../services/ui.service";
 import {NodeSimple} from "./nodes/simple";
 import {BasicEntity} from "../data/basicentity";
 import {BasicConnection} from "../data/basicconnection";
+import {NodeAbstract} from "./nodes/nodeabstract";
 
 
 /**

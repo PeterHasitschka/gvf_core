@@ -2,14 +2,14 @@ import {GraphVisConfig} from '../../config';
 import {start} from "repl";
 import {GraphObject} from "../graphobjectinterface";
 import {Plane} from "../../../plane/plane";
-import {NodeAbstract} from "../nodes/abstract";
+import {NodeAbstract} from "../nodes/nodeabstract";
 
 
 /**
  * Abstract class of an Edge for the GraphVis
  * Derived from the @see{THREE.Line} class.
  * Thus, it holds a geometry and a material
- * but also its two connecting nodes
+ * but also its two connecting graphelements
  * @author Peter Hasitschka
  */
 export abstract class EdgeAbstract extends THREE.Line implements GraphObject {
@@ -25,7 +25,7 @@ export abstract class EdgeAbstract extends THREE.Line implements GraphObject {
     protected addRandom;
 
     /**
-     * Creating an edge by taking the nodes and the plane
+     * Creating an edge by taking the graphelements and the plane
      * Nodes and config-values define the geometry and material
      * @param sourceNode
      * @param destNode
@@ -99,7 +99,7 @@ export abstract class EdgeAbstract extends THREE.Line implements GraphObject {
     }
 
     /**
-     * Updating the position of the edge by taking its nodes' position
+     * Updating the position of the edge by taking its graphelements' position
      * No rendering is performed!
      */
     public updatePositions() {
