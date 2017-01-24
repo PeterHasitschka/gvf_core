@@ -82,36 +82,6 @@ export class DataService {
      * @returns {Promise<boolean>}
      */
     fetchGeneratedDummyData() {
-
-
-
-
-        // let USER_LENGTH = 500;
-        // let RESOURCE_LENGTH = 100;
-        // let ACTIVITY_LEARN_LENGTH = 100;
-        // let ACTIVITY_COMMUNICATE_LENGTH = 100;
-        //
-        // for (let i = 0; i < USER_LENGTH; i++) {
-        //     this.data.learners.push(new Learner({id: i, name: "Your mum"}));
-        // }
-        // for (let i = 0; i < RESOURCE_LENGTH; i++) {
-        //     this.data.resources.push(new Resource({id: i, title: "Soemthing", compexity: Math.random()}));
-        // }
-        // for (let i = 0; i < ACTIVITY_LEARN_LENGTH; i++) {
-        //     this.data.activities.push(new Activity({
-        //         id: i, type: "learning",
-        //         learner_id: Math.floor(Math.random() * USER_LENGTH),
-        //         resource_id: Math.floor(Math.random() * RESOURCE_LENGTH),
-        //     }));
-        // }
-        // for (let i = 0; i < ACTIVITY_COMMUNICATE_LENGTH; i++) {
-        //     this.data.activities.push(new Activity({
-        //         id: i, type: "communicating",
-        //         learner1_id: Math.floor(Math.random() * USER_LENGTH),
-        //         learner2_id: Math.floor(Math.random() * USER_LENGTH),
-        //     }));
-        // }
-        // return Promise.resolve(true);
         return Promise.resolve(true);
     }
 
@@ -146,10 +116,10 @@ export class DataService {
             .toPromise()
             .then((r) => {
                 r.nodes.forEach((resultdata) => {
-                    let entity = new BasicEntity(resultdata);
+                    let entity = new BasicEntity(resultdata['id'], resultdata);
                     this.data.entities.push(entity);
                 });
-                console.log("Fetched Entities:", this.data.entities);
+                //console.log("Fetched Entities:", this.data.entities);
             });
     }
 
@@ -160,101 +130,18 @@ export class DataService {
             .toPromise()
             .then((r) => {
                 r.edges.forEach((resultdata) => {
-                    let entity = new BasicConnection(resultdata);
-                    this.data.connections.push(entity);
+
+                    let srcNode = BasicEntity.getObject(resultdata['src']);
+                    let dstNode = BasicEntity.getObject(resultdata['dst']);
+                    let connection = new BasicConnection(resultdata['id'], srcNode, dstNode, resultdata);
+                    //console.log(connection);
+                    this.data.connections.push(connection);
                 });
-                console.log("Fetched Connections:", this.data.connections);
+                //console.log("Fetched Connections:", this.data.connections);
             });
     }
 
-    /**
-     * Fetching the learners from server, returning as promise
-     * @returns {Promise<TResult>}
-     */
-    /*
-     fetchLearners() {
-     console.log("Fetching learners data from server...");
-     return this.http.get(DataService.DUMMYDATA.learners)
-     .map(res => res.json())
-     .toPromise()
-     .then((r) => {
-     r.forEach((resultdata) => {
-     let learner = new Learner(resultdata);
-     this.data.learners.push(learner);
-     });
-     console.log("Fetched Learners:", this.data.learners);
-     });
-     }
-     */
 
-    /**
-     * Fetching the resources from server, returning as promise
-     * @returns {Promise<TResult>}
-     */
-    /*
-     fetchResources() {
-     console.log("Fetching resource data from server...");
-     return this.http.get(DataService.DUMMYDATA.resources)
-     .map(res => res.json())
-     .toPromise()
-     .then((r) => {
-     r.forEach((resultdata) => {
-     let resource = new Resource(resultdata);
-     this.data.resources.push(resource);
-     });
-     console.log("Fetched Resources:", this.data.resources);
-     });
-     }
-     */
-
-    /**
-     * Fetching the activities from server, returning as promise
-     * @returns {Promise<TResult>}
-     */
-    /*
-     fetchActivities() {
-     console.log("Fetching activities data from server...");
-     return this.http.get(DataService.DUMMYDATA.activities)
-     .map(res => res.json())
-     .toPromise()
-     .then((r) => {
-     r.forEach((resultdata) => {
-     let act = new Activity(resultdata);
-     this.data.activities.push(act);
-     });
-     console.log("Fetched Activties:", this.data.activities);
-     });
-     }
-     */
-    /**
-     * Return the (stored) learners
-     * @returns {Array}
-     */
-    /*
-     getLearners():Learner[] {
-     return this.data.learners;
-     }
-     */
-
-    /**
-     * Return the (stored) resources
-     * @returns {Array}
-     */
-    /*
-     getResources():Resource[] {
-     return this.data.resources;
-     }
-     */
-
-    /**
-     * Return the (stored) activities
-     * @returns {Array}
-     */
-    /*
-     getActivities():Activity[] {
-     return this.data.activities;
-     }
-     */
 
     getDemoEntities():NodeSimple[] {
         return this.data.entities;

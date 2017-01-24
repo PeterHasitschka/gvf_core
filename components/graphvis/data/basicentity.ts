@@ -1,5 +1,3 @@
-
-
 import {DataAbstract} from "./abstract";
 /**
  * Entity Data object
@@ -14,18 +12,17 @@ export class BasicEntity extends DataAbstract {
      * Entity constructor
      * @param data Holds an id and at least a 'name' property by current definition
      */
-    constructor(protected data: Object) {
-        super(data);
+    constructor(id:number, data:Object) {
+        super(id, data);
         BasicEntity.dataList.push(this);
     }
-
 
 
     /**
      * Get all Entity
      * @returns {BasicEntity[]}
      */
-    public static getDataList():BasicEntity[]{
+    public static getDataList():BasicEntity[] {
         return BasicEntity.dataList;
     }
 }

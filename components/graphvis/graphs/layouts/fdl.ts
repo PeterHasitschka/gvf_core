@@ -46,10 +46,10 @@ export class GraphLayoutFdl extends GraphLayoutAbstract {
 
     private reCalcPositions() {
 
-        let NODE_REPULSION_FACTOR = 90;
-        let EDGE_FORCE_FACTOR = 1;
+        let NODE_REPULSION_FACTOR = 50;
+        let EDGE_FORCE_FACTOR = 0.01;
         let VELOCITY_DAMPING = 0.1;
-        let WALL_REPULSION_FACTOR = 200;
+        let WALL_REPULSION_FACTOR = 300;
 
         /**
          * Template for this simple FDL algorithm:

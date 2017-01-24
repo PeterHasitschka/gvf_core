@@ -46,13 +46,16 @@ export class BasicGraph extends GraphAbstract {
 
         let connections = DataService.getInstance().getDemoConnections();
         let edges:EdgeAbstract[] = [];
-
+        console.log(connections);
         connections.forEach((connection:BasicConnection) => {
-            let src = connection.getData("src");
-            let dst = connection.getData("dst");
+            let entities = connection.getEntities();
+            let src = entities.src;
+            let dst = entities.dst;
 
-            let n1:NodeAbstract = this.getNodeByDataId(src);
-            let n2:NodeAbstract = this.getNodeByDataId(dst);
+            let n1:NodeAbstract = this.getNodeByDataId(src.getId());
+            let n2:NodeAbstract = this.getNodeByDataId(dst.getId());
+
+            console.log(n1,n2);
             let edge = new EdgeBasic(n1, n2, this.plane);
                         n1.addEdge(edge);
                         n2.addEdge(edge);

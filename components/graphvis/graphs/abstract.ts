@@ -39,7 +39,6 @@ export abstract class GraphAbstract {
         this.loadData();
         this.edges = this.createEdges();
         this.layout = new this.layoutClass(this.plane, this.nodes, this.edges);
-
         this.edges.forEach((edge:EdgeAbstract) => {
             this.plane.getGraphScene().addObject(edge);
         });

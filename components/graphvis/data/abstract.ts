@@ -7,14 +7,11 @@ export abstract class DataAbstract {
 
     protected static dataList:DataAbstract[];
 
-    protected id:number;
-
     /**
      * Data object, which at least holds an ID taken as parameter on constructor
      * @param data
      */
-    constructor(protected data:Object) {
-        this.id = data["id"];
+    constructor(protected id:number, protected data:Object) {
     }
 
     public getId():number {
@@ -40,13 +37,13 @@ export abstract class DataAbstract {
      * @returns {DataAbstract|null}
      */
     public static getObject(id:number) {
-        let foundObj:DataAbstract = null;
-        this.dataList.forEach((obj:DataAbstract) => {
+        let foundObj = null;
+        this.dataList.forEach((obj) => {
             if (foundObj)
                 return;
             if (obj.getId() === id)
                 foundObj = obj;
-        })
+        });
         return foundObj;
     }
 

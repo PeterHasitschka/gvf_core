@@ -40,7 +40,7 @@ export class GraphVisConfig {
         abstractedge: {
             color: 0xaaaaff,
             z_pos: -1.0,
-            thickness: 0.7
+            thickness: 0.6
         }
     };
 
