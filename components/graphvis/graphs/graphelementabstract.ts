@@ -5,6 +5,7 @@ import {Plane} from "../../plane/plane";
 import {EdgeAbstract} from "./edges/edgeelementabstract";
 import {WORKER_UI_STARTABLE_MESSAGING_SERVICE} from "@angular/platform-browser";
 import {UiService} from "../../../services/ui.service";
+import {InterGraphEventService, INTERGRAPH_EVENTS} from "../../../services/intergraphevents.service";
 
 
 /**
@@ -135,17 +136,21 @@ export abstract class ElementAbstract extends THREE.Group implements GraphObject
     }
 
     /**
-     * Callback called when node is intersected the first time (Mouse-Hover)
+     * On Mouse-Hover
+     * Sending an Event for notifying that node was intersected
      */
     public onIntersectStart():void {
         this.highlight();
+        InterGraphEventService.getInstance().send(INTERGRAPH_EVENTS.NODE_HOVERED, this);
     }
 
     /**
-     * Callback called when node is not intersected anymore (Mouse-Leave)
+     * On Mouse-Leave
+     * Sending an Event for notifying that node was left
      */
     public onIntersectLeave():void {
         this.deHighlight();
+        InterGraphEventService.getInstance().send(INTERGRAPH_EVENTS.NODE_LEFT, this);
     }
 
     /**

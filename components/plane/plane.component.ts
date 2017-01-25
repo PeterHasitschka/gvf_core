@@ -41,15 +41,15 @@ export class PlaneComponent {
      * the container HTML element exists now
      */
     ngAfterViewInit():void {
-        this.uiService.addSideInfoElement(new SideInfoModel(
-            this.plane.getName(),
-            SideInfoPositions.Left,
-            SideInfoContentType.GraphSettings,
-            {
-                graphtype: this.plane.getGraphType()
-            }
-            )
-        );
+        // this.uiService.addSideInfoElement(new SideInfoModel(
+        //     this.plane.getName(),
+        //     SideInfoPositions.Left,
+        //     SideInfoContentType.GraphSettings,
+        //     {
+        //         graphtype: this.plane.getGraphType()
+        //     }
+        //     )
+        // );
 
         window.setTimeout(function () {
             this.plane.initScene(this.id);

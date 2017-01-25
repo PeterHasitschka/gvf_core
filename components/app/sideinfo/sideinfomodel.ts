@@ -4,7 +4,7 @@ export enum SideInfoPositions {
 }
 
 export enum SideInfoContentType {
-    GraphSettings,
+    DynamicInfo,
     Text
 }
 

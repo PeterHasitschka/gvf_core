@@ -6,7 +6,7 @@
             {{infomodel.getData()["text"]}}
         </span>
     </div>
-    <div  *ngIf="infomodel.getContentType() === types.GraphSettings">
-        <sideinfocontentgraph [data]="infomodel.data"></sideinfocontentgraph>
+    <div  *ngIf="infomodel.getContentType() === types.DynamicInfo">
+        <sideinfodynamicinfo [data]="infomodel.data"></sideinfodynamicinfo>
     </div>
 </div>

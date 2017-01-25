@@ -47,6 +47,18 @@ export class AppComponent implements OnInit {
             {text: "Prototype of GVF. Work in progress: Separating framework from specific project."}
             )
         );
+
+
+        this.uiService.addSideInfoElement(new SideInfoModel(
+           "Info",
+            SideInfoPositions.Right,
+            SideInfoContentType.DynamicInfo,
+            {
+                //graphtype: this.plane.getGraphType()
+            }
+            )
+        );
+
         //console.log(this.sideInfoElements);
 
         this.loadPlugins();

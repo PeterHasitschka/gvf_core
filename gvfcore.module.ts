@@ -7,11 +7,11 @@ import {GraphworkspaceComponent}  from './components/graphworkspace/graphworkspa
 import {PlaneComponent}  from './components/plane/plane.component';
 
 import {HttpModule} from '@angular/http'
-import {SideInfoContentGraphsettingsComponent} from "./components/app/sideinfo/contentmodels/graphsettings.component";
+import {SideInfoContentDynamicInfoComponent} from "./components/app/sideinfo/contentmodels/dyninfo.component";
 import {InterGraphConnectionDirective} from "./components/graphworkspace/intergraphconnections/intergraphconnection.directive";
 @NgModule({
     imports: [BrowserModule, HttpModule],
-    declarations: [AppComponent, GraphworkspaceComponent, PlaneComponent, SideInfoComponent, SideInfoContentGraphsettingsComponent, InterGraphConnectionDirective],
+    declarations: [AppComponent, GraphworkspaceComponent, PlaneComponent, SideInfoComponent, SideInfoContentDynamicInfoComponent, InterGraphConnectionDirective],
     bootstrap: [AppComponent]
 })
 /**
