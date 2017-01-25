@@ -1,8 +1,8 @@
 import {GraphVisConfig} from '../config';
-import {DataAbstract} from "../data/abstract";
+import {DataAbstract} from "../data/dataabstract";
 import {GraphObject} from "./graphobjectinterface";
 import {Plane} from "../../plane/plane";
-import {EdgeAbstract} from "./edges/abstract";
+import {EdgeAbstract} from "./edges/edgeelementabstract";
 import {WORKER_UI_STARTABLE_MESSAGING_SERVICE} from "@angular/platform-browser";
 import {UiService} from "../../../services/ui.service";
 

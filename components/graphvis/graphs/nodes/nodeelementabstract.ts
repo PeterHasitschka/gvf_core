@@ -1,7 +1,7 @@
-import {ElementAbstract} from "../elementabstract";
+import {ElementAbstract} from "../graphelementabstract";
 import {Plane} from "../../../plane/plane";
 import {GraphVisConfig} from "../../config";
-import {DataAbstract} from "../../data/abstract";
+import {DataAbstract} from "../../data/dataabstract";
 export abstract class NodeAbstract extends ElementAbstract {
 
 

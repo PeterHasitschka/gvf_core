@@ -1,13 +1,13 @@
 import {Plane} from '../../plane/plane';
-import {DataAbstract} from '../data/abstract';
-import {GraphLayoutAbstract} from '../graphs/layouts/abstract';
+import {DataAbstract} from '../data/dataabstract';
+import {GraphLayoutAbstract} from './layouts/graphlayoutabstract';
 import {UiService} from "../../../services/ui.service";
 import {SideInfoPositions, SideInfoContentType, SideInfoModel} from "../../app/sideinfo/sideinfomodel";
-import {EdgeAbstract} from "./edges/abstract";
+import {EdgeAbstract} from "./edges/edgeelementabstract";
 import {LayoutInterface} from "./layouts/layoutinterface";
-import {BasicGroup} from "../data/basicgroup";
-import {NodeAbstract} from "./nodes/nodeabstract";
-import {ElementAbstract} from "./elementabstract";
+import {BasicGroup} from "../data/databasicgroup";
+import {NodeAbstract} from "./nodes/nodeelementabstract";
+import {ElementAbstract} from "./graphelementabstract";
 /**
  * Abstract Graph Class
  * Holding the corresponding data and the plane

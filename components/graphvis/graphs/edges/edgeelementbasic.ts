@@ -1,6 +1,6 @@
-import {EdgeAbstract} from "./abstract";
+import {EdgeAbstract} from "./edgeelementabstract";
 import {Plane} from "../../../plane/plane";
-import {NodeAbstract} from "../nodes/nodeabstract";
+import {NodeAbstract} from "../nodes/nodeelementabstract";
 
 
 /**

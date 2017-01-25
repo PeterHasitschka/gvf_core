@@ -1,15 +1,12 @@
 import {Plane} from '../../plane/plane';
-import {GraphAbstract} from './abstract';
+import {GraphAbstract} from './graphabstract';
 import {DataService} from '../../../services/data.service';
 
-import {EdgeAbstract} from "./edges/abstract";
-import {GraphLayoutFdl} from "./layouts/fdl";
-import {NodeSimple} from "./nodes/simple";
-import {BasicGroup} from "../data/basicgroup";
-import {GraphLayoutRandom} from "./layouts/random";
-import {GroupSimple} from "./groups/simple";
-import {ElementAbstract} from "./elementabstract";
-import {GroupAbstract} from "./groups/abstract";
+import {EdgeAbstract} from "./edges/edgeelementabstract";
+import {GraphLayoutFdl} from "./layouts/graphlayoutfdl";
+import {BasicGroup} from "../data/databasicgroup";
+import {GroupSimple} from "./groups/groupelementsimple";
+import {GroupAbstract} from "./groups/groupelementabstract";
 
 
 /**

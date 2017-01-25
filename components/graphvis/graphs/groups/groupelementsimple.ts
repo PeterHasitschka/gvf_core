@@ -1,7 +1,7 @@
-import {DataAbstract} from "../../data/abstract";
+import {DataAbstract} from "../../data/dataabstract";
 import {Plane} from "../../../plane/plane";
-import {GroupAbstract} from "./abstract";
-import {BasicGroup} from "../../data/basicgroup";
+import {GroupAbstract} from "./groupelementabstract";
+import {BasicGroup} from "../../data/databasicgroup";
 
 /**
  * A simple node, derived from @see{NodeAbstract}

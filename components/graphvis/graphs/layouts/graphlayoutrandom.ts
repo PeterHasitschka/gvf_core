@@ -1,7 +1,7 @@
-import {GraphLayoutAbstract} from './abstract';
+import {GraphLayoutAbstract} from './graphlayoutabstract';
 import {Plane} from '../../../plane/plane';
-import {EdgeAbstract} from "../edges/abstract";
-import {NodeAbstract} from "../nodes/nodeabstract";
+import {EdgeAbstract} from "../edges/edgeelementabstract";
+import {NodeAbstract} from "../nodes/nodeelementabstract";
 
 /**
  * Dummy-Random layout. The graphelements just get set randomly on the plane

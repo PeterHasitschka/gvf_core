@@ -1,6 +1,6 @@
 import {SideInfoComponent} from "../sideinfo.component";
 import {OnDestroy, Component, Input} from "@angular/core";
-import {GraphAbstract} from "../../../graphvis/graphs/abstract";
+import {GraphAbstract} from "../../../graphvis/graphs/graphabstract";
 import {InterGraphEventService, INTERGRAPH_EVENTS} from "../../../../services/intergraphevents.service";
 import {GraphVisConfig} from "../../../graphvis/config";
 

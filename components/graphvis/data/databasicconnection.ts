@@ -1,5 +1,5 @@
-import {DataAbstract} from "./abstract";
-import {BasicEntity} from "./basicentity";
+import {DataAbstract} from "./dataabstract";
+import {BasicEntity} from "./databasicentity";
 /**
  * Connection Data object.
  * Connecting two "Node" objects

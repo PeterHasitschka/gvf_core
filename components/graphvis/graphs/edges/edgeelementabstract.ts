@@ -2,7 +2,7 @@ import {GraphVisConfig} from '../../config';
 import {start} from "repl";
 import {GraphObject} from "../graphobjectinterface";
 import {Plane} from "../../../plane/plane";
-import {NodeAbstract} from "../nodes/nodeabstract";
+import {NodeAbstract} from "../nodes/nodeelementabstract";
 
 
 /**

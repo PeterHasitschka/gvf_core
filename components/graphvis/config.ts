@@ -1,7 +1,7 @@
 // import {ResourceGraph} from '../../../afel/graphs/resourcegraph';
 // import {LearnerGraph} from '../../../afel/graphs/learnergraph';
-import {BasicGraph} from "./graphs/basic";
-import {SimpleGroups} from "./graphs/groupssimple";
+import {BasicGraph} from "./graphs/graphbasic";
+import {SimpleGroups} from "./graphs/graphgroupssimple";
 
 /**
  * Configurations related to the Graph Visualization

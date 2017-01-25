@@ -1,5 +1,5 @@
-import {DataAbstract} from "./abstract";
-import {BasicEntity} from "./basicentity";
+import {DataAbstract} from "./dataabstract";
+import {BasicEntity} from "./databasicentity";
 export class BasicGroup extends DataAbstract {
 
 

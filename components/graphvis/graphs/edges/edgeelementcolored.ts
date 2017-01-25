@@ -1,6 +1,6 @@
 import {Plane} from "../../../plane/plane";
-import {EdgeBasic} from "./basic";
-import {NodeAbstract} from "../nodes/nodeabstract";
+import {EdgeBasic} from "./edgeelementbasic";
+import {NodeAbstract} from "../nodes/nodeelementabstract";
 
 /**
  * A colored edge.

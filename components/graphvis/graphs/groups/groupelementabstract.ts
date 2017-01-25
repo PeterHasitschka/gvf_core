@@ -1,6 +1,6 @@
 import {Plane} from "../../../plane/plane";
-import {BasicGroup} from "../../data/basicgroup";
-import {ElementAbstract} from "../elementabstract";
+import {BasicGroup} from "../../data/databasicgroup";
+import {ElementAbstract} from "../graphelementabstract";
 import {GraphVisConfig} from "../../config";
 
 /**

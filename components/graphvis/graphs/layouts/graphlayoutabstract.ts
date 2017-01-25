@@ -1,7 +1,7 @@
 import {Plane} from '../../../plane/plane';
 import {LayoutInterface} from "./layoutinterface";
-import {EdgeAbstract} from "../edges/abstract";
-import {NodeAbstract} from "../nodes/nodeabstract";
+import {EdgeAbstract} from "../edges/edgeelementabstract";
+import {NodeAbstract} from "../nodes/nodeelementabstract";
 
 /**
  * Abstract class for different graph layouts (e.g. random graph, FDL-Graph, Special Community-Graphs

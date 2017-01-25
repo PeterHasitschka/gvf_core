@@ -1,17 +1,17 @@
 import {Plane} from '../../plane/plane';
-import {GraphAbstract} from './abstract';
+import {GraphAbstract} from './graphabstract';
 import {DataService} from '../../../services/data.service';
 
-import {GraphLayoutRandom} from './layouts/random';
-import {EdgeBasic} from "./edges/basic";
-import {EdgeAbstract} from "./edges/abstract";
+import {GraphLayoutRandom} from './layouts/graphlayoutrandom';
+import {EdgeBasic} from "./edges/edgeelementbasic";
+import {EdgeAbstract} from "./edges/edgeelementabstract";
 import {InterGraphEventService, INTERGRAPH_EVENTS} from "../../../services/intergraphevents.service";
-import {GraphLayoutFdl} from "./layouts/fdl";
+import {GraphLayoutFdl} from "./layouts/graphlayoutfdl";
 import {UiService} from "../../../services/ui.service";
-import {NodeSimple} from "./nodes/simple";
-import {BasicEntity} from "../data/basicentity";
-import {BasicConnection} from "../data/basicconnection";
-import {NodeAbstract} from "./nodes/nodeabstract";
+import {NodeSimple} from "./nodes/nodelementsimple";
+import {BasicEntity} from "../data/databasicentity";
+import {BasicConnection} from "../data/databasicconnection";
+import {NodeAbstract} from "./nodes/nodeelementabstract";
 
 
 /**

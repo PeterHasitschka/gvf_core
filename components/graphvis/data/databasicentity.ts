@@ -1,4 +1,4 @@
-import {DataAbstract} from "./abstract";
+import {DataAbstract} from "./dataabstract";
 /**
  * Entity Data object
  * Holding data of a single Entity

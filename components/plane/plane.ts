@@ -1,7 +1,7 @@
 import {Component} from '@angular/core';
 import {GraphScene} from '../graphvis/scene';
 import {GraphVisConfig} from '../graphvis/config';
-import {GraphAbstract} from '../graphvis/graphs/abstract';
+import {GraphAbstract} from '../graphvis/graphs/graphabstract';
 import {UiService} from "../../services/ui.service";
 
 /**

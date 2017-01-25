@@ -1,6 +1,6 @@
-import {DataAbstract} from "../../data/abstract";
+import {DataAbstract} from "../../data/dataabstract";
 import {Plane} from "../../../plane/plane";
-import {NodeAbstract} from "./nodeabstract";
+import {NodeAbstract} from "./nodeelementabstract";
 
 /**
  * A simple node, derived from @see{NodeAbstract}
