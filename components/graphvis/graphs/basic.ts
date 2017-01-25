@@ -21,7 +21,6 @@ import {NodeAbstract} from "./nodes/nodeabstract";
  */
 export class BasicGraph extends GraphAbstract {
 
-    protected data:BasicEntity[];
     protected edges:EdgeAbstract[];
 
     constructor(protected plane:Plane) {

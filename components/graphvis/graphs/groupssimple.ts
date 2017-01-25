@@ -8,6 +8,8 @@ import {NodeSimple} from "./nodes/simple";
 import {BasicGroup} from "../data/basicgroup";
 import {GraphLayoutRandom} from "./layouts/random";
 import {GroupSimple} from "./groups/simple";
+import {ElementAbstract} from "./elementabstract";
+import {GroupAbstract} from "./groups/abstract";
 
 
 /**
@@ -17,28 +19,42 @@ import {GroupSimple} from "./groups/simple";
  */
 export class SimpleGroups extends GraphAbstract {
 
-    protected data:BasicGroup[];
     protected edges:EdgeAbstract[];
+    protected graphElements:GroupAbstract[];
 
     constructor(protected plane:Plane) {
         super(plane);
 
 
-        this.dataGetterMethod = DataService.getInstance().getDemoEntities.bind(DataService.getInstance());
+        this.dataGetterMethod = DataService.getInstance().getDemoGroups.bind(DataService.getInstance());
 
         this.nodetype = GroupSimple;
 
-        this.layoutClass = GraphLayoutRandom;
-        //this.layoutClass = GraphLayoutFdl;
+        //this.layoutClass = GraphLayoutRandom;
+        this.layoutClass = GraphLayoutFdl;
     }
 
 
     public init():void {
         super.init();
+        this.setInitiScales();
+    }
 
-        //let groupGetterFct =
 
-        console.log(this.data);
+    protected setInitiScales() {
+        let nums = [];
+        this.graphElements.forEach((g:GroupAbstract) => {
+            let groupDataObj = <BasicGroup>g.getDataEntity();
+            nums.push(groupDataObj.getEntities().length);
+        });
+        let max = Math.max.apply(Math, nums);
+
+        this.graphElements.forEach((g:GroupAbstract) => {
+            let groupDataObj = <BasicGroup>g.getDataEntity();
+            g.setScale(groupDataObj.getEntities().length / max);
+        });
+
+        this.plane.getGraphScene().render();
     }
 
 }

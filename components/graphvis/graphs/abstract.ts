@@ -7,6 +7,7 @@ import {EdgeAbstract} from "./edges/abstract";
 import {LayoutInterface} from "./layouts/layoutinterface";
 import {BasicGroup} from "../data/basicgroup";
 import {NodeAbstract} from "./nodes/nodeabstract";
+import {ElementAbstract} from "./elementabstract";
 /**
  * Abstract Graph Class
  * Holding the corresponding data and the plane
@@ -19,19 +20,18 @@ export abstract class GraphAbstract {
     /**
      * The data of a specific type (learner, resource, ...) for this plane
      */
-    protected data:DataAbstract[];
     protected dataGetterMethod;
 
     protected nodetype:any;
     protected layoutClass:any;
     protected layout:LayoutInterface = null;
-    protected nodes:NodeAbstract[];
+    protected graphElements:ElementAbstract[];
     protected groups:BasicGroup[];
     protected edges:EdgeAbstract[];
 
 
     constructor(protected plane:Plane) {
-        this.nodes = [];
+        this.graphElements = [];
     }
 
     /**
@@ -40,7 +40,7 @@ export abstract class GraphAbstract {
     public init():void {
         this.loadData();
         this.edges = this.createEdges();
-        this.layout = new this.layoutClass(this.plane, this.nodes, this.edges);
+        this.layout = new this.layoutClass(this.plane, this.graphElements, this.edges);
         this.edges.forEach((edge:EdgeAbstract) => {
             this.plane.getGraphScene().addObject(edge);
         });
@@ -68,12 +68,12 @@ export abstract class GraphAbstract {
      * Afterwards layout gets calculated by the defined layout class
      */
     protected loadData():void {
-        this.data = this.dataGetterMethod();
+        let data = this.dataGetterMethod();
 
-        this.data.forEach((data:DataAbstract) => {
+        data.forEach((data:DataAbstract) => {
             let n = new this.nodetype(0, 0, data, this.plane);
             this.plane.getGraphScene().addObject(n);
-            this.nodes.push(n);
+            this.graphElements.push(n);
         });
     }
 
@@ -85,7 +85,7 @@ export abstract class GraphAbstract {
      */
     protected getNodeByDataId(id:number):NodeAbstract {
         let foundNode:NodeAbstract = null;
-        this.nodes.forEach((node:NodeAbstract) => {
+        this.graphElements.forEach((node:NodeAbstract) => {
             if (foundNode)
                 return;
             if (!node.getDataEntity())
@@ -105,7 +105,7 @@ export abstract class GraphAbstract {
     protected getNodeByDataEntity(entity:DataAbstract):NodeAbstract[] {
 
         let out:NodeAbstract[] = [];
-        this.nodes.forEach((node:NodeAbstract) => {
+        this.graphElements.forEach((node:NodeAbstract) => {
             if (node.getDataEntity().getId() === entity.getId())
                 out.push(node);
         });

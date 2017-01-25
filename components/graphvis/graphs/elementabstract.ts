@@ -89,7 +89,7 @@ export abstract class ElementAbstract extends THREE.Group implements GraphObject
 
     /**
      * Add an edge to the object.
-     * The edge's nodes are NOT affected by this
+     * The edge's graphElements are NOT affected by this
      * @param edge
      */
     public addEdge(edge:EdgeAbstract) {

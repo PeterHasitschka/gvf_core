@@ -29,11 +29,16 @@ export abstract class GroupAbstract extends ElementAbstract {
         this.setColor(this.color);
     }
 
-    public highlight(){
+
+    public setScale(factor:number) {
+        this.scale.set(factor, factor, factor);
+    }
+
+
+    public highlight() {
         super.highlight();
         this.groupNodeMesh.material['color'].setHex(this.highlightColor);
     }
-
 
     public deHighlight() {
         super.deHighlight();

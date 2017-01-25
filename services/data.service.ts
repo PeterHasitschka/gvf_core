@@ -7,6 +7,7 @@ import {BasicEntity} from "../components/graphvis/data/basicentity";
 import {NodeSimple} from "../components/graphvis/graphs/nodes/simple";
 import {BasicConnection} from "../components/graphvis/data/basicconnection";
 import {BasicGroup} from "../components/graphvis/data/basicgroup";
+import {Learner} from "../../afel/graph/data/learner";
 
 @Injectable()
 /**
@@ -37,7 +38,7 @@ export class DataService {
      * @returns {DataService}
      */
     constructor(private http:Http) {
-        this.data = {entities: [], connections: []};
+        this.data = {entities: [], connections: [], groups: []};
         if (!DataService.isCreating) {
             return DataService.getInstance(http);
         }
@@ -97,6 +98,9 @@ export class DataService {
         return this.fetchDemoEntities()
             .then(() => {
                 return this.fetchDemoConnections()
+            })
+            .then(() => {
+                return this.createDummyDemoGroups()
             });
 
 
@@ -109,6 +113,34 @@ export class DataService {
 
     }
 
+    createDummyDemoGroups() {
+        console.log("Creating Demo Groups out of data from server...");
+
+
+        let alreadyChosenIds = [];
+        let learnerFetcher = function (maxnum:number):Learner[] {
+            let randomLearners:Learner[] = [];
+            for (let i = 0; i < maxnum; i++) {
+                let someLearnerId = Math.floor(Math.random() * Learner.getDataList().length);
+                while (alreadyChosenIds.indexOf(someLearnerId) >= 0)
+                    someLearnerId = Math.floor(Math.random() * Learner.getDataList().length);
+                alreadyChosenIds.push(someLearnerId);
+                let someRandomLearner = Learner.getObject(someLearnerId);
+                randomLearners.push(someRandomLearner);
+            }
+            return randomLearners;
+        };
+
+        let c1 = new BasicGroup(BasicGroup.getDataList().length, learnerFetcher(10), {});
+        let c2 = new BasicGroup(BasicGroup.getDataList().length, learnerFetcher(5), {});
+        let c3 = new BasicGroup(BasicGroup.getDataList().length, learnerFetcher(20), {});
+
+        c1.removeEntity(c1.getEntities()[3]);
+
+        this.data.groups = [c1,c2,c3];
+
+        return true;
+    }
 
     fetchDemoEntities() {
         console.log("Fetching Demo Nodes data from server...", DataService.DUMMYDATA.data);
@@ -144,14 +176,13 @@ export class DataService {
     }
 
 
-
     getDemoEntities():NodeSimple[] {
         return this.data.entities;
     }
 
     getDemoGroups():BasicGroup[] {
 
-        return [];
+        return this.data.groups;
     }
 
     getDemoConnections():BasicConnection[] {
