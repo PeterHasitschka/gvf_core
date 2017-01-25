@@ -16,7 +16,7 @@ export class GraphScene {
     private threeCamera:THREE.Camera;
     private threeRaycaster:THREE.Raycaster;
     private SceneMouseInteractions:SceneMouseInteractions;
-    private objectGroup:THREE.Object3D;
+    private objectGroup:THREE.Group;
 
 
     /**
@@ -57,7 +57,8 @@ export class GraphScene {
         this.SceneMouseInteractions = new SceneMouseInteractions(this);
         this.threeRaycaster = new THREE.Raycaster();
 
-        this.objectGroup = new THREE.Object3D();
+        this.objectGroup = new THREE.Group();
+        this.objectGroup.name="Graph Scene Group";
         this.threeScene.add(this.objectGroup);
     }
 

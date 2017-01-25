@@ -13,10 +13,9 @@ import {UiService} from "../../../services/ui.service";
  * Thus, it holds a geometry and a material
  * @author Peter Hasitschka
  */
-export abstract class ElementAbstract extends THREE.Mesh implements GraphObject {
+export abstract class ElementAbstract extends THREE.Group implements GraphObject {
 
-    protected threeMaterial:THREE.MeshBasicMaterial;
-    protected threeGeometry:THREE.Geometry;
+
     protected zPos;
     protected color:number;
     protected isHighlighted = false;
@@ -26,18 +25,21 @@ export abstract class ElementAbstract extends THREE.Mesh implements GraphObject 
     protected dataEntity:DataAbstract;
     protected edges = [];
 
+
     /**
      * Constructor of the abstract node
      * @param x X-Position on the Plane
      * @param y Y-Position on the Plane
      * @param plane Plane Instance
      */
-    constructor(x:number, y:number, plane:Plane, geometry:THREE.Geometry, material:THREE.MeshBasicMaterial) {
+    constructor(x:number, y:number, plane:Plane) {
 
         /**
          * SUPER call must be first statement, thus extract geometry and material afterwards
          */
-        super(geometry, material);
+
+        super();
+        this.name = "GVF Element Group";
 
         var config = GraphVisConfig.graphelements;
 
@@ -46,10 +48,9 @@ export abstract class ElementAbstract extends THREE.Mesh implements GraphObject 
 
         this.plane = plane;
         this.color = color;
-        this.highlightColor = highlightColor
-        this.threeGeometry = <THREE.Geometry>this.geometry;
-        this.threeMaterial = <THREE.MeshBasicMaterial>this.material;
+        this.highlightColor = highlightColor;
         this.zPos = config.abstractnode.z_pos;
+
 
         x = x === undefined ? 0.0 : x;
         y = y === undefined ? 0.0 : y;
@@ -76,7 +77,6 @@ export abstract class ElementAbstract extends THREE.Mesh implements GraphObject 
      * Setting the color of the simple node (e.g. 0xffffff)
      */
     public setColor(color:number):void {
-        this.threeMaterial.color.setHex(color);
     }
 
     /**
@@ -117,11 +117,10 @@ export abstract class ElementAbstract extends THREE.Mesh implements GraphObject 
      * The defined highlight-color is applied
      * No rendering is made
      */
-    public highlightNode() {
+    public highlight() {
         if (this.isHighlighted)
             return;
         this.isHighlighted = true;
-        this.threeMaterial.color.setHex(this.highlightColor);
     }
 
     /**
@@ -129,25 +128,24 @@ export abstract class ElementAbstract extends THREE.Mesh implements GraphObject 
      * The defined standard-color is applied
      * No rendering is made
      */
-    public deHighlightNode() {
+    public deHighlight() {
         if (!this.isHighlighted)
             return;
         this.isHighlighted = false;
-        this.threeMaterial.color.setHex(this.color);
     }
 
     /**
      * Callback called when node is intersected the first time (Mouse-Hover)
      */
     public onIntersectStart():void {
-        this.highlightNode();
+        this.highlight();
     }
 
     /**
      * Callback called when node is not intersected anymore (Mouse-Leave)
      */
     public onIntersectLeave():void {
-        this.deHighlightNode();
+        this.deHighlight();
     }
 
     /**

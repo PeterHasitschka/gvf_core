@@ -12,7 +12,6 @@ export class SceneMouseInteractions {
     private currentlyIntersected = {};
 
 
-
     constructor(private scene:GraphScene) {
         scene.getContainer().addEventListener('mousemove', this.onSceneMouseMove.bind(this), false);
         UiService.getInstance().getGraphWorkSpaceSvgElement().addEventListener('mousemove', this.onSceneMouseMove.bind(this), false);
@@ -28,19 +27,23 @@ export class SceneMouseInteractions {
             return;
 
         this.scene.getThreeRaycaster().setFromCamera(this.mouseContainerPos, this.scene.getThreeCamera());
-        var intersects = this.scene.getThreeRaycaster().intersectObjects(this.scene.getObjectGroup().children);
+        var intersects = this.scene.getThreeRaycaster().intersectObjects(this.scene.getObjectGroup().children, true);
 
         //Check for new
         let newIntersected = {};
         intersects.forEach((intersectedObj) => {
             let obj:any = intersectedObj['object'];
-
             if (typeof obj.onIntersectStart === 'undefined') {
-                return;
+                if (typeof obj.parent.onIntersectStart !== 'undefined') {
+                    obj = obj.parent;
+                }
+                else
+                    return;
             }
 
             let id = obj['uuid'];
             if (typeof this.currentlyIntersected[id] === 'undefined') {
+                //console.log(obj.onIntersectStart);
                 obj.onIntersectStart();
             }
             newIntersected[id] = obj;
