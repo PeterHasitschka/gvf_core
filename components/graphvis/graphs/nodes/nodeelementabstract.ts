@@ -3,6 +3,7 @@ import {Plane} from "../../../plane/plane";
 import {GraphVisConfig} from "../../config";
 import {DataAbstract} from "../../data/dataabstract";
 import {InterGraphEventService, INTERGRAPH_EVENTS} from "../../../../services/intergraphevents.service";
+import {EdgeAbstract} from "../edges/edgeelementabstract";
 export abstract class NodeAbstract extends ElementAbstract {
 
 
@@ -34,12 +35,19 @@ export abstract class NodeAbstract extends ElementAbstract {
 
     public highlight() {
         this.nodeMesh.material['color'].setHex(this.highlightColor);
+
+        // this.edges.forEach((e:EdgeAbstract) => {
+        //     e.highlight();
+        // });
         super.highlight();
     }
 
 
     public deHighlight() {
         this.nodeMesh.material['color'].setHex(this.color);
+        // this.edges.forEach((e:EdgeAbstract) => {
+        //     e.deHighlight();
+        // });
         super.deHighlight();
     }
 

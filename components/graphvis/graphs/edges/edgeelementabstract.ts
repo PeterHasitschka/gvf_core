@@ -20,10 +20,12 @@ export abstract class EdgeAbstract extends THREE.Line implements GraphObject {
     protected zPos;
     protected color:number;
     protected opacity = 1.0;
+    protected origOpacity;
     protected plane:Plane;
     protected sourceNode:NodeAbstract;
     protected destNode:NodeAbstract;
     protected addRandom;
+    protected isHighlighted = false;
 
     /**
      * Creating an edge by taking the graphelements and the plane
@@ -66,6 +68,8 @@ export abstract class EdgeAbstract extends THREE.Line implements GraphObject {
         this.threeGeometry = geometry;
         this.threeMaterial = material;
         this.zPos = config.abstractedge.z_pos;
+
+        this.origOpacity = this.opacity;
     }
 
     private addRandomColorValue(color:number):number {
@@ -122,9 +126,36 @@ export abstract class EdgeAbstract extends THREE.Line implements GraphObject {
         this.threeGeometry.vertices[1]['x'] = this.destNode.getPosition()['x'];
         this.threeGeometry.vertices[1]['y'] = this.destNode.getPosition()['y'];
         this.threeGeometry.verticesNeedUpdate = true;
-
-
     }
+
+    /**
+     * Abstract of highlighting a node
+     * The defined highlight-color is applied
+     * No rendering is made
+     */
+    public highlight() {
+        if (this.isHighlighted)
+            return;
+        this.isHighlighted = true;
+        this.threeMaterial.linewidth *= 4.0;
+        this.opacity = 1.0;
+        this.plane.getGraphScene().render();
+    }
+
+    /**
+     * Abstract of De-highlighting a node
+     * The defined standard-color is applied
+     * No rendering is made
+     */
+    public deHighlight() {
+        if (!this.isHighlighted)
+            return;
+        this.isHighlighted = false;
+        this.threeMaterial.linewidth /= 4.0;
+        this.opacity = this.origOpacity;
+        this.plane.getGraphScene().render();
+    }
+
 
     /**
      * Callback on hovering the edge
