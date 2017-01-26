@@ -13,7 +13,6 @@ export enum SideInfoContentType {
  */
 export class SideInfoModel {
     constructor(private title:String, private position:SideInfoPositions, private type:SideInfoContentType, private data?:{}) {
-
     }
 
     public getTitle():String {

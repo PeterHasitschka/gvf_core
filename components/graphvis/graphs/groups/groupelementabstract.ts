@@ -11,7 +11,7 @@ export abstract class GroupAbstract extends ElementAbstract {
 
     protected groupNodeMesh:THREE.Mesh;
 
-    constructor(x:number, y:number, protected group:BasicGroup, plane:Plane) {
+    constructor(x:number, y:number, protected dataEntity:BasicGroup, plane:Plane) {
 
         super(x, y, plane);
 
@@ -54,6 +54,8 @@ export abstract class GroupAbstract extends ElementAbstract {
         super.onIntersectLeave();
         this.plane.getGraphScene().render();
     }
+
+
 }
 
 

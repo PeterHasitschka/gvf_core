@@ -41,16 +41,21 @@ export class AppComponent implements OnInit {
 
     ngOnInit() {
         this.uiService.addSideInfoElement(new SideInfoModel(
-            "Prototype",
+            "Status",
             SideInfoPositions.Left,
             SideInfoContentType.Text,
-            {text: "Prototype of GVF. Work in progress: Separating framework from specific project."}
+            {text: "Prototype of GVF.<br>" +
+            "Different graphs visualizing different entities and connections can be shown.<br>" +
+            "A basic simple FDL algorithm is used.<br>" +
+            "Basic Connections between different graphs can be shown.<br>" +
+            "Simple groups (communities) can be represented in seperate graphs (WIP)<br>" +
+            "<br>-- P.H., 26.01.2017"}
             )
         );
 
 
         this.uiService.addSideInfoElement(new SideInfoModel(
-           "Info",
+           "Element-Info",
             SideInfoPositions.Right,
             SideInfoContentType.DynamicInfo,
             {

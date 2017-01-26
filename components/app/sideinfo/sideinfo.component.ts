@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {SideInfoModel, SideInfoContentType} from "./sideinfomodel";
+import {SideInfoModel, SideInfoContentType, SideInfoPositions} from "./sideinfomodel";
 
 
 @Component({
@@ -12,7 +12,8 @@ import {SideInfoModel, SideInfoContentType} from "./sideinfomodel";
  */
 export class SideInfoComponent implements OnInit {
 
-    @Input() private infomodel:SideInfoModel
+    @Input() private infomodel:SideInfoModel;
+    @Input() private position:SideInfoPositions;
 
     public types;
 

@@ -2,7 +2,7 @@
     float: left;
     width: 100%;
     min-height: 150px;
-    background: #F3F0F0;
+    background: #F9F9F9;
     border: 1px solid #BBBBBB;
     color: #484848;
     font-size: 13px;
@@ -13,4 +13,8 @@
 .sidebarinfo h3 {
     font-size: 18px;
     margin-top: 7px;
+}
+
+span {
+    font-size:10px;
 }

@@ -3,11 +3,15 @@ import {OnDestroy, Component, Input} from "@angular/core";
 import {GraphAbstract} from "../../../graphvis/graphs/graphabstract";
 import {InterGraphEventService, INTERGRAPH_EVENTS} from "../../../../services/intergraphevents.service";
 import {GraphVisConfig} from "../../../graphvis/config";
+import {ElementAbstract} from "../../../graphvis/graphs/graphelementabstract";
+import {GroupAbstract} from "../../../graphvis/graphs/groups/groupelementabstract";
+import {BasicGroup} from "../../../graphvis/data/databasicgroup";
+import {BasicEntity} from "../../../graphvis/data/databasicentity";
 
 @Component({
     selector: 'sideinfodynamicinfo',
-    templateUrl: 'gvfcore/components/app/sideinfo/contentmodels/graph.html',
-    // styleUrls: ['gvfcore/components/app/sideinfo/sideinfo.css']
+    templateUrl: 'gvfcore/components/app/sideinfo/contentmodels/dyninfo.html',
+    styleUrls: ['gvfcore/components/app/sideinfo/contentmodels/dyninfo.css']
 })
 
 /**
@@ -16,56 +20,32 @@ import {GraphVisConfig} from "../../../graphvis/config";
 export class SideInfoContentDynamicInfoComponent implements OnDestroy {
 
     @Input() data:{};
-    private nodeInfo = false;
+    private elementInfo = false;
 
     constructor(private intergraphEventService:InterGraphEventService) {
 
 
-        this.intergraphEventService.addListener(INTERGRAPH_EVENTS.NODE_HOVERED, function(e) {
+        this.intergraphEventService.addListener(INTERGRAPH_EVENTS.NODE_HOVERED, function (e) {
             this.dynInfo = [];
-            this.dynInfo.push("node hovered");
+
+            let element:ElementAbstract = e.detail;
+            this.dynInfo.push("Element-Type: " + element.name);
+            this.dynInfo.push("Data-ID: " + element.getDataEntity().getId());
+
+            if (element instanceof GroupAbstract) {
+
+                let groupData = <BasicGroup>element.getDataEntity();
+                this.dynInfo.push("Group Type: " + element.constructor.name);
+                this.dynInfo.push("Contains " + groupData.getEntities().length + " " +
+                    groupData.getEntities()[0].constructor.name + " elements";
+            }
+
+            this.dynInfo.push(JSON.stringify(element.getDataEntity().getData()));
         }.bind(this));
 
-        this.intergraphEventService.addListener(INTERGRAPH_EVENTS.NODE_LEFT, function(e) {
-            this.dynInfo = false;
+        this.intergraphEventService.addListener(INTERGRAPH_EVENTS.NODE_LEFT, function (e) {
+            //this.dynInfo = false;
         }.bind(this));
-
-        // this.intergraphEventService.addListener(INTERGRAPH_EVENTS.RESOURCE_NODE_HOVERED, function (e) {
-        //     if (typeof this.data.graphtype === "undefined") {
-        //         console.warn("Graph-Side-Info. Could not find graphtype in data");
-        //         return;
-        //     }
-        //     if (GraphVisConfig.active_graphs[this.data.graphtype] !== ResourceGraph)
-        //         return;
-        //
-        //     let node:NodeAbstract = e.detail;
-        //     this.dynInfo = [];
-        //     this.dynInfo.push("Resource Node - ID: " + node.getDataEntity().getId());
-        //     this.dynInfo.push("Title: " + node.getDataEntity().getData('title'));
-        //     this.dynInfo.push("Complexity: " + node.getDataEntity().getData('complexity'));
-        // }.bind(this));
-        //
-        // this.intergraphEventService.addListener(INTERGRAPH_EVENTS.LEARNER_NODE_HOVERED, function (e) {
-        //     if (typeof this.data.graphtype === "undefined") {
-        //         console.warn("Graph-Side-Info. Could not find graphtype in data");
-        //         return;
-        //     }
-        //     if (GraphVisConfig.active_graphs[this.data.graphtype] !== LearnerGraph)
-        //         return;
-        //
-        //     let node:NodeAbstract = e.detail;
-        //     this.dynInfo = [];
-        //     this.dynInfo.push("Learner Node - ID: " + node.getDataEntity().getId());
-        //     this.dynInfo.push("Name: " + node.getDataEntity().getData('name'));
-        //     this.dynInfo.push("Experience: " + node.getDataEntity().getData('experience'));
-        // }.bind(this));
-        //
-        // this.intergraphEventService.addListener(INTERGRAPH_EVENTS.LEARNER_NODE_LEFT, function (e) {
-        //     this.dynInfo = false;
-        // }.bind(this));
-        // this.intergraphEventService.addListener(INTERGRAPH_EVENTS.RESOURCE_NODE_LEFT, function (e) {
-        //     this.dynInfo = false;
-        // }.bind(this));
     }
 
     ngOnDestroy() {

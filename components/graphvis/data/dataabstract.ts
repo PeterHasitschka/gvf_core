@@ -19,11 +19,13 @@ export abstract class DataAbstract {
     }
 
     /**
-     * Getting a data value
-     * @param key {string} Key of the property
-     * @returns {any} null if not existing, else value
+     * Getting a data value or the whole data set
+     * @param key {string} Key of the property. If Undefined, the whole data set is returned
+     * @returns {any} null if not existing, else value or dataset
      */
-    public getData(key:string) {
+    public getData(key:string = null) {
+        if (key === null)
+            return this.data;
 
         if (typeof this.data[key] === 'undefined')
             return null;

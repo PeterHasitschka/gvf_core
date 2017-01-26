@@ -9,9 +9,8 @@
     </div>
     <div class="row mainrow">
         <div class="col-md-2 col-sm-12" id="mainleftcol">
-            <!--<sideinfo title="Left Menu" identifier="firstleft"></sideinfo>-->
-            <sideinfo *ngFor="let infomodel of (uiService.sideInfoElements)"
-                      [infomodel]="infomodel">
+            <sideinfo *ngFor="let sideinfoelement of (uiService.sideInfoElements)"
+                      [infomodel]="sideinfoelement" [position]="posEnum.Left">
             </sideinfo>
         </div>
         <div class="col-md-8  col-sm-12" id="mainmiddlecol">
@@ -24,6 +23,10 @@
             <br/>
             <input id="show_interconnections_checkbox" type="checkbox" (change)="onShowInterConnectionsClick($event)"/>
             <label for="show_interconnections_checkbox">Show the Inter-Graph-Connection-Canvas</label>
+
+            <sideinfo *ngFor="let sideinfoelement of (uiService.sideInfoElements)"
+                      [infomodel]="sideinfoelement"  [position]="posEnum.Right">
+            </sideinfo>
         </div>
     </div>
     <div class="row footerrow" style="">
