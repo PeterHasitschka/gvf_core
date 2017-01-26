@@ -23,7 +23,9 @@ export abstract class GroupAbstract extends ElementAbstract {
             GraphVisConfig.graphelements.abstractgroup.segments),
             new THREE.MeshBasicMaterial(
                 {
-                    color: this.color
+                    color: this.color,
+                    transparent: true,
+                    opacity: 0.5
                 }));
 
         this.add(this.groupNodeMesh);
@@ -58,8 +60,6 @@ export abstract class GroupAbstract extends ElementAbstract {
         InterGraphEventService.getInstance().send(INTERGRAPH_EVENTS.GROUP_LEFT, this);
         this.plane.getGraphScene().render();
     }
-
-
 
 
     public setColor(color:number):void {

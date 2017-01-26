@@ -19,6 +19,7 @@ export abstract class EdgeAbstract extends THREE.Line implements GraphObject {
     protected threeGeometry:THREE.Geometry;
     protected zPos;
     protected color:number;
+    protected opacity = 1.0;
     protected plane:Plane;
     protected sourceNode:NodeAbstract;
     protected destNode:NodeAbstract;
@@ -44,10 +45,11 @@ export abstract class EdgeAbstract extends THREE.Line implements GraphObject {
 
         // if (this.addRandom)
         //     color = this.addRandomColorValue(color);
-
         let material = new THREE.LineBasicMaterial({
             color: color,
-            linewidth: config.abstractedge.thickness
+            linewidth: config.abstractedge.thickness,
+            opacity : this.opacity,
+            transparent : true
         });
         let geometry = new THREE.Geometry();
         geometry.vertices.push(new THREE.Vector3(startX, startY, config.abstractedge.z_pos));
@@ -97,6 +99,18 @@ export abstract class EdgeAbstract extends THREE.Line implements GraphObject {
         this.color = color;
         this.threeMaterial.color.setHex(color);
     }
+
+    /**
+     * Setting an opacity (0 ... 1)
+     * No rendering is performed!
+     * @param opacity
+     */
+    public setOpacity(opacity:number) {
+        this.opacity = opacity;
+        this.threeMaterial.opacity = opacity;
+    }
+
+
 
     /**
      * Updating the position of the edge by taking its graphelements' position
