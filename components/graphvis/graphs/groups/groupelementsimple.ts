@@ -4,7 +4,7 @@ import {GroupAbstract} from "./groupelementabstract";
 import {BasicGroup} from "../../data/databasicgroup";
 
 /**
- * A simple node, derived from @see{NodeAbstract}
+ * A simple group, derived from @see{GroupAbstract}
  * @author Peter Hasitschka
  */
 export class GroupSimple extends GroupAbstract {

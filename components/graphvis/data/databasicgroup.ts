@@ -9,7 +9,6 @@ export class BasicGroup extends DataAbstract {
 
     constructor(id:number, entities:BasicEntity[], data:Object) {
         super(id, data);
-
         if (entities && entities.length > 0)
             this.entities = entities;
 

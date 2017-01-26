@@ -98,10 +98,10 @@ export class DataService {
         return this.fetchDemoEntities()
             .then(() => {
                 return this.fetchDemoConnections()
-            })
-            .then(() => {
-                return this.createDummyDemoGroups()
             });
+            // .then(() => {
+            //     return this.createDummyDemoGroups()
+            // });
 
 
         // .then(() => {
@@ -113,34 +113,7 @@ export class DataService {
 
     }
 
-    createDummyDemoGroups() {
-        console.log("Creating Demo Groups out of data from server...");
 
-
-        let alreadyChosenIds = [];
-        let learnerFetcher = function (maxnum:number):Learner[] {
-            let randomLearners:Learner[] = [];
-            for (let i = 0; i < maxnum; i++) {
-                let someLearnerId = Math.floor(Math.random() * Learner.getDataList().length);
-                while (alreadyChosenIds.indexOf(someLearnerId) >= 0)
-                    someLearnerId = Math.floor(Math.random() * Learner.getDataList().length);
-                alreadyChosenIds.push(someLearnerId);
-                let someRandomLearner = Learner.getObject(someLearnerId);
-                randomLearners.push(someRandomLearner);
-            }
-            return randomLearners;
-        };
-
-        let c1 = new BasicGroup(BasicGroup.getDataList().length, learnerFetcher(10), {});
-        let c2 = new BasicGroup(BasicGroup.getDataList().length, learnerFetcher(5), {});
-        let c3 = new BasicGroup(BasicGroup.getDataList().length, learnerFetcher(20), {});
-
-        c1.removeEntity(c1.getEntities()[3]);
-
-        this.data.groups = [c1,c2,c3];
-
-        return true;
-    }
 
     fetchDemoEntities() {
         console.log("Fetching Demo Nodes data from server...", DataService.DUMMYDATA.data);
@@ -181,7 +154,6 @@ export class DataService {
     }
 
     getDemoGroups():BasicGroup[] {
-
         return this.data.groups;
     }
 

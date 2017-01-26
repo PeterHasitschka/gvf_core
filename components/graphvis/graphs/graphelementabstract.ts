@@ -23,7 +23,7 @@ export abstract class ElementAbstract extends THREE.Group implements GraphObject
     protected highlightColor:number;
     protected plane:Plane;
 
-    protected dataEntity:DataAbstract;
+
     protected edges = [];
 
 
@@ -31,9 +31,10 @@ export abstract class ElementAbstract extends THREE.Group implements GraphObject
      * Constructor of the abstract node
      * @param x X-Position on the Plane
      * @param y Y-Position on the Plane
+     * @param dataEntity DateAbstract element holding the data
      * @param plane Plane Instance
      */
-    constructor(x:number, y:number, plane:Plane) {
+    constructor(x:number, y:number, protected dataEntity:DataAbstract, plane:Plane) {
 
         /**
          * SUPER call must be first statement, thus extract geometry and material afterwards
@@ -57,6 +58,8 @@ export abstract class ElementAbstract extends THREE.Group implements GraphObject
         y = y === undefined ? 0.0 : y;
 
         this.setPosition(x, y);
+
+        this.dataEntity.registerGraphElement(this);
     }
 
     /**
@@ -122,6 +125,7 @@ export abstract class ElementAbstract extends THREE.Group implements GraphObject
         if (this.isHighlighted)
             return;
         this.isHighlighted = true;
+        this.plane.getGraphScene().render();
     }
 
     /**
@@ -133,6 +137,7 @@ export abstract class ElementAbstract extends THREE.Group implements GraphObject
         if (!this.isHighlighted)
             return;
         this.isHighlighted = false;
+        this.plane.getGraphScene().render();
     }
 
     /**
@@ -141,7 +146,7 @@ export abstract class ElementAbstract extends THREE.Group implements GraphObject
      */
     public onIntersectStart():void {
         this.highlight();
-        InterGraphEventService.getInstance().send(INTERGRAPH_EVENTS.NODE_HOVERED, this);
+        InterGraphEventService.getInstance().send(INTERGRAPH_EVENTS.ELEMENT_HOVERED, this);
     }
 
     /**
@@ -150,7 +155,7 @@ export abstract class ElementAbstract extends THREE.Group implements GraphObject
      */
     public onIntersectLeave():void {
         this.deHighlight();
-        InterGraphEventService.getInstance().send(INTERGRAPH_EVENTS.NODE_LEFT, this);
+        InterGraphEventService.getInstance().send(INTERGRAPH_EVENTS.ELEMENT_LEFT, this);
     }
 
     /**

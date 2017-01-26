@@ -8,6 +8,9 @@ import {LayoutInterface} from "./layouts/layoutinterface";
 import {BasicGroup} from "../data/databasicgroup";
 import {NodeAbstract} from "./nodes/nodeelementabstract";
 import {ElementAbstract} from "./graphelementabstract";
+import {InterGraphEventService, INTERGRAPH_EVENTS} from "../../../services/intergraphevents.service";
+import {GroupedObservable} from "rxjs/operator/groupBy";
+import {GroupAbstract} from "./groups/groupelementabstract";
 /**
  * Abstract Graph Class
  * Holding the corresponding data and the plane
@@ -22,7 +25,7 @@ export abstract class GraphAbstract {
      */
     protected dataGetterMethod;
 
-    protected nodetype:any;
+    protected nodetype;
     protected layoutClass:any;
     protected layout:LayoutInterface = null;
     protected graphElements:ElementAbstract[];
@@ -32,6 +35,8 @@ export abstract class GraphAbstract {
 
     constructor(protected plane:Plane) {
         this.graphElements = [];
+
+        this.addEventListeners();
     }
 
     /**
@@ -59,6 +64,17 @@ export abstract class GraphAbstract {
      */
     protected createEdges():EdgeAbstract[] {
         return []
+    }
+
+    protected addEventListeners() {
+        InterGraphEventService.getInstance().addListener(INTERGRAPH_EVENTS.NODE_HOVERED, function (e) {
+        }.bind(this));
+
+        InterGraphEventService.getInstance().addListener(INTERGRAPH_EVENTS.NODE_LEFT, function (e) {
+        }.bind(this));
+
+
+
     }
 
 

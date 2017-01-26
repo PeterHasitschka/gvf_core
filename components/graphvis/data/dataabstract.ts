@@ -1,3 +1,4 @@
+import {ElementAbstract} from "../graphs/graphelementabstract";
 /**
  * Abstract Data Object
  * Holds an Id, that is incremented by each derived Class on its own
@@ -6,6 +7,7 @@
 export abstract class DataAbstract {
 
     protected static dataList:DataAbstract[];
+    protected registeredGraphElements:ElementAbstract[] = [];
 
     /**
      * Data object, which at least holds an ID taken as parameter on constructor
@@ -16,6 +18,15 @@ export abstract class DataAbstract {
 
     public getId():number {
         return this.id;
+    }
+
+
+    public registerGraphElement(element:ElementAbstract) {
+        this.registeredGraphElements.push(element);
+    }
+
+    public getRegisteredGraphElements():ElementAbstract[] {
+        return this.registeredGraphElements;
     }
 
     /**

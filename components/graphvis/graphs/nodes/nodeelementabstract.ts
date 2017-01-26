@@ -2,6 +2,7 @@ import {ElementAbstract} from "../graphelementabstract";
 import {Plane} from "../../../plane/plane";
 import {GraphVisConfig} from "../../config";
 import {DataAbstract} from "../../data/dataabstract";
+import {InterGraphEventService, INTERGRAPH_EVENTS} from "../../../../services/intergraphevents.service";
 export abstract class NodeAbstract extends ElementAbstract {
 
 
@@ -9,7 +10,7 @@ export abstract class NodeAbstract extends ElementAbstract {
 
     constructor(x:number, y:number, protected dataEntity:DataAbstract, plane:Plane) {
 
-        super(x, y, plane);
+        super(x, y, dataEntity, plane);
         this.name = "Node Abstract";
 
         this.nodeMesh = new THREE.Mesh(new THREE.CircleGeometry(
@@ -32,13 +33,34 @@ export abstract class NodeAbstract extends ElementAbstract {
 
 
     public highlight() {
-        super.highlight();
         this.nodeMesh.material['color'].setHex(this.highlightColor);
+        super.highlight();
     }
 
 
     public deHighlight() {
-        super.deHighlight();
         this.nodeMesh.material['color'].setHex(this.color);
+        super.deHighlight();
+    }
+
+
+    /**
+     * On Mouse-Hover
+     * Sending an Event for notifying that node was intersected
+     */
+    public onIntersectStart():void {
+        super.onIntersectStart();
+        InterGraphEventService.getInstance().send(INTERGRAPH_EVENTS.NODE_HOVERED, this);
+        this.plane.getGraphScene().render();
+    }
+
+    /**
+     * On Mouse-Leave
+     * Sending an Event for notifying that node was left
+     */
+    public onIntersectLeave():void {
+        super.onIntersectLeave();
+        InterGraphEventService.getInstance().send(INTERGRAPH_EVENTS.NODE_LEFT, this);
+        this.plane.getGraphScene().render();
     }
 }

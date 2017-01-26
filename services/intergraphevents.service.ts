@@ -2,6 +2,8 @@ import {Injectable} from "@angular/core";
 
 
 export enum INTERGRAPH_EVENTS {
+    ELEMENT_HOVERED,
+    ELEMENT_LEFT,
     NODE_HOVERED,
     NODE_LEFT,
     GROUP_HOVERED,

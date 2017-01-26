@@ -25,7 +25,7 @@ export class SideInfoContentDynamicInfoComponent implements OnDestroy {
     constructor(private intergraphEventService:InterGraphEventService) {
 
 
-        this.intergraphEventService.addListener(INTERGRAPH_EVENTS.NODE_HOVERED, function (e) {
+        this.intergraphEventService.addListener(INTERGRAPH_EVENTS.ELEMENT_HOVERED, function (e) {
             this.dynInfo = [];
 
             let element:ElementAbstract = e.detail;
@@ -37,13 +37,13 @@ export class SideInfoContentDynamicInfoComponent implements OnDestroy {
                 let groupData = <BasicGroup>element.getDataEntity();
                 this.dynInfo.push("Group Type: " + element.constructor.name);
                 this.dynInfo.push("Contains " + groupData.getEntities().length + " " +
-                    groupData.getEntities()[0].constructor.name + " elements";
+                    groupData.getEntities()[0].constructor.name + " elements");
             }
 
             this.dynInfo.push(JSON.stringify(element.getDataEntity().getData()));
         }.bind(this));
 
-        this.intergraphEventService.addListener(INTERGRAPH_EVENTS.NODE_LEFT, function (e) {
+        this.intergraphEventService.addListener(INTERGRAPH_EVENTS.ELEMENT_LEFT, function (e) {
             //this.dynInfo = false;
         }.bind(this));
     }

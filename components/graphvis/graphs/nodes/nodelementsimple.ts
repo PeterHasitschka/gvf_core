@@ -8,6 +8,7 @@ import {NodeAbstract} from "./nodeelementabstract";
  */
 export class NodeSimple extends NodeAbstract {
 
+
     constructor(x:number, y:number, dataEntity:DataAbstract, plane:Plane) {
         super(x, y, dataEntity, plane);
     }

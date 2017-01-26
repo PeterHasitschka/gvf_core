@@ -2,6 +2,7 @@ import {Plane} from "../../../plane/plane";
 import {BasicGroup} from "../../data/databasicgroup";
 import {ElementAbstract} from "../graphelementabstract";
 import {GraphVisConfig} from "../../config";
+import {INTERGRAPH_EVENTS, InterGraphEventService} from "../../../../services/intergraphevents.service";
 
 /**
  * A simple node, derived from @see{NodeAbstract}
@@ -11,21 +12,22 @@ export abstract class GroupAbstract extends ElementAbstract {
 
     protected groupNodeMesh:THREE.Mesh;
 
+    protected color = GraphVisConfig.graphelements.abstractgroup.color;
+
     constructor(x:number, y:number, protected dataEntity:BasicGroup, plane:Plane) {
 
-        super(x, y, plane);
+        super(x, y, dataEntity, plane);
 
         this.groupNodeMesh = new THREE.Mesh(new THREE.CircleGeometry(
             GraphVisConfig.graphelements.abstractgroup.size,
             GraphVisConfig.graphelements.abstractgroup.segments),
             new THREE.MeshBasicMaterial(
                 {
-                    color: GraphVisConfig.graphelements.abstractgroup.color
+                    color: this.color
                 }));
 
         this.add(this.groupNodeMesh);
 
-        this.color = GraphVisConfig.graphelements.abstractgroup.color;
         this.setColor(this.color);
     }
 
@@ -47,12 +49,22 @@ export abstract class GroupAbstract extends ElementAbstract {
 
     public onIntersectStart():void {
         super.onIntersectStart();
+        InterGraphEventService.getInstance().send(INTERGRAPH_EVENTS.GROUP_HOVERED, this);
         this.plane.getGraphScene().render();
     }
 
     public onIntersectLeave():void {
         super.onIntersectLeave();
+        InterGraphEventService.getInstance().send(INTERGRAPH_EVENTS.GROUP_LEFT, this);
         this.plane.getGraphScene().render();
+    }
+
+
+
+
+    public setColor(color:number):void {
+        super.setColor(color);
+        this.groupNodeMesh.material['color'].setHex(color);
     }
 
 
