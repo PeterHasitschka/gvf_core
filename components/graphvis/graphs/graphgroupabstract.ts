@@ -8,6 +8,7 @@ import {InterGraphEventService, INTERGRAPH_EVENTS} from "../../../services/inter
 import {BasicEntity} from "../data/databasicentity";
 import {ElementAbstract} from "./graphelementabstract";
 import {GraphLayoutFdlCommunities} from "./layouts/graphlayoutfdl_communities";
+import {NodeAbstract} from "./nodes/nodeelementabstract";
 
 
 /**
@@ -60,6 +61,34 @@ export class GroupGraphAbstract extends GraphAbstract {
 
         InterGraphEventService.getInstance().addListener(INTERGRAPH_EVENTS.GROUP_LEFT, function (e) {
         }.bind(this));
+
+
+        InterGraphEventService.getInstance().addListener(INTERGRAPH_EVENTS.NODE_HOVERED, function (e) {
+            let nodeData = (<NodeAbstract>e.detail).getDataEntity();
+            this.graphElements.forEach((group:GroupAbstract) => {
+                let entitiesOfGroup = (<BasicGroup>group.getDataEntity()).getEntities();
+                entitiesOfGroup.forEach((entityOfGroup:BasicEntity) => {
+                    if (entityOfGroup === nodeData) {
+                        group.highlight();
+                        //this.plane.getGraphScene().render();
+                    }
+                });
+            });
+        }.bind(this));
+
+        InterGraphEventService.getInstance().addListener(INTERGRAPH_EVENTS.NODE_LEFT, function (e) {
+            // let nodeData = (<NodeAbstract>e.detail).getDataEntity();
+            this.graphElements.forEach((group:GroupAbstract) => {
+                //   let entitiesOfGroup = (<BasicGroup>group.getDataEntity()).getEntities();
+                //   entitiesOfGroup.forEach((entityOfGroup:BasicEntity) => {
+                //       if(entityOfGroup === nodeData) {
+                group.deHighlight();
+                //this.plane.getGraphScene().render();
+                //       }
+                // });
+            });
+        }.bind(this));
+
     }
 
 }

@@ -46,7 +46,6 @@ export class InterGraphEventService {
      * @param data
      */
     public send(evtKey:INTERGRAPH_EVENTS, data) {
-
         let evt = new CustomEvent(INTERGRAPH_EVENTS[evtKey], {detail: data});
         window.dispatchEvent(evt);
     }

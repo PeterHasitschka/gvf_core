@@ -65,9 +65,9 @@ export class GraphVisConfig {
     };
 
     public static intergraph_connections = {
-        width: 0.3,
-        color: "grey"
-    }
+        width: 0.5,
+        color: "red" // SVG stroke color
+    };
 
 
     public static active_graphs = {

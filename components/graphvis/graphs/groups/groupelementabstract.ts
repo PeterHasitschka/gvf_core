@@ -41,13 +41,13 @@ export abstract class GroupAbstract extends ElementAbstract {
 
 
     public highlight() {
-        super.highlight();
         this.groupNodeMesh.material['color'].setHex(this.highlightColor);
+        super.highlight();
     }
 
     public deHighlight() {
-        super.deHighlight();
         this.groupNodeMesh.material['color'].setHex(this.color);
+        super.deHighlight();
     }
 
     public onIntersectStart():void {
@@ -73,7 +73,7 @@ export abstract class GroupAbstract extends ElementAbstract {
             data.getRegisteredGraphElements().forEach((element:ElementAbstract) => {
                 element.deHighlight();
             })
-        })
+        });
 
         this.plane.getGraphScene().render();
     }

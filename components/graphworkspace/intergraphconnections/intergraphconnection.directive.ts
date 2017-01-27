@@ -19,6 +19,7 @@ export class InterGraphConnectionDirective implements OnInit {
         let config = GraphVisConfig.intergraph_connections;
         this.el.nativeElement.setAttribute("stroke", config.color);
         this.el.nativeElement.setAttribute("stroke-width", config.width);
+        this.el.nativeElement.setAttribute("opacity", 0.5);
     }
 
     ngOnInit() {
