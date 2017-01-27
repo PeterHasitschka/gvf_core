@@ -19,6 +19,7 @@ export class Plane {
     static containerPrefix:string = "graphvisplanecontainer_";
     private graph:GraphAbstract;
     private canvasDimensions;
+    private backplaneMesh:THREE.Mesh;
 
     /**
      * @param{string} name - Defining the graph's name
@@ -103,8 +104,10 @@ export class Plane {
 
         var squareMesh = new THREE.Mesh(squareGeometry, squareMaterial);
         squareMesh.position.set(0, 0.0, z);
+        squareMesh.name = "Colored Back plane";
         //this.dummyRotate(this.scene.getObjectGroup(), new THREE.Vector3(0, 0 - halfW, z), -0.3);
         this.scene.addObject(squareMesh);
+        this.backplaneMesh = squareMesh;
     }
 
     private dummyRotate(object, axis, radians) {
@@ -139,6 +142,10 @@ export class Plane {
 
     public getGraphType():string {
         return this.graphtype;
+    }
+
+    public setBackgroundColor(color:number) {
+        this.backplaneMesh.material['color'].setHex(color);
     }
 
 }
