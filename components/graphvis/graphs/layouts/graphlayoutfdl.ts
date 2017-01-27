@@ -10,9 +10,9 @@ export class GraphLayoutFdl extends GraphLayoutAbstract {
 
     protected NODE_REPULSION_FACTOR = 50;
     protected EDGE_FORCE_FACTOR = 0.01;
-    protected VELOCITY = 0.8;
+    protected VELOCITY = 1.5;
     protected WALL_REPULSION_FACTOR = 300;
-    protected ITERATIONS = 250;
+    protected ITERATIONS = 150;
     protected VEOLOCITY_REDUCTION_DAMPING = 4000;
 
     protected currentIteration = 0;

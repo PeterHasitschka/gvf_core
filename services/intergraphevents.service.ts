@@ -7,7 +7,8 @@ export enum INTERGRAPH_EVENTS {
     NODE_HOVERED,
     NODE_LEFT,
     GROUP_HOVERED,
-    GROUP_LEFT
+    GROUP_LEFT,
+    OUTSIDE_ALL_GRAPHS
 }
 
 @Injectable()

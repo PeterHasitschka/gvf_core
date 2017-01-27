@@ -1,10 +1,9 @@
-import {Component, ViewChild} from '@angular/core';
+import {Component, ViewChild, HostListener} from '@angular/core';
 import {OnInit} from '@angular/core';
 import {Plane} from '../plane/plane';
 import {GraphVisConfig} from '../graphvis/config';
 import {DataService} from "../../services/data.service";
 import {UiService} from "../../services/ui.service";
-import {SceneMouseInteractions} from "../graphvis/scenemouseinteractions";
 import {ApiService} from "../../services/apiservice";
 
 
@@ -29,6 +28,7 @@ export class GraphworkspaceComponent implements OnInit {
         this.planes = [];
         this.uiService.setGraphWorkSpace(this);
     }
+
 
     ngOnInit():void {
         // Necessary for mousemoves

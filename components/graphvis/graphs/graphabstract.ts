@@ -36,7 +36,7 @@ export abstract class GraphAbstract {
     constructor(protected plane:Plane) {
         this.graphElements = [];
 
-        this.addEventListeners();
+
     }
 
     /**
@@ -54,6 +54,7 @@ export abstract class GraphAbstract {
             this.layout.calculateLayout(function () {
                 console.log("Finished calculating layout");
                 this.plane.getGraphScene().render();
+                this.addEventListeners();
             }.bind(this));
         });
     }
@@ -74,7 +75,12 @@ export abstract class GraphAbstract {
         }.bind(this));
 
 
-
+        InterGraphEventService.getInstance().addListener(INTERGRAPH_EVENTS.OUTSIDE_ALL_GRAPHS, function (none) {
+            this.graphElements.forEach((e:ElementAbstract) => {
+                e.deHighlight();
+                console.log("DE HIGHLIGHT ALL");
+            });
+        }.bind(this));
     }
 
 
