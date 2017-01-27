@@ -1,15 +1,13 @@
 import {Plane} from '../../plane/plane';
 import {GraphAbstract} from './graphabstract';
-import {DataService} from '../../../services/data.service';
-
 import {EdgeAbstract} from "./edges/edgeelementabstract";
-import {GraphLayoutFdl} from "./layouts/graphlayoutfdl";
 import {BasicGroup} from "../data/databasicgroup";
 import {GroupSimple} from "./groups/groupelementsimple";
 import {GroupAbstract} from "./groups/groupelementabstract";
 import {InterGraphEventService, INTERGRAPH_EVENTS} from "../../../services/intergraphevents.service";
 import {BasicEntity} from "../data/databasicentity";
 import {ElementAbstract} from "./graphelementabstract";
+import {GraphLayoutFdlCommunities} from "./layouts/graphlayoutfdl_communities";
 
 
 /**
@@ -28,7 +26,7 @@ export class GroupGraphAbstract extends GraphAbstract {
         this.nodetype = GroupSimple;
 
         //this.layoutClass = GraphLayoutRandom;
-        this.layoutClass = GraphLayoutFdl;
+        this.layoutClass = GraphLayoutFdlCommunities;
     }
 
 

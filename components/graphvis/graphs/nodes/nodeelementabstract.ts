@@ -35,7 +35,6 @@ export abstract class NodeAbstract extends ElementAbstract {
 
     public highlight() {
         this.nodeMesh.material['color'].setHex(this.highlightColor);
-
         // this.edges.forEach((e:EdgeAbstract) => {
         //     e.highlight();
         // });

@@ -19,13 +19,13 @@ export abstract class EdgeAbstract extends THREE.Line implements GraphObject {
     protected threeGeometry:THREE.Geometry;
     protected zPos;
     protected color:number;
-    protected opacity = 1.0;
+    protected opacity;
     protected origOpacity;
     protected plane:Plane;
     protected sourceNode:NodeAbstract;
     protected destNode:NodeAbstract;
     protected addRandom;
-    protected isHighlighted = false;
+    protected isHighlighted;
 
     /**
      * Creating an edge by taking the graphelements and the plane
@@ -50,7 +50,7 @@ export abstract class EdgeAbstract extends THREE.Line implements GraphObject {
         let material = new THREE.LineBasicMaterial({
             color: color,
             linewidth: config.abstractedge.thickness,
-            opacity : this.opacity,
+            opacity : 1.0,
             transparent : true
         });
         let geometry = new THREE.Geometry();

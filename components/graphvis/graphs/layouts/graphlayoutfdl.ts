@@ -8,6 +8,11 @@ import {NodeAbstract} from "../nodes/nodeelementabstract";
  */
 export class GraphLayoutFdl extends GraphLayoutAbstract {
 
+    protected NODE_REPULSION_FACTOR = 50;
+    protected EDGE_FORCE_FACTOR = 0.01;
+    protected VELOCITY_DAMPING = 0.1;
+    protected WALL_REPULSION_FACTOR = 300;
+
     constructor(protected plane:Plane, nodes:NodeAbstract[], edges:EdgeAbstract[]) {
         super(plane, nodes, edges);
     }
@@ -46,10 +51,6 @@ export class GraphLayoutFdl extends GraphLayoutAbstract {
 
     private reCalcPositions() {
 
-        let NODE_REPULSION_FACTOR = 50;
-        let EDGE_FORCE_FACTOR = 0.01;
-        let VELOCITY_DAMPING = 0.1;
-        let WALL_REPULSION_FACTOR = 300;
 
         /**
          * Template for this simple FDL algorithm:
@@ -85,8 +86,8 @@ export class GraphLayoutFdl extends GraphLayoutAbstract {
 
 
                 let distance = nodeV.getDistance(nodeU);
-                nodeV['force'].x += NODE_REPULSION_FACTOR * nodeV.getDistance(nodeU, 'x') / distance;
-                nodeV['force'].y += NODE_REPULSION_FACTOR * nodeV.getDistance(nodeU, 'y') / distance;
+                nodeV['force'].x += this.NODE_REPULSION_FACTOR * nodeV.getDistance(nodeU, 'x') / distance;
+                nodeV['force'].y += this.NODE_REPULSION_FACTOR * nodeV.getDistance(nodeU, 'y') / distance;
             });
 
             /**
@@ -97,8 +98,8 @@ export class GraphLayoutFdl extends GraphLayoutAbstract {
                 let n2:NodeAbstract = edge.getDestNode();
 
                 let nodeU:NodeAbstract = n1.getDataEntity().getId() === nodeV.getDataEntity().getId() ? n2 : n1;
-                nodeV['force'].x += nodeU.getDistance(nodeV, 'x') * EDGE_FORCE_FACTOR;
-                nodeV['force'].y += nodeU.getDistance(nodeV, 'y') * EDGE_FORCE_FACTOR;
+                nodeV['force'].x += nodeU.getDistance(nodeV, 'x') * this.EDGE_FORCE_FACTOR;
+                nodeV['force'].y += nodeU.getDistance(nodeV, 'y') * this.EDGE_FORCE_FACTOR;
             });
 
 
@@ -130,14 +131,14 @@ export class GraphLayoutFdl extends GraphLayoutAbstract {
                 //console.log("Y > upper edge", wallDistY);
             }
 
-            let wallRepX = 0 - Math.pow(wallDistX, -1) * WALL_REPULSION_FACTOR;
-            let wallRepY = 0 - Math.pow(wallDistY, -1) * WALL_REPULSION_FACTOR;
+            let wallRepX = 0 - Math.pow(wallDistX, -1) * this.WALL_REPULSION_FACTOR;
+            let wallRepY = 0 - Math.pow(wallDistY, -1) * this.WALL_REPULSION_FACTOR;
 
             /**
              * Finally calculate V's velocity
              */
-            nodeV['velocity'].x = (nodeV['velocity'].x + nodeV['force'].x + wallRepX) * VELOCITY_DAMPING;
-            nodeV['velocity'].y = (nodeV['velocity'].y + nodeV['force'].y + wallRepY) * VELOCITY_DAMPING;
+            nodeV['velocity'].x = (nodeV['velocity'].x + nodeV['force'].x + wallRepX) * this.VELOCITY_DAMPING;
+            nodeV['velocity'].y = (nodeV['velocity'].y + nodeV['force'].y + wallRepY) * this.VELOCITY_DAMPING;
 
 
             //console.log(nodeV['velocity']);
