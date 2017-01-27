@@ -3,6 +3,7 @@ import {BasicGroup} from "../../data/databasicgroup";
 import {ElementAbstract} from "../graphelementabstract";
 import {GraphVisConfig} from "../../config";
 import {INTERGRAPH_EVENTS, InterGraphEventService} from "../../../../services/intergraphevents.service";
+import {BasicEntity} from "../../data/databasicentity";
 
 /**
  * A simple node, derived from @see{NodeAbstract}
@@ -52,12 +53,28 @@ export abstract class GroupAbstract extends ElementAbstract {
     public onIntersectStart():void {
         super.onIntersectStart();
         InterGraphEventService.getInstance().send(INTERGRAPH_EVENTS.GROUP_HOVERED, this);
+
+        let groupedData = (<BasicGroup>this.getDataEntity()).getEntities();
+        groupedData.forEach((data:BasicEntity) => {
+            data.getRegisteredGraphElements().forEach((element:ElementAbstract) => {
+                element.highlight();
+            })
+        })
         this.plane.getGraphScene().render();
     }
 
     public onIntersectLeave():void {
         super.onIntersectLeave();
         InterGraphEventService.getInstance().send(INTERGRAPH_EVENTS.GROUP_LEFT, this);
+
+        let groupedData = (<BasicGroup>this.getDataEntity()).getEntities();
+
+        groupedData.forEach((data:BasicEntity) => {
+            data.getRegisteredGraphElements().forEach((element:ElementAbstract) => {
+                element.deHighlight();
+            })
+        })
+
         this.plane.getGraphScene().render();
     }
 

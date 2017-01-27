@@ -56,25 +56,9 @@ export class GroupGraphAbstract extends GraphAbstract {
         super.addEventListeners();
 
         InterGraphEventService.getInstance().addListener(INTERGRAPH_EVENTS.GROUP_HOVERED, function (e) {
-            let groupElement = <GroupAbstract>e.detail;
-            let groupedData = (<BasicGroup>groupElement.getDataEntity()).getEntities();
-
-            groupedData.forEach((data:BasicEntity) => {
-                data.getRegisteredGraphElements().forEach((element:ElementAbstract) => {
-                    element.highlight();
-                })
-            })
         }.bind(this));
 
         InterGraphEventService.getInstance().addListener(INTERGRAPH_EVENTS.GROUP_LEFT, function (e) {
-            let groupElement = <GroupAbstract>e.detail;
-            let groupedData = (<BasicGroup>groupElement.getDataEntity()).getEntities();
-
-            groupedData.forEach((data:BasicEntity) => {
-                data.getRegisteredGraphElements().forEach((element:ElementAbstract) => {
-                    element.deHighlight();
-                })
-            })
         }.bind(this));
     }
 
