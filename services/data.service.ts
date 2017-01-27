@@ -121,7 +121,7 @@ export class DataService {
             .map(res => res.json())
             .toPromise()
             .then((r) => {
-                console.log(r);
+                //console.log(r);
                 r.nodes.forEach((resultdata) => {
                     let entity = new BasicEntity(resultdata['id'], resultdata);
                     this.data.entities.push(entity);

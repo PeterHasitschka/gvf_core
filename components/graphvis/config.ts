@@ -65,7 +65,7 @@ export class GraphVisConfig {
     };
 
     public static intergraph_connections = {
-        width: 0.1,
+        width: 0.3,
         color: "grey"
     }
 

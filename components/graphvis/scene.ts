@@ -56,6 +56,7 @@ export class GraphScene {
 
         this.SceneMouseInteractions = new SceneMouseInteractions(this);
         this.threeRaycaster = new THREE.Raycaster();
+        //this.threeRaycaster.precision = 5.0;
 
         this.objectGroup = new THREE.Group();
         this.objectGroup.name="Graph Scene Group";

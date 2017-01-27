@@ -40,7 +40,7 @@ export class GraphworkspaceComponent implements OnInit {
 
 
         DataService.getInstance().fetchData().then(() => {
-           console.log("Fetched Demo Data", DataService.getInstance().getDemoEntities());
+           //console.log("Fetched Demo Data", DataService.getInstance().getDemoEntities());
         });
     }
 

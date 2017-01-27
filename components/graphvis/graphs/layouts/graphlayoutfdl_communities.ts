@@ -11,7 +11,7 @@ export class GraphLayoutFdlCommunities extends GraphLayoutFdl {
 
     protected NODE_REPULSION_FACTOR = 50;
     protected EDGE_FORCE_FACTOR = 0.01;
-    protected VELOCITY_DAMPING = 1;
+    protected VELOCITY = 1;
     protected WALL_REPULSION_FACTOR = 60;
 
     constructor(protected plane:Plane, nodes:NodeAbstract[], edges:EdgeAbstract[]) {

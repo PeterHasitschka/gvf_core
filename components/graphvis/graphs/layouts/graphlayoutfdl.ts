@@ -10,8 +10,12 @@ export class GraphLayoutFdl extends GraphLayoutAbstract {
 
     protected NODE_REPULSION_FACTOR = 50;
     protected EDGE_FORCE_FACTOR = 0.01;
-    protected VELOCITY_DAMPING = 0.1;
+    protected VELOCITY = 0.8;
     protected WALL_REPULSION_FACTOR = 300;
+    protected ITERATIONS = 250;
+    protected VEOLOCITY_REDUCTION_DAMPING = 4000;
+
+    protected currentIteration = 0;
 
     constructor(protected plane:Plane, nodes:NodeAbstract[], edges:EdgeAbstract[]) {
         super(plane, nodes, edges);
@@ -24,19 +28,19 @@ export class GraphLayoutFdl extends GraphLayoutAbstract {
 
     public calculateLayout(onFinish):void {
 
-        let iterations = 1000;
 
-        let i = 0;
         var loopFct = function () {
             this.reCalcPositions();
 
             this.edges.forEach((edge:EdgeAbstract) => {
                 edge.updatePositions();
             });
+
+            // if (this.currentIteration % 3 === 0)
             this.plane.getGraphScene().render();
 
-            i++;
-            if (i < iterations)
+            this.currentIteration++;
+            if (this.currentIteration < this.ITERATIONS)
                 requestAnimationFrame(loopFct);
             //loopFct();
             else {
@@ -134,11 +138,15 @@ export class GraphLayoutFdl extends GraphLayoutAbstract {
             let wallRepX = 0 - Math.pow(wallDistX, -1) * this.WALL_REPULSION_FACTOR;
             let wallRepY = 0 - Math.pow(wallDistY, -1) * this.WALL_REPULSION_FACTOR;
 
+
+            // Decrease velocity
+            this.VELOCITY *= (1 - (this.currentIteration / this.ITERATIONS)/ this.VEOLOCITY_REDUCTION_DAMPING);
+
             /**
              * Finally calculate V's velocity
              */
-            nodeV['velocity'].x = (nodeV['velocity'].x + nodeV['force'].x + wallRepX) * this.VELOCITY_DAMPING;
-            nodeV['velocity'].y = (nodeV['velocity'].y + nodeV['force'].y + wallRepY) * this.VELOCITY_DAMPING;
+            nodeV['velocity'].x = (nodeV['velocity'].x + nodeV['force'].x + wallRepX) * this.VELOCITY;
+            nodeV['velocity'].y = (nodeV['velocity'].y + nodeV['force'].y + wallRepY) * this.VELOCITY;
 
 
             //console.log(nodeV['velocity']);
