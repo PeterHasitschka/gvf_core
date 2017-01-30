@@ -26,6 +26,7 @@ export abstract class ElementAbstract extends THREE.Group implements GraphObject
     protected options = {};
     protected edges = [];
 
+    public static elementname = "GVF Element Group";
 
     /**
      * Constructor of the abstract node
@@ -45,7 +46,7 @@ export abstract class ElementAbstract extends THREE.Group implements GraphObject
         if (typeof options !== "undefined" && options !== null)
             this.options = options;
 
-        this.name = "GVF Element Group";
+        this.name = ElementAbstract.elementname;
 
         var config = GraphVisConfig.graphelements;
 
@@ -92,6 +93,7 @@ export abstract class ElementAbstract extends THREE.Group implements GraphObject
      * @returns {Vector3}
      */
     public getPosition():THREE.Vector3 {
+
         return this.position;
     }
 
@@ -190,7 +192,10 @@ export abstract class ElementAbstract extends THREE.Group implements GraphObject
      */
     public getWorkspacePosition() {
 
-        let pos = this.getPosition();
+        let pos = this.getPosition().clone();
+
+        let parentPos = this.parent.position;
+        pos = pos.add(parentPos);
 
         let canvas = this.plane.getGraphScene().getThreeRenderer().domElement;
         let canvasBounding = canvas.getBoundingClientRect();
@@ -208,5 +213,10 @@ export abstract class ElementAbstract extends THREE.Group implements GraphObject
         if (typeof this.options[key] === "undefined")
             return null;
         return this.options[key];
+    }
+
+
+    public getPlane():Plane{
+        return this.plane;
     }
 }

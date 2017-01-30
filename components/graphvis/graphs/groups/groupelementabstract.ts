@@ -6,6 +6,7 @@ import {INTERGRAPH_EVENTS, InterGraphEventService} from "../../../../services/in
 import {BasicEntity} from "../../data/databasicentity";
 import {NodeAbstract} from "../nodes/nodeelementabstract";
 import Object3D = THREE.Object3D;
+import {UiService} from "../../../../services/ui.service";
 
 /**
  * A simple node, derived from @see{NodeAbstract}
@@ -100,9 +101,25 @@ export abstract class GroupAbstract extends ElementAbstract {
 
         let groupedData = (<BasicGroup>this.getDataEntity()).getEntities();
         groupedData.forEach((data:BasicEntity) => {
+
             data.getRegisteredGraphElements().forEach((element:ElementAbstract) => {
                 element.highlight();
             })
+        });
+
+
+        /**
+         * Connect own nodes to nodes in other graphs by intergraphconnections
+         */
+        this.subNodes.forEach((element:ElementAbstract) => {
+            // Connect with the same nodes in other planes
+            let data = element.getDataEntity();
+            if (data.getRegisteredGraphElements().length > 1)
+                data.getRegisteredGraphElements().forEach((otherGraphElement:ElementAbstract) => {
+                    if (otherGraphElement === element)
+                        return;
+                    UiService.getInstance().addNodesToIntergraphConnection(element, otherGraphElement);
+                });
         });
         this.plane.getGraphScene().render();
     }
@@ -119,6 +136,7 @@ export abstract class GroupAbstract extends ElementAbstract {
             })
         });
 
+        UiService.getInstance().clearIntergraphConnections();
         this.plane.getGraphScene().render();
     }
 
@@ -127,6 +145,8 @@ export abstract class GroupAbstract extends ElementAbstract {
         super.setColor(color);
         this.groupNodeMesh.material['color'].setHex(color);
     }
+
+
 
 
     public getDataEntity():BasicGroup {
