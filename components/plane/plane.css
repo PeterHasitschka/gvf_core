@@ -10,11 +10,33 @@
 
 }
 
-.graphvisplanecontainer p {
-    color: #777777;
-    margin: 0;
+.graphvisplaneheader {
     background: #F9F9F9;
     border-bottom: 1px solid #E6E6E6;
+    color: #777777;
+}
+
+.graphvisplanetitle {
+    float: left;
+    width: 95%;
+    margin: 0;
+}
+
+.graphvisplanectrl {
+    width: 5%;
+    float: right;
+}
+
+.graphvisplanectrl .graphvisplanebtn {
+    background: #B5B5B5;
+    color: white;
+    text-align: center;
+    font-size: 10px;
+    margin-top: 3px;
+    width: 16px;
+    padding-top: 1px;
+    height: 14px;
+    float: right;
 }
 
 .graphvisplanecontainer canvas {

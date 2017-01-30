@@ -1,3 +1,8 @@
 <div class="graphvisplanecontainer" id="{{plane.getContainerPrefix()}}{{getId()}}">
-    <p [innerHTML]="plane.getName()"></p>
+    <div class="graphvisplaneheader">
+        <div class="graphvisplanetitle" [innerHTML]="plane.getName()"></div>
+        <div class="graphvisplanectrl">
+            <div class="graphvisplanebtn" (click)="plane.close()"><i class="fa fa-window-close" aria-hidden="true"></i></div>
+        </div>
+    </div>
 </div>

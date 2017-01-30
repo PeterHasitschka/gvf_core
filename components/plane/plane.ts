@@ -148,4 +148,7 @@ export class Plane {
         this.backplaneMesh.material['color'].setHex(color);
     }
 
+    public close(){
+        console.log("Closing plane");
+    }
 }
