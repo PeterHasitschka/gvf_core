@@ -151,4 +151,7 @@ export class Plane {
     public close(){
         console.log("Closing plane");
     }
+    public minimize(){
+        console.log("Closing plane");
+    }
 }
