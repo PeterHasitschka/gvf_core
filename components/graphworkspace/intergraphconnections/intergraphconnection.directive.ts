@@ -15,6 +15,7 @@ export class InterGraphConnectionDirective implements OnInit {
 
     @Input('nodePair') nodes;
 
+
     constructor(private el:ElementRef, private renderer:Renderer) {
         let config = GraphVisConfig.intergraph_connections;
         this.el.nativeElement.setAttribute("stroke", config.color);
@@ -23,8 +24,9 @@ export class InterGraphConnectionDirective implements OnInit {
     }
 
     ngOnInit() {
+        this.el.nativeElement.setAttribute("stroke", this.nodes.color);
         let i = 1;
-        this.nodes.forEach((node:NodeAbstract) => {
+        this.nodes.nodes.forEach((node:NodeAbstract) => {
             let pos = node.getWorkspacePosition();
             this.el.nativeElement.setAttribute("x" + i, pos.x);
             this.el.nativeElement.setAttribute("y" + i, pos.y);

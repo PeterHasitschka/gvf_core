@@ -7,6 +7,7 @@ import {BasicEntity} from "../../data/databasicentity";
 import {NodeAbstract} from "../nodes/nodeelementabstract";
 import Object3D = THREE.Object3D;
 import {UiService} from "../../../../services/ui.service";
+import {LearnerGraph} from "../../../../../afel/graph/graphs/learnergraph";
 
 /**
  * A simple node, derived from @see{NodeAbstract}
@@ -95,6 +96,7 @@ export abstract class GroupAbstract extends ElementAbstract {
         super.deHighlight();
     }
 
+
     public onIntersectStart():void {
         super.onIntersectStart();
         InterGraphEventService.getInstance().send(INTERGRAPH_EVENTS.GROUP_HOVERED, this);
@@ -118,9 +120,14 @@ export abstract class GroupAbstract extends ElementAbstract {
                 data.getRegisteredGraphElements().forEach((otherGraphElement:ElementAbstract) => {
                     if (otherGraphElement === element)
                         return;
-                    UiService.getInstance().addNodesToIntergraphConnection(element, otherGraphElement);
+                    if (otherGraphElement.getPlane().getGraph().constructor === LearnerGraph)
+                        return;
+
+                    UiService.getInstance().addNodesToIntergraphConnection(element, otherGraphElement, "blue");
                 });
         });
+
+
         this.plane.getGraphScene().render();
     }
 
@@ -145,8 +152,6 @@ export abstract class GroupAbstract extends ElementAbstract {
         super.setColor(color);
         this.groupNodeMesh.material['color'].setHex(color);
     }
-
-
 
 
     public getDataEntity():BasicGroup {

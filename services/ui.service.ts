@@ -80,9 +80,9 @@ export class UiService {
     }
 
 
-    addNodesToIntergraphConnection(node1, node2) {
+    addNodesToIntergraphConnection(node1, node2, color="red") {
         if (this.getGraphWorkSpaceSvgElementVisible())
-            this.intergraphConnections.push([node1, node2]);
+            this.intergraphConnections.push({nodes:[node1, node2], color: color});
     }
 
     clearIntergraphConnections() {

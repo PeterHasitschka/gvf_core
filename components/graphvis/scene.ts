@@ -31,17 +31,17 @@ export class GraphScene {
 
         this.threeRenderer = new THREE.WebGLRenderer({alpha: true, antialias: true});
 
-        /**
-         this.threeCamera = new THREE.OrthographicCamera(
-         canvasW / -2,
-         canvasW / 2,
-         canvasH / 2,
-         canvasH / -2,
-         config.near,
-         config.far);
-         **/
 
-        this.threeCamera = new THREE.PerspectiveCamera(45, canvasW / canvasH, config.near, config.far);
+        this.threeCamera = new THREE.OrthographicCamera(
+            canvasW / -2,
+            canvasW / 2,
+            canvasH / 2,
+            canvasH / -2,
+            config.near,
+            config.far);
+
+
+        //this.threeCamera = new THREE.PerspectiveCamera(45, canvasW / canvasH, config.near, config.far);
         this.threeScene = new THREE.Scene();
 
 
@@ -59,7 +59,7 @@ export class GraphScene {
         //this.threeRaycaster.precision = 5.0;
 
         this.objectGroup = new THREE.Group();
-        this.objectGroup.name="Graph Scene Group";
+        this.objectGroup.name = "Graph Scene Group";
         this.threeScene.add(this.objectGroup);
     }
 
