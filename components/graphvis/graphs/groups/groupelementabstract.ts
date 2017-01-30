@@ -17,10 +17,14 @@ export abstract class GroupAbstract extends ElementAbstract {
 
     protected color = GraphVisConfig.graphelements.abstractgroup.color;
 
+    protected subNodes;
 
-    constructor(x:number, y:number, protected dataEntity:BasicGroup, plane:Plane, protected subNodeType) {
+    protected scaleFactor = 1;
 
-        super(x, y, dataEntity, plane);
+
+    constructor(x:number, y:number, protected dataEntity:BasicGroup, plane:Plane, protected subNodeType, options:Object) {
+
+        super(x, y, dataEntity, plane, options);
 
         this.groupNodeMesh = new THREE.Mesh(new THREE.CircleGeometry(
             GraphVisConfig.graphelements.abstractgroup.size,
@@ -34,6 +38,8 @@ export abstract class GroupAbstract extends ElementAbstract {
 
         this.add(this.groupNodeMesh);
 
+        this.subNodes = [];
+
         this.setColor(this.color);
         this.addSubnodes();
 
@@ -42,13 +48,39 @@ export abstract class GroupAbstract extends ElementAbstract {
 
     protected addSubnodes() {
         this.getDataEntity().getEntities().forEach((dataEntity:BasicEntity) => {
-            let node = new this.subNodeType((Math.random() * 25 - 12.5), (Math.random() * 25 - 12.5), dataEntity, this.plane);
+            let node = new this.subNodeType(0, 0, dataEntity, this.plane, {skip_highlighting_on_hover: false});
             this.add(<Object3D>node);
+            this.subNodes.push(node);
         });
     }
 
     public setScale(factor:number) {
         this.groupNodeMesh.scale.set(factor, factor, factor);
+        this.scaleFactor = factor;
+        this.updateSubNodePositions();
+
+    }
+
+    protected updateSubNodePositions() {
+        this.subNodes.forEach((node:NodeAbstract) => {
+            let pos = this.calculateSubNodePosition(node);
+            node.setPosition(pos.x, pos.y);
+        });
+        this.plane.getGraphScene().render();
+    }
+
+    /**
+     * Calculating random polar coordinates depending on the group-nodes scaled radius
+     * @param node
+     * @returns {{x: number, y: number}}
+     */
+    protected calculateSubNodePosition(node:NodeAbstract) {
+        let radius = this.groupNodeMesh.geometry.boundingSphere.radius * this.scaleFactor;
+
+        let phi = Math.random() * Math.PI * 2;
+        let randRadius = Math.random() * (radius - 5);
+
+        return {x: randRadius * Math.cos(phi), y: randRadius * Math.sin(phi)};
     }
 
 

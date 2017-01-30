@@ -23,7 +23,7 @@ export abstract class ElementAbstract extends THREE.Group implements GraphObject
     protected highlightColor:number;
     protected plane:Plane;
 
-
+    protected options = {};
     protected edges = [];
 
 
@@ -33,14 +33,18 @@ export abstract class ElementAbstract extends THREE.Group implements GraphObject
      * @param y Y-Position on the Plane
      * @param dataEntity DateAbstract element holding the data
      * @param plane Plane Instance
+     * @param options Object holding various options
      */
-    constructor(x:number, y:number, protected dataEntity:DataAbstract, plane:Plane) {
+    constructor(x:number, y:number, protected dataEntity:DataAbstract, plane:Plane, options:Object) {
 
         /**
          * SUPER call must be first statement, thus extract geometry and material afterwards
          */
-
         super();
+
+        if (typeof options !== "undefined" && options !== null)
+            this.options = options;
+
         this.name = "GVF Element Group";
 
         var config = GraphVisConfig.graphelements;
@@ -145,7 +149,9 @@ export abstract class ElementAbstract extends THREE.Group implements GraphObject
      * Sending an Event for notifying that node was intersected
      */
     public onIntersectStart():void {
-        this.highlight();
+
+        if (this.getOptionValue("skip_highlighting_on_hover") !== false)
+            this.highlight();
         InterGraphEventService.getInstance().send(INTERGRAPH_EVENTS.ELEMENT_HOVERED, this);
     }
 
@@ -154,7 +160,8 @@ export abstract class ElementAbstract extends THREE.Group implements GraphObject
      * Sending an Event for notifying that node was left
      */
     public onIntersectLeave():void {
-        this.deHighlight();
+        if (this.getOptionValue("skip_highlighting_on_hover") !== false)
+            this.deHighlight();
         InterGraphEventService.getInstance().send(INTERGRAPH_EVENTS.ELEMENT_LEFT, this);
     }
 
@@ -194,5 +201,12 @@ export abstract class ElementAbstract extends THREE.Group implements GraphObject
         let y = -pos['y'] + canvasBounding.top - workspaceBounding.top + canvasBounding.height / 2;
 
         return ({x: x, y: y});
+    }
+
+
+    protected getOptionValue(key:string) {
+        if (typeof this.options[key] === "undefined")
+            return null;
+        return this.options[key];
     }
 }

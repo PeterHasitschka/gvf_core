@@ -10,7 +10,7 @@ import {NodeSimple} from "../nodes/nodelementsimple";
  */
 export class GroupSimple extends GroupAbstract {
 
-    constructor(x:number, y:number, protected dataEntity:BasicGroup, plane:Plane) {
-        super(x, y, dataEntity, plane, NodeSimple);
+    constructor(x:number, y:number, protected dataEntity:BasicGroup, plane:Plane, options:Object) {
+        super(x, y, dataEntity, plane, NodeSimple, options);
     }
 }

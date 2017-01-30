@@ -9,10 +9,13 @@ export abstract class NodeAbstract extends ElementAbstract {
 
     protected nodeMesh:THREE.Mesh;
 
-    constructor(x:number, y:number, protected dataEntity:DataAbstract, plane:Plane) {
 
-        super(x, y, dataEntity, plane);
+    constructor(x:number, y:number, protected dataEntity:DataAbstract, plane:Plane, options:Object) {
+
+        super(x, y, dataEntity, plane, options);
         this.name = "Node Abstract";
+
+
 
         this.nodeMesh = new THREE.Mesh(new THREE.CircleGeometry(
             GraphVisConfig.graphelements.abstractnode.size,
