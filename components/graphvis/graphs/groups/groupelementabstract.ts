@@ -4,6 +4,8 @@ import {ElementAbstract} from "../graphelementabstract";
 import {GraphVisConfig} from "../../config";
 import {INTERGRAPH_EVENTS, InterGraphEventService} from "../../../../services/intergraphevents.service";
 import {BasicEntity} from "../../data/databasicentity";
+import {NodeAbstract} from "../nodes/nodeelementabstract";
+import Object3D = THREE.Object3D;
 
 /**
  * A simple node, derived from @see{NodeAbstract}
@@ -15,7 +17,8 @@ export abstract class GroupAbstract extends ElementAbstract {
 
     protected color = GraphVisConfig.graphelements.abstractgroup.color;
 
-    constructor(x:number, y:number, protected dataEntity:BasicGroup, plane:Plane) {
+
+    constructor(x:number, y:number, protected dataEntity:BasicGroup, plane:Plane, protected subNodeType) {
 
         super(x, y, dataEntity, plane);
 
@@ -32,11 +35,20 @@ export abstract class GroupAbstract extends ElementAbstract {
         this.add(this.groupNodeMesh);
 
         this.setColor(this.color);
+        this.addSubnodes();
+
     }
 
 
+    protected addSubnodes() {
+        this.getDataEntity().getEntities().forEach((dataEntity:BasicEntity) => {
+            let node = new this.subNodeType((Math.random() * 25 - 12.5), (Math.random() * 25 - 12.5), dataEntity, this.plane);
+            this.add(<Object3D>node);
+        });
+    }
+
     public setScale(factor:number) {
-        this.scale.set(factor, factor, factor);
+        this.groupNodeMesh.scale.set(factor, factor, factor);
     }
 
 
@@ -59,7 +71,7 @@ export abstract class GroupAbstract extends ElementAbstract {
             data.getRegisteredGraphElements().forEach((element:ElementAbstract) => {
                 element.highlight();
             })
-        })
+        });
         this.plane.getGraphScene().render();
     }
 
@@ -82,6 +94,11 @@ export abstract class GroupAbstract extends ElementAbstract {
     public setColor(color:number):void {
         super.setColor(color);
         this.groupNodeMesh.material['color'].setHex(color);
+    }
+
+
+    public getDataEntity():BasicGroup {
+        return this.dataEntity;
     }
 
 

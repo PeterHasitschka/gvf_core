@@ -57,7 +57,6 @@ export abstract class NodeAbstract extends ElementAbstract {
      */
     public onIntersectStart():void {
         super.onIntersectStart();
-        console.log("NODE INTERSECT START CALLED");
         InterGraphEventService.getInstance().send(INTERGRAPH_EVENTS.NODE_HOVERED, this);
         this.plane.getGraphScene().render();
     }
