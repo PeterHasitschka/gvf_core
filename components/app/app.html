@@ -31,7 +31,11 @@
     </div>
     <div class="row footerrow" style="">
         <div class="col-md-12">
-            Footer
+
+            <div class="footer-mimizedplane" *ngFor="let p of uiService.getMinimizedPlanes()">
+                <div class="title" [innerHTML]="p.getName()"></div>
+                <div (click)="p.restore()" class="restorebtn"><i class="fa fa-window-restore" aria-hidden="true"></i></div>
+            </div>
         </div>
     </div>
 </div>

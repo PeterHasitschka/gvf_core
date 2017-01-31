@@ -134,6 +134,10 @@ export abstract class GraphAbstract {
         return out;
     }
 
+    public getGraphElements(){
+        return this.graphElements;
+    }
+
     /**
      * Edge Getter
      * @returns {EdgeAbstract[]}

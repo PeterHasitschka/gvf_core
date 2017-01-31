@@ -1,5 +1,7 @@
 import {GraphVisConfig} from './config';
 import {SceneMouseInteractions} from "./scenemouseinteractions";
+import {Plane} from "../plane/plane";
+
 
 
 //const THREE = require('../../../node_modules/three/build/three.js');
@@ -24,10 +26,10 @@ export class GraphScene {
      * @param{HTMLMElement} container - Container to hold the canvas
      * @param{Object} dimensions - Simple object holding 'x' and 'y' value, defining the size
      */
-    constructor(private container:HTMLElement, private dimensions:Object) {
+    constructor(private container:HTMLElement, private plane:Plane) {
         var config = GraphVisConfig.scene;
-        var canvasW = dimensions["x"],
-            canvasH = dimensions["y"];
+        var canvasW = plane.getCanvasSize()["x"],
+            canvasH = plane.getCanvasSize()["y"];
 
         this.threeRenderer = new THREE.WebGLRenderer({alpha: true, antialias: true});
 
@@ -61,6 +63,7 @@ export class GraphScene {
         this.objectGroup = new THREE.Group();
         this.objectGroup.name = "Graph Scene Group";
         this.threeScene.add(this.objectGroup);
+
     }
 
     /**
@@ -75,7 +78,8 @@ export class GraphScene {
      * Call the 'render' method of the THREE Renderer
      */
     public render():void {
-        this.threeRenderer.render(this.threeScene, this.threeCamera);
+        if (!this.plane.getIsMinimized())
+            this.threeRenderer.render(this.threeScene, this.threeCamera);
     }
 
 

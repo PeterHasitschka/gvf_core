@@ -21,6 +21,8 @@ export class Plane {
     private canvasDimensions;
     private backplaneMesh:THREE.Mesh;
 
+    private isMinimized = false;
+
     /**
      * @param{string} name - Defining the graph's name
      * @param{string} graphtype - @see{GraphVisConfig} for possible strings
@@ -40,6 +42,7 @@ export class Plane {
      */
     public initScene(containerId:number) {
 
+
         /**
          * Determine HTML container
          */
@@ -50,7 +53,7 @@ export class Plane {
         /**
          * Create THREE.js Scene within GraphScene Container
          */
-        this.scene = new GraphScene(container, this.canvasDimensions);
+        this.scene = new GraphScene(container, this);
         this.createBackPlane();
 
         /**
@@ -149,9 +152,20 @@ export class Plane {
     }
 
     public close(){
-        console.log("Closing plane");
+        console.warn("Closing plane - Not implemented yet");
     }
     public minimize(){
-        console.log("Closing plane");
+        this.isMinimized = true;
+        this.uiService.setPlaneMinimized(this);
+    }
+
+    public restore(){
+        this.isMinimized = false;
+        this.uiService.setPlaneRestored(this);
+        this.getGraphScene().render();
+    }
+
+    public getIsMinimized(){
+        return this.isMinimized;
     }
 }

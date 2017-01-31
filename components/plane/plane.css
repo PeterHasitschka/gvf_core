@@ -35,6 +35,7 @@
     padding-top: 1px;
     height: 14px;
     float: right;
+    cursor: pointer;
 }
 
 .graphvisplanecontainer canvas {

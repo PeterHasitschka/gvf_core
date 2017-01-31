@@ -1,6 +1,7 @@
 import {Injectable} from "@angular/core";
 import {SideInfoModel} from "../components/app/sideinfo/sideinfomodel";
 import {GraphworkspaceComponent} from "../components/graphworkspace/graphworkspace.component";
+import {Plane} from "../components/plane/plane";
 
 
 @Injectable()
@@ -21,6 +22,8 @@ export class UiService {
     private graphWorkSpace:GraphworkspaceComponent = null;
 
     public intergraphConnections = [];
+
+    private minimizedPlanes:Plane[] = [];
 
     constructor() {
         this.sideInfoElements = [];
@@ -80,12 +83,44 @@ export class UiService {
     }
 
 
-    addNodesToIntergraphConnection(node1, node2, color="red") {
-        if (this.getGraphWorkSpaceSvgElementVisible())
-            this.intergraphConnections.push({nodes:[node1, node2], color: color});
+    addNodesToIntergraphConnection(node1, node2, color = "red") {
+
+        if (node1.getPlane().getIsMinimized() || node2.getPlane().getIsMinimized())
+            return;
+
+        if (this.getGraphWorkSpaceSvgElementVisible()) {
+            this.intergraphConnections.push({nodes: [node1, node2], color: color});
+        }
     }
 
     clearIntergraphConnections() {
         this.intergraphConnections = [];
+    }
+
+
+    setPlaneMinimized(plane:Plane) {
+
+        let isAlreadyMinimized = false;
+        this.minimizedPlanes.forEach((p:Plane) => {
+            if (plane === p)
+                isAlreadyMinimized = true;
+        });
+
+        if (isAlreadyMinimized)
+            return;
+
+        this.minimizedPlanes.push(plane);
+    }
+
+    setPlaneRestored(plane:Plane) {
+        this.minimizedPlanes.forEach((p:Plane, index) => {
+            if (plane === p) {
+                this.minimizedPlanes.splice(index, 1);
+            }
+        });
+    }
+
+    getMinimizedPlanes():Plane[]{
+        return this.minimizedPlanes;
     }
 }

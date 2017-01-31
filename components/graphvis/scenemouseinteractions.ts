@@ -14,7 +14,8 @@ export class SceneMouseInteractions {
 
     constructor(private scene:GraphScene) {
         scene.getContainer().addEventListener('mousemove', this.onSceneMouseMove.bind(this), false);
-        UiService.getInstance().getGraphWorkSpaceSvgElement().addEventListener('mousemove', this.onSceneMouseMove.bind(this), false);
+        //UiService.getInstance().getGraphWorkSpaceSvgElement().addEventListener('mousemove', this.onSceneMouseMove.bind(this), false);
+        //UiService.getInstance().getGraphWorkSpaceSvgElement().addEventListener('mouseclick', this.traverseSvgMouseClickInteractions.bind(this), false);
     }
 
 

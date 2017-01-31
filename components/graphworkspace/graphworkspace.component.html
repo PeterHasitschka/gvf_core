@@ -9,7 +9,7 @@
         </svg>
 
 
-        <graph-plane [class]="getGridClasses()" *ngFor="let p of getPlanes()" [plane]="p">
+        <graph-plane [class]="getGridClasses()" *ngFor="let p of getPlanes()" [plane]="p" [ngClass] = "{hidden: p.getIsMinimized()}">
         </graph-plane>
     </div>
 </div>

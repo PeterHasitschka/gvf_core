@@ -63,7 +63,6 @@ export abstract class ElementAbstract extends THREE.Group implements GraphObject
         y = y === undefined ? 0.0 : y;
 
         this.setPosition(x, y);
-
         this.dataEntity.registerGraphElement(this);
     }
 

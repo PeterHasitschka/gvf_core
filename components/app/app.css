@@ -58,3 +58,26 @@ h1 {
     height: 29px;
 }
 
+
+.footerrow .footer-mimizedplane {
+    float:left;
+    width: 300px;
+    margin-right:20px;
+    border: 1px solid gray;
+}
+
+.footerrow .footer-mimizedplane .title {
+    text-overflow: ellipsis;
+    width: 276px;
+    white-space: nowrap;
+    overflow: hidden;
+    float: left;
+}
+
+.footerrow .footer-mimizedplane .restorebtn {
+    float: right;
+    width: 20px;
+    margin-top: 3px;
+    margin-right: -2px;
+
+}

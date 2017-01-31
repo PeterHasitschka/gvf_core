@@ -37,10 +37,8 @@ export class GraphworkspaceComponent implements OnInit {
         this.apiService.sendEvent("initready", null);
 
 
-
-
         DataService.getInstance().fetchData().then(() => {
-           //console.log("Fetched Demo Data", DataService.getInstance().getDemoEntities());
+            //console.log("Fetched Demo Data", DataService.getInstance().getDemoEntities());
         });
     }
 

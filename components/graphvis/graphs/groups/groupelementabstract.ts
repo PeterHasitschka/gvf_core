@@ -123,7 +123,7 @@ export abstract class GroupAbstract extends ElementAbstract {
                     if (otherGraphElement.getPlane().getGraph().constructor === LearnerGraph)
                         return;
 
-                    UiService.getInstance().addNodesToIntergraphConnection(element, otherGraphElement, "blue");
+                    UiService.getInstance().addNodesToIntergraphConnection(element, otherGraphElement, "red");
                 });
         });
 
