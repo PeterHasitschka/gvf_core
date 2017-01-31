@@ -78,6 +78,11 @@ export class GroupGraphAbstract extends GraphAbstract {
 
         InterGraphEventService.getInstance().addListener(INTERGRAPH_EVENTS.NODE_LEFT, function (e) {
             // let nodeData = (<NodeAbstract>e.detail).getDataEntity();
+            let node = <NodeAbstract>e.detail;
+            // If own node was left, do nothing! That was inside a community!
+            if (node.getPlane() === this.plane)
+                return;
+            
             this.graphElements.forEach((group:GroupAbstract) => {
                 //   let entitiesOfGroup = (<BasicGroup>group.getDataEntity()).getEntities();
                 //   entitiesOfGroup.forEach((entityOfGroup:BasicEntity) => {
