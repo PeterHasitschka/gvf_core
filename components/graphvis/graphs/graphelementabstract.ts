@@ -76,6 +76,7 @@ export abstract class ElementAbstract extends THREE.Group implements GraphObject
     public setPosition(x:number, y:number):void {
         this.position.setX(x);
         this.position.setY(y);
+        this.position.setZ(this.zPos);
         this.edges.forEach((edge:EdgeAbstract) => {
             edge.updatePositions();
         });

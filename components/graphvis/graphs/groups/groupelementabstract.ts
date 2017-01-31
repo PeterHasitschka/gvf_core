@@ -35,11 +35,11 @@ export abstract class GroupAbstract extends ElementAbstract {
                 {
                     color: this.color,
                     transparent: true,
-                    opacity: 0.5
+                    opacity: GraphVisConfig.graphelements.abstractgroup.opacity
                 }));
 
         this.add(this.groupNodeMesh);
-
+        this.groupNodeMesh.position.setZ(GraphVisConfig.graphelements.abstractgroup.z_pos);
         this.subNodes = [];
 
         this.setColor(this.color);

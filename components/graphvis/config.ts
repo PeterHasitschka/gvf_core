@@ -39,8 +39,10 @@ export class GraphVisConfig {
             segments: 128,
             size: 50,
             color: 0xffcc55,
-            highlight_color: 0xff3333,
-            z_pos: 0.0
+            highlight_color: 0x00FFFF,
+            z_pos: -1.0,
+            opacity : 0.5,
+
         }
 
     };
