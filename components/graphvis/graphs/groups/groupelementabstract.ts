@@ -92,6 +92,11 @@ export abstract class GroupAbstract extends ElementAbstract {
     }
 
     public deHighlight() {
+        this.subNodes.forEach((e:ElementAbstract) => {
+            e.deHighlight();
+        });
+
+
         this.groupNodeMesh.material['color'].setHex(this.color);
         super.deHighlight();
     }
