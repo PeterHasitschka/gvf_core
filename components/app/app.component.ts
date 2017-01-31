@@ -33,7 +33,7 @@ export class AppComponent implements OnInit {
     /**
      * Constructor
      */
-    constructor(private dataService:DataService, private uiService:UiService) {
+    constructor(private dataService:DataService, private uiService:UiService, private intergrapheventService:InterGraphEventService) {
 
         this.posEnum = SideInfoPositions;
     }
@@ -43,25 +43,16 @@ export class AppComponent implements OnInit {
      * Ensure that no highlights of nodes etc. remain when mouse is moved outside graphs
      * @type {number}
      */
-    /*
-     private mouseMoveConter = 0;
-     @HostListener('mousemove', ['$event'])
-     onMousemove(event:MouseEvent) {
-     this.mouseMoveConter++;
-     this.mouseMoveConter %= 20;
-
-     if (this.mouseMoveConter !== 0)
-     return;
-
-     for (let i in event["path"]) {
-     let elm = <HTMLElement>event["path"][i];
-     if (elm.tagName === "GRAPH-PLANE") {
-     return;
-     }
-     }
-     InterGraphEventService.getInstance().send(INTERGRAPH_EVENTS.OUTSIDE_ALL_GRAPHS, null);
-     }
-     */
+    // DEACTIVATED -- Does not make difference if sub-element was hit
+    // private mouseMoveConter = 0;
+    // @HostListener('mousemove', ['$event'])
+    // onMousemove(event:MouseEvent) {
+    //     if (this.intergrapheventService.planeHovered === null)
+    //         return;
+    //     this.intergrapheventService.planeHovered = null;
+    //     this.intergrapheventService.send(INTERGRAPH_EVENTS.GRAPH_LEFT, null);
+    //     console.log(event);
+    // }
 
 
     ngOnInit() {

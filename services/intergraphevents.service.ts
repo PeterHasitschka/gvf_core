@@ -8,7 +8,7 @@ export enum INTERGRAPH_EVENTS {
     NODE_LEFT,
     GROUP_HOVERED,
     GROUP_LEFT,
-    OUTSIDE_ALL_GRAPHS
+    GRAPH_LEFT
 }
 
 @Injectable()
@@ -20,6 +20,8 @@ export class InterGraphEventService {
 
     static instance:InterGraphEventService;
     static isCreating:Boolean = false;
+
+    public planeHovered = null;
 
 
     constructor() {

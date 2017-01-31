@@ -75,10 +75,9 @@ export abstract class GraphAbstract {
         }.bind(this));
 
 
-        InterGraphEventService.getInstance().addListener(INTERGRAPH_EVENTS.OUTSIDE_ALL_GRAPHS, function (none) {
+        InterGraphEventService.getInstance().addListener(INTERGRAPH_EVENTS.GRAPH_LEFT, function (none) {
             this.graphElements.forEach((e:ElementAbstract) => {
                 e.deHighlight();
-                console.log("DE HIGHLIGHT ALL");
             });
         }.bind(this));
     }
@@ -134,7 +133,7 @@ export abstract class GraphAbstract {
         return out;
     }
 
-    public getGraphElements(){
+    public getGraphElements() {
         return this.graphElements;
     }
 

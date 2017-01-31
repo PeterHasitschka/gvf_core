@@ -1,8 +1,9 @@
-import {Component, Input, ViewEncapsulation} from '@angular/core';
+import {Component, Input, ViewEncapsulation, HostListener} from '@angular/core';
 import {Plane} from './plane';
 import {DataService} from '../../services/data.service';
 import {SideInfoPositions, SideInfoContentType, SideInfoModel} from "../app/sideinfo/sideinfomodel";
 import {UiService} from "../../services/ui.service";
+import {InterGraphEventService, INTERGRAPH_EVENTS} from "../../services/intergraphevents.service";
 
 
 @Component({
@@ -31,9 +32,21 @@ export class PlaneComponent {
     private id:number;
 
 
-    constructor(private uiService:UiService) {
+    constructor(private uiService:UiService, private intergrapheventService:InterGraphEventService) {
         this.id = PlaneComponent.counter;
         PlaneComponent.counter++;
+    }
+
+    /**
+     * Send event when mouse left this graph!
+     * @param event
+     */
+    @HostListener('mousemove', ['$event'])
+    onMousemove(event:MouseEvent) {
+        if (this.intergrapheventService.planeHovered === this.getId())
+            return;
+        this.intergrapheventService.planeHovered = this.getId();
+        this.intergrapheventService.send(INTERGRAPH_EVENTS.GRAPH_LEFT, null);
     }
 
     /**
