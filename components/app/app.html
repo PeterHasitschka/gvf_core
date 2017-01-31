@@ -8,12 +8,12 @@
         </div>
     </div>
     <div class="row mainrow">
-        <div class="col-md-2 col-sm-12" id="mainleftcol">
+        <div class="col-md-1 col-sm-12" id="mainleftcol">
             <sideinfo *ngFor="let sideinfoelement of (uiService.sideInfoElements)"
                       [infomodel]="sideinfoelement" [position]="posEnum.Left">
             </sideinfo>
         </div>
-        <div class="col-md-8  col-sm-12" id="mainmiddlecol">
+        <div class="col-md-9  col-sm-12" id="mainmiddlecol">
             <graphworkspace></graphworkspace>
         </div>
         <div class="col-md-2  col-sm-12" id="mainrightcol">
