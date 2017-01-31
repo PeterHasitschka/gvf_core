@@ -18,7 +18,7 @@ export class UiService {
     static isCreating:Boolean = false;
 
     private graphWorkSpaceSvgElement:HTMLElement = null;
-    public graphWorkSpaceSvgElementVisible = false;
+    public graphWorkSpaceSvgElementVisible = true;
     private graphWorkSpace:GraphworkspaceComponent = null;
 
     public intergraphConnections = [];

@@ -19,13 +19,15 @@
         <div class="col-md-2  col-sm-12" id="mainrightcol">
             <button (click)="addDummyPlane()" type="button" class="btn btn-success">Add new Dummy Plane</button>
             <br/>
-            <button (click)="addDummyGroupPlane()" type="button" class="btn btn-success">Add Dummy Community Plane</button>
+            <button (click)="addDummyGroupPlane()" type="button" class="btn btn-success">Add Dummy Community Plane
+            </button>
             <br/>
-            <input id="show_interconnections_checkbox" type="checkbox" (change)="onShowInterConnectionsClick($event)"/>
+            <input id="show_interconnections_checkbox" type="checkbox" checked="{{uiService.getGraphWorkSpaceSvgElementVisible()}}"
+                   (change)="onShowInterConnectionsClick($event)"/>
             <label for="show_interconnections_checkbox">Show the Inter-Graph-Connection-Canvas</label>
 
             <sideinfo *ngFor="let sideinfoelement of (uiService.sideInfoElements)"
-                      [infomodel]="sideinfoelement"  [position]="posEnum.Right">
+                      [infomodel]="sideinfoelement" [position]="posEnum.Right">
             </sideinfo>
         </div>
     </div>
@@ -34,7 +36,8 @@
 
             <div class="footer-mimizedplane" *ngFor="let p of uiService.getMinimizedPlanes()">
                 <div class="title" [innerHTML]="p.getName()"></div>
-                <div (click)="p.restore()" class="restorebtn"><i class="fa fa-window-restore" aria-hidden="true"></i></div>
+                <div (click)="p.restore()" class="restorebtn"><i class="fa fa-window-restore" aria-hidden="true"></i>
+                </div>
             </div>
         </div>
     </div>
