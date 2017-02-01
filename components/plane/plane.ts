@@ -132,6 +132,10 @@ export class Plane {
         return Plane.containerPrefix;
     }
 
+    public getId():number {
+        return this.containerId;
+    }
+
     public getGraphScene():GraphScene {
         if (!this.scene)
             console.error("Could not get Graph Scene - Not initialized yet?");
@@ -151,21 +155,22 @@ export class Plane {
         this.backplaneMesh.material['color'].setHex(color);
     }
 
-    public close(){
+    public close() {
         console.warn("Closing plane - Not implemented yet");
     }
-    public minimize(){
+
+    public minimize() {
         this.isMinimized = true;
         this.uiService.setPlaneMinimized(this);
     }
 
-    public restore(){
+    public restore() {
         this.isMinimized = false;
         this.uiService.setPlaneRestored(this);
         this.getGraphScene().render();
     }
 
-    public getIsMinimized(){
+    public getIsMinimized() {
         return this.isMinimized;
     }
 }

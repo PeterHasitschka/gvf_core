@@ -120,7 +120,33 @@ export class UiService {
         });
     }
 
-    getMinimizedPlanes():Plane[]{
+    getMinimizedPlanes():Plane[] {
         return this.minimizedPlanes;
+    }
+
+
+
+
+
+
+    private static logLevelLimit = 10;
+    /**
+     * Logging to console.
+     * @param text String or Object to log
+     * @param srcObj class Name is displayed in log. (So use 'this' for example)
+     * @param color CSS-String (Only working with text to log)
+     * @param level 1-10, where 1 is most important and 10 is less important.
+     */
+    public static log(text:any, srcObj:Object, color:string = "black", level:number = 1):void {
+
+        if (level > UiService.logLevelLimit)
+            return;
+
+        let classColor = "#008800";
+
+        if (typeof text === "string")
+            console.log("GVFLOG-LEVEL" + level + ": " + "%c" + srcObj.constructor.name + ": " + "%c" + text, "color:" + classColor, "color:" + color);
+        else
+            console.log("GVFLOG-LEVEL" + level + ": " + "%c" + srcObj.constructor.name + ": ", "color:" + classColor, text);
     }
 }

@@ -82,7 +82,7 @@ export class GroupGraphAbstract extends GraphAbstract {
             // If own node was left, do nothing! That was inside a community!
             if (node.getPlane() === this.plane)
                 return;
-            
+
             this.graphElements.forEach((group:GroupAbstract) => {
                 //   let entitiesOfGroup = (<BasicGroup>group.getDataEntity()).getEntities();
                 //   entitiesOfGroup.forEach((entityOfGroup:BasicEntity) => {

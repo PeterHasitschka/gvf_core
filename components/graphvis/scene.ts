@@ -1,7 +1,7 @@
 import {GraphVisConfig} from './config';
 import {SceneMouseInteractions} from "./scenemouseinteractions";
 import {Plane} from "../plane/plane";
-
+import {UiService} from "../../services/ui.service";
 
 
 //const THREE = require('../../../node_modules/three/build/three.js');
@@ -78,8 +78,11 @@ export class GraphScene {
      * Call the 'render' method of the THREE Renderer
      */
     public render():void {
-        if (!this.plane.getIsMinimized())
+        if (!this.plane.getIsMinimized()) {
             this.threeRenderer.render(this.threeScene, this.threeCamera);
+            UiService.log("Rendering Graph Scene " + this.plane.getId(), this, null, 10);
+        }
+
     }
 
 
