@@ -43,8 +43,8 @@ export class GroupCombinedGraphAbstract extends GroupGraphAbstract {
             enew2 = entities2;
             //console.log(enew1.length, enew2.length, enewcomb.length, entities1.length + entities2.length);
 
-            let gnew1 = new g1.constructor(g1.constructor['getDataList']().length, enew1, {});
-            let gnew2 = new g2.constructor(g2.constructor['getDataList']().length, enew2, {});
+            let gnew1 = new BasicGroup(g1.constructor['getDataList']().length, enew1, {});
+            let gnew2 = new BasicGroup(g2.constructor['getDataList']().length, enew2, {});
             let gnewcomb = new BasicGroup(BasicGroup.getDataList().length, enew2, {});
             return {g1only: gnew1, intersect: gnew2, g2only: gnewcomb};
         };

@@ -28,7 +28,7 @@ export class Plane {
      * @param{string} name - Defining the graph's name
      * @param{string} graphtype
      */
-    constructor(private name:string, private graphclass:Function, public uiService:UiService, private dataGetterFct = null) {
+    constructor(private name:string, private graphclass, public uiService:UiService, private dataGetterFct = null) {
         Plane.planes.push(this);
     }
 
