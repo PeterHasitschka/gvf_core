@@ -14,7 +14,7 @@ export class GvfApi {
     }
 
 
-    static addPlane(name:string, type:string) {
+    static addPlane(name:string, type:Function) {
         UiService.getInstance().getGraphWorkSpace().addPlane(new Plane(name, type, UiService.getInstance()));
     }
 }

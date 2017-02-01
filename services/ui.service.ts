@@ -27,7 +27,6 @@ export class UiService {
 
     constructor() {
         this.sideInfoElements = [];
-        console.log("Created UI SERVICE");
         if (!UiService.isCreating) {
             return UiService.getInstance();
         }

@@ -10,6 +10,8 @@ import {InterGraphEventService, INTERGRAPH_EVENTS} from "../../services/intergra
 import {ApiService} from "../../services/apiservice";
 import {GvfPlugins} from "../../../plugins/plugins";
 import {GvfPluginInterface} from "../../../plugins/plugininterface";
+import {BasicGraph} from "../graphvis/graphs/graphbasic";
+import {SimpleGroups} from "../graphvis/graphs/graphgroupssimple";
 
 @Component({
     selector: 'gvf-app',
@@ -37,21 +39,6 @@ export class AppComponent implements OnInit {
         this.posEnum = SideInfoPositions;
     }
 
-
-    /**
-     * Ensure that no highlights of nodes etc. remain when mouse is moved outside graphs
-     * @type {number}
-     */
-    // DEACTIVATED -- Does not make difference if sub-element was hit
-    // private mouseMoveConter = 0;
-    // @HostListener('mousemove', ['$event'])
-    // onMousemove(event:MouseEvent) {
-    //     if (this.intergrapheventService.planeHovered === null)
-    //         return;
-    //     this.intergrapheventService.planeHovered = null;
-    //     this.intergrapheventService.send(INTERGRAPH_EVENTS.GRAPH_LEFT, null);
-    //     console.log(event);
-    // }
 
 
     ngOnInit() {
@@ -96,10 +83,10 @@ export class AppComponent implements OnInit {
      * Simple Plugin Loader.
      */
     loadPlugins() {
-        console.log("Loading plugins");
+
 
         let pluginList = GvfPlugins.plugins.onInit;
-        console.log("Loading plugins");
+        UiService.consolelog("Loading " + pluginList.length + "plugins",this,null, 3);
         for (let pluginClass of pluginList) {
             let plugin = new pluginClass();
             plugin.runAfterInit();
@@ -112,11 +99,11 @@ export class AppComponent implements OnInit {
      * @todo: Remove if not necessary anymore
      */
     addDummyPlane():void {
-        this.graphworkspace.addPlane(new Plane("Plane something " + Math.random(), 'basic', this.uiService));
+        this.graphworkspace.addPlane(new Plane("Plane something " + Math.random(), BasicGraph, this.uiService));
     }
 
     addDummyGroupPlane() {
-        this.graphworkspace.addPlane(new Plane("Dummy Groups (Communities)", 'basicgroups', this.uiService));
+        this.graphworkspace.addPlane(new Plane("Dummy Groups (Communities)", SimpleGroups, this.uiService));
     }
 
     /**

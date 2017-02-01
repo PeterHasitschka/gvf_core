@@ -39,6 +39,11 @@ export abstract class GraphAbstract {
 
     }
 
+    public setDataGetterMethod(fct:Function){
+        this.dataGetterMethod = fct;
+    }
+
+
     /**
      * Init method for loading data and creating the layout and graphelements
      */

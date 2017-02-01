@@ -70,12 +70,4 @@ export class GraphVisConfig {
         width: 1.0,
         color: "red" // SVG stroke color
     };
-
-
-    public static active_graphs = {
-        'basic': BasicGraph,
-        'basicgroups': SimpleGroups
-    };
-
-
 }

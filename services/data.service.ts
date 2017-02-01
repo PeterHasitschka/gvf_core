@@ -8,6 +8,7 @@ import {BasicConnection} from "../components/graphvis/data/databasicconnection";
 import {BasicGroup} from "../components/graphvis/data/databasicgroup";
 import {Learner} from "../../afel/graph/data/learner";
 import {NodeSimple} from "../components/graphvis/graphs/nodes/nodelementsimple";
+import {UiService} from "./ui.service";
 
 @Injectable()
 /**
@@ -94,7 +95,7 @@ export class DataService {
      */
 
     fetchDataFromServer() {
-        console.log("fetchDemoNodes learning-platform data from server...");
+        UiService.consolelog("fetchDemoNodes learning-platform data from server...",this,null, 5);
         return this.fetchDemoEntities()
             .then(() => {
                 return this.fetchDemoConnections()
@@ -116,7 +117,7 @@ export class DataService {
 
 
     fetchDemoEntities() {
-        console.log("Fetching Demo Nodes data from server...", DataService.DUMMYDATA.data);
+        UiService.consolelog("Fetching Demo Nodes data from server... " + DataService.DUMMYDATA.data,this,null, 5);
         return this.http.get(DataService.DUMMYDATA.data)
             .map(res => res.json())
             .toPromise()
@@ -131,7 +132,7 @@ export class DataService {
     }
 
     fetchDemoConnections() {
-        console.log("Fetching Demo Connections data from server...");
+        UiService.consolelog("Fetching Demo Connections data from server...",this,null, 5);
         return this.http.get(DataService.DUMMYDATA.data)
             .map(res => res.json())
             .toPromise()

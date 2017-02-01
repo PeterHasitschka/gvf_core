@@ -17,6 +17,7 @@ export class Plane {
     private containerId:number;
     private scene:GraphScene;
     static containerPrefix:string = "graphvisplanecontainer_";
+    private static planes:Plane[] = [];
     private graph:GraphAbstract;
     private canvasDimensions;
     private backplaneMesh:THREE.Mesh;
@@ -25,10 +26,10 @@ export class Plane {
 
     /**
      * @param{string} name - Defining the graph's name
-     * @param{string} graphtype - @see{GraphVisConfig} for possible strings
+     * @param{string} graphtype
      */
-    constructor(private name:string, private graphtype:string, public uiService:UiService) {
-
+    constructor(private name:string, private graphclass:Function, public uiService:UiService, private dataGetterFct = null) {
+        Plane.planes.push(this);
     }
 
     /**
@@ -59,7 +60,14 @@ export class Plane {
         /**
          * Create Graph, depending on graphtype-string
          */
-        this.graph = new GraphVisConfig.active_graphs[this.graphtype](this);
+
+        //this.graph = new GraphVisConfig.active_graphs[this.graphtype](this);
+        this.graph = new this.graphclass(this);
+
+        if (this.dataGetterFct)
+            this.graph.setDataGetterMethod(this.dataGetterFct);
+
+
         // try {
         // } catch (e) {
         //
@@ -147,8 +155,8 @@ export class Plane {
     }
 
 
-    public getGraphType():string {
-        return this.graphtype;
+    public getGraphClass():Function {
+        return this.graphclass;
     }
 
     public setBackgroundColor(color:number) {
@@ -172,5 +180,9 @@ export class Plane {
 
     public getIsMinimized() {
         return this.isMinimized;
+    }
+
+    public static getPlanes():Plane[] {
+        return Plane.planes;
     }
 }

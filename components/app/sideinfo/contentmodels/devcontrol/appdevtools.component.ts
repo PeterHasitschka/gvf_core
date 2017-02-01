@@ -1,6 +1,9 @@
 import {OnDestroy, Component} from "@angular/core";
 import {InterGraphEventService} from "../../../../../services/intergraphevents.service";
 import {UiService} from "../../../../../services/ui.service";
+import {Plane} from "../../../../plane/plane";
+import {GroupGraphAbstract} from "../../../../graphvis/graphs/graphgroupabstract";
+import {GroupCombinedGraphAbstract} from "../../../../graphvis/graphs/graphgroupcombinedabstract";
 
 
 @Component({
@@ -24,6 +27,17 @@ export class SideInfoContentAppDevToolsComponent implements OnDestroy {
     private onSliderChange(val) {
         this.logLevel = val;
         UiService.logLevelLimit = val;
+    }
+
+    private compareCommunityPlanes() {
+        let planes = Plane.getPlanes();
+        let p1 = planes[2];
+        let p2 = planes[3];
+
+        GroupCombinedGraphAbstract.generateComparedGraph(
+            <GroupGraphAbstract>p1.getGraph(),
+            <GroupGraphAbstract>p2.getGraph()
+        );
     }
 
     ngOnDestroy() {

@@ -9,6 +9,7 @@ import {BasicEntity} from "../data/databasicentity";
 import {ElementAbstract} from "./graphelementabstract";
 import {GraphLayoutFdlCommunities} from "./layouts/graphlayoutfdl_communities";
 import {NodeAbstract} from "./nodes/nodeelementabstract";
+import {UiService} from "../../../services/ui.service";
 
 
 /**
@@ -70,9 +71,9 @@ export class GroupGraphAbstract extends GraphAbstract {
                 entitiesOfGroup.forEach((entityOfGroup:BasicEntity) => {
                     if (entityOfGroup === nodeData) {
                         group.highlight();
-                        //this.plane.getGraphScene().render();
                     }
                 });
+                this.plane.getGraphScene().render();
             });
         }.bind(this));
 
@@ -88,12 +89,15 @@ export class GroupGraphAbstract extends GraphAbstract {
                 //   entitiesOfGroup.forEach((entityOfGroup:BasicEntity) => {
                 //       if(entityOfGroup === nodeData) {
                 group.deHighlight();
-                //this.plane.getGraphScene().render();
+                //
                 //       }
                 // });
             });
+            this.plane.getGraphScene().render();
         }.bind(this));
 
     }
+
+
 
 }
