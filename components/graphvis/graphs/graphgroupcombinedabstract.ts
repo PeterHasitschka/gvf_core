@@ -43,10 +43,15 @@ export class GroupCombinedGraphAbstract extends GroupGraphAbstract {
             enew2 = entities2;
             //console.log(enew1.length, enew2.length, enewcomb.length, entities1.length + entities2.length);
 
-            let gnew1 = new BasicGroup(g1.constructor['getDataList']().length, enew1, {});
-            let gnew2 = new BasicGroup(g2.constructor['getDataList']().length, enew2, {});
-            let gnewcomb = new BasicGroup(BasicGroup.getDataList().length, enew2, {});
-            return {g1only: gnew1, intersect: gnew2, g2only: gnewcomb};
+            let gnew1 = null;
+            let gnew2 = null;
+            let gnewcomb = null;
+            //gnew1 = new BasicGroup(g1.constructor['getDataList']().length, enew1, {});
+            //gnew2 = new BasicGroup(g2.constructor['getDataList']().length, enew2, {});
+
+            if (enewcomb.length > 1)
+                gnewcomb = new BasicGroup(BasicGroup.getDataList().length, enewcomb, {});
+            return {g1only: null, intersect: gnewcomb, g2only: null};
         };
 
 
@@ -63,15 +68,16 @@ export class GroupCombinedGraphAbstract extends GroupGraphAbstract {
 
                 let intersectRes = getIntersectionAndDistinctions(group1, group2);
                 //groupsToAdd = groupsToAdd.concat(intersectRes.g1only).concat(intersectRes.intersect).concat(intersectRes.g2only);
-                groupsToAdd = groupsToAdd.concat(intersectRes.intersect);
+                groupsToAdd = intersectRes.intersect ? groupsToAdd.concat(intersectRes.intersect) : groupsToAdd;
             });
 
         });
         console.log(groupsToAdd);
 
-        let p = new Plane("Compared Communities", this, UiService.getInstance(), function () {
-            return groupsToAdd;
-        });
+        let p = new Plane('<i class="fa fa-compress" aria-hidden="true"></i> <strong>Merged</strong> Communities',
+            this, UiService.getInstance(), function () {
+                return groupsToAdd;
+            });
         UiService.getInstance().getGraphWorkSpace().addPlane(p);
 
 
