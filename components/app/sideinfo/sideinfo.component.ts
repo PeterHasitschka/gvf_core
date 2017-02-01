@@ -15,7 +15,7 @@ export class SideInfoComponent implements OnInit {
     @Input() private infomodel:SideInfoModel;
     @Input() private position:SideInfoPositions;
 
-    public types;
+    public  types;
 
     constructor() {
         //Necessary since template can't handle global enums

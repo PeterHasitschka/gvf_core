@@ -1,4 +1,5 @@
 import {Injectable} from "@angular/core";
+import {UiService} from "./ui.service";
 
 
 export enum INTERGRAPH_EVENTS {
@@ -50,7 +51,9 @@ export class InterGraphEventService {
      */
     public send(evtKey:INTERGRAPH_EVENTS, data) {
         let evt = new CustomEvent(INTERGRAPH_EVENTS[evtKey], {detail: data});
+        UiService.consolelog("Send Event: "+INTERGRAPH_EVENTS[evtKey],this, "#AA5500", 5);
         window.dispatchEvent(evt);
+
     }
 
     /**

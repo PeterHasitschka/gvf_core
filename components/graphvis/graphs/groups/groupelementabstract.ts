@@ -86,19 +86,19 @@ export abstract class GroupAbstract extends ElementAbstract {
     }
 
 
-    public highlight() {
+    public highlight(render=false) {
         this.groupNodeMesh.material['color'].setHex(this.highlightColor);
-        super.highlight();
+        super.highlight(render);
     }
 
-    public deHighlight() {
+    public deHighlight(render=false) {
         this.subNodes.forEach((e:ElementAbstract) => {
-            e.deHighlight();
+            e.deHighlight(render);
         });
 
 
         this.groupNodeMesh.material['color'].setHex(this.color);
-        super.deHighlight();
+        super.deHighlight(render);
     }
 
 
@@ -106,14 +106,25 @@ export abstract class GroupAbstract extends ElementAbstract {
         super.onIntersectStart();
         InterGraphEventService.getInstance().send(INTERGRAPH_EVENTS.GROUP_HOVERED, this);
 
+
+        /**
+         * Highlight all nodes which are referring to the sub-entities
+         */
+
+            // Render all planes with foreign nodes in the end.
+        let affectedPlanes = [];
         let groupedData = (<BasicGroup>this.getDataEntity()).getEntities();
         groupedData.forEach((data:BasicEntity) => {
-
-            data.getRegisteredGraphElements().forEach((element:ElementAbstract) => {
+            data.getRegisteredGraphElements().forEach((element:ElementAbstract, index:number) => {
                 element.highlight();
+                if (affectedPlanes.indexOf(element.getPlane()) === -1)
+                    affectedPlanes.push(element.getPlane());
             })
         });
 
+        affectedPlanes.forEach((p:Plane) => {
+            p.getGraphScene().render();
+        });
 
         /**
          * Connect own nodes to nodes in other graphs by intergraphconnections
@@ -127,11 +138,9 @@ export abstract class GroupAbstract extends ElementAbstract {
                         return;
                     if (otherGraphElement.getPlane().getGraph().constructor === LearnerGraph)
                         return;
-
                     UiService.getInstance().addNodesToIntergraphConnection(element, otherGraphElement, "red");
                 });
         });
-
 
         this.plane.getGraphScene().render();
     }
@@ -142,10 +151,18 @@ export abstract class GroupAbstract extends ElementAbstract {
 
         let groupedData = (<BasicGroup>this.getDataEntity()).getEntities();
 
+        // Render all planes with foreign nodes in the end.
+        let affectedPlanes = [];
         groupedData.forEach((data:BasicEntity) => {
             data.getRegisteredGraphElements().forEach((element:ElementAbstract) => {
                 element.deHighlight();
+                if (affectedPlanes.indexOf(element.getPlane()) === -1)
+                    affectedPlanes.push(element.getPlane());
             })
+        });
+
+        affectedPlanes.forEach((p:Plane) => {
+            p.getGraphScene().render();
         });
 
         UiService.getInstance().clearIntergraphConnections();

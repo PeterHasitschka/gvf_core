@@ -80,7 +80,7 @@ export class GraphScene {
     public render():void {
         if (!this.plane.getIsMinimized()) {
             this.threeRenderer.render(this.threeScene, this.threeCamera);
-            UiService.log("Rendering Graph Scene " + this.plane.getId(), this, null, 10);
+            UiService.consolelog("Rendering Graph Scene " + this.plane.getId(), this, null, 10);
         }
 
     }

@@ -125,11 +125,8 @@ export class UiService {
     }
 
 
+    public static logLevelLimit = 5;
 
-
-
-
-    private static logLevelLimit = 10;
     /**
      * Logging to console.
      * @param text String or Object to log
@@ -137,7 +134,7 @@ export class UiService {
      * @param color CSS-String (Only working with text to log)
      * @param level 1-10, where 1 is most important and 10 is less important.
      */
-    public static log(text:any, srcObj:Object, color:string = "black", level:number = 1):void {
+    public static consolelog(text:any, srcObj:Object, color:string = "black", level:number = 1):void {
 
         if (level > UiService.logLevelLimit)
             return;

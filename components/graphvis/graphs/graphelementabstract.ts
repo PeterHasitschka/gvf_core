@@ -127,11 +127,15 @@ export abstract class ElementAbstract extends THREE.Group implements GraphObject
      * The defined highlight-color is applied
      * No rendering is made
      */
-    public highlight() {
+    public highlight(render:boolean = false) {
+        if (this.getOptionValue("skip_highlighting_on_hover") === false)
+            return;
+
         if (this.isHighlighted)
             return;
         this.isHighlighted = true;
-        this.plane.getGraphScene().render();
+        if (render)
+            this.plane.getGraphScene().render();
     }
 
     /**
@@ -139,11 +143,15 @@ export abstract class ElementAbstract extends THREE.Group implements GraphObject
      * The defined standard-color is applied
      * No rendering is made
      */
-    public deHighlight() {
+    public deHighlight(render:boolean = false) {
+        if (this.getOptionValue("skip_highlighting_on_hover") === false)
+            return;
+
         if (!this.isHighlighted)
             return;
         this.isHighlighted = false;
-        this.plane.getGraphScene().render();
+        if (render)
+            this.plane.getGraphScene().render();
     }
 
     /**
@@ -151,10 +159,8 @@ export abstract class ElementAbstract extends THREE.Group implements GraphObject
      * Sending an Event for notifying that node was intersected
      */
     public onIntersectStart():void {
-
-        if (this.getOptionValue("skip_highlighting_on_hover") !== false)
-            this.highlight();
         InterGraphEventService.getInstance().send(INTERGRAPH_EVENTS.ELEMENT_HOVERED, this);
+        this.highlight(true);
     }
 
     /**
@@ -162,9 +168,9 @@ export abstract class ElementAbstract extends THREE.Group implements GraphObject
      * Sending an Event for notifying that node was left
      */
     public onIntersectLeave():void {
-        if (this.getOptionValue("skip_highlighting_on_hover") !== false)
-            this.deHighlight();
         InterGraphEventService.getInstance().send(INTERGRAPH_EVENTS.ELEMENT_LEFT, this);
+
+        this.deHighlight(true);
     }
 
     /**
@@ -216,7 +222,7 @@ export abstract class ElementAbstract extends THREE.Group implements GraphObject
     }
 
 
-    public getPlane():Plane{
+    public getPlane():Plane {
         return this.plane;
     }
 }

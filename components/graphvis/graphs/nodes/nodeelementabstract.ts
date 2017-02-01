@@ -36,21 +36,21 @@ export abstract class NodeAbstract extends ElementAbstract {
     }
 
 
-    public highlight() {
+    public highlight(render=false) {
         this.nodeMesh.material['color'].setHex(this.highlightColor);
         // this.edges.forEach((e:EdgeAbstract) => {
         //     e.highlight();
         // });
-        super.highlight();
+        super.highlight(render);
     }
 
 
-    public deHighlight() {
+    public deHighlight(render=false) {
         this.nodeMesh.material['color'].setHex(this.color);
         // this.edges.forEach((e:EdgeAbstract) => {
         //     e.deHighlight();
         // });
-        super.deHighlight();
+        super.deHighlight(render);
     }
 
 
@@ -61,7 +61,7 @@ export abstract class NodeAbstract extends ElementAbstract {
     public onIntersectStart():void {
         super.onIntersectStart();
         InterGraphEventService.getInstance().send(INTERGRAPH_EVENTS.NODE_HOVERED, this);
-        this.plane.getGraphScene().render();
+        //this.plane.getGraphScene().render();
     }
 
     /**
@@ -71,6 +71,6 @@ export abstract class NodeAbstract extends ElementAbstract {
     public onIntersectLeave():void {
         super.onIntersectLeave();
         InterGraphEventService.getInstance().send(INTERGRAPH_EVENTS.NODE_LEFT, this);
-        this.plane.getGraphScene().render();
+        //this.plane.getGraphScene().render();
     }
 }

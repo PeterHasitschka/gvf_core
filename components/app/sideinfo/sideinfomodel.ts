@@ -5,7 +5,8 @@ export enum SideInfoPositions {
 
 export enum SideInfoContentType {
     DynamicInfo,
-    Text
+    Text,
+    AppDevTools
 }
 
 /**

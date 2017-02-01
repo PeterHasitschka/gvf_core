@@ -6,7 +6,6 @@ import {UiService} from "../../services/ui.service";
 import {SideInfoModel, SideInfoPositions, SideInfoContentType} from "./sideinfo/sideinfomodel";
 import {Subscription} from "rxjs/Rx";
 
-import {SideInfoPositionPipe} from "./sideinfo/contentmodels/sideinfopipe";
 import {InterGraphEventService, INTERGRAPH_EVENTS} from "../../services/intergraphevents.service";
 import {ApiService} from "../../services/apiservice";
 import {GvfPlugins} from "../../../plugins/plugins";
@@ -82,7 +81,12 @@ export class AppComponent implements OnInit {
             )
         );
 
-        //console.log(this.sideInfoElements);
+        this.uiService.addSideInfoElement(new SideInfoModel(
+            '<i class="fa fa-hand-spock-o" aria-hidden="true"></i> App-Dev Tools',
+            SideInfoPositions.Right,
+            SideInfoContentType.AppDevTools
+        ));
+
 
         this.loadPlugins();
     }

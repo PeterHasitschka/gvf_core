@@ -1,11 +1,15 @@
 <div *ngIf="position === infomodel.getPosition()" class="sidebarinfo">
     <h3 [innerHTML]="infomodel.getTitle()"></h3>
-    
-    <div  *ngIf="infomodel.getContentType() === types.Text">
+
+    <div *ngIf="infomodel.getContentType() === types.Text">
         <span [innerHTML]="infomodel.getData()['text']">
         </span>
     </div>
-    <div  *ngIf="infomodel.getContentType() === types.DynamicInfo">
-        <sideinfodynamicinfo [data]="infomodel.data"></sideinfodynamicinfo>
+    <div *ngIf="infomodel.getContentType() === types.DynamicInfo">
+        <sideinfoelementinfo [data]="infomodel.data"></sideinfoelementinfo>
+    </div>
+
+    <div *ngIf="infomodel.getContentType() === types.AppDevTools">
+        <appdevtools></appdevtools>
     </div>
 </div>

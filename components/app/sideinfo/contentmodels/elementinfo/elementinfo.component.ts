@@ -1,23 +1,23 @@
-import {SideInfoComponent} from "../sideinfo.component";
+import {SideInfoComponent} from "../../sideinfo.component";
 import {OnDestroy, Component, Input} from "@angular/core";
-import {GraphAbstract} from "../../../graphvis/graphs/graphabstract";
-import {InterGraphEventService, INTERGRAPH_EVENTS} from "../../../../services/intergraphevents.service";
-import {GraphVisConfig} from "../../../graphvis/config";
-import {ElementAbstract} from "../../../graphvis/graphs/graphelementabstract";
-import {GroupAbstract} from "../../../graphvis/graphs/groups/groupelementabstract";
-import {BasicGroup} from "../../../graphvis/data/databasicgroup";
-import {BasicEntity} from "../../../graphvis/data/databasicentity";
+import {GraphAbstract} from "../../../../graphvis/graphs/graphabstract";
+import {InterGraphEventService, INTERGRAPH_EVENTS} from "../../../../../services/intergraphevents.service";
+import {GraphVisConfig} from "../../../../graphvis/config";
+import {ElementAbstract} from "../../../../graphvis/graphs/graphelementabstract";
+import {GroupAbstract} from "../../../../graphvis/graphs/groups/groupelementabstract";
+import {BasicGroup} from "../../../../graphvis/data/databasicgroup";
+import {BasicEntity} from "../../../../graphvis/data/databasicentity";
 
 @Component({
-    selector: 'sideinfodynamicinfo',
-    templateUrl: 'gvfcore/components/app/sideinfo/contentmodels/dyninfo.html',
-    styleUrls: ['gvfcore/components/app/sideinfo/contentmodels/dyninfo.css']
+    selector: 'sideinfoelementinfo',
+    templateUrl: 'gvfcore/components/app/sideinfo/contentmodels/elementinfo/elementinfo.html',
+    styleUrls: ['gvfcore/components/app/sideinfo/contentmodels/elementinfo/element.css']
 })
 
 /**
  * Side-Info-Component-Content for graphs
  */
-export class SideInfoContentDynamicInfoComponent implements OnDestroy {
+export class SideInfoContentElementInfoComponent implements OnDestroy {
 
     @Input() data:{};
     private elementInfo = false;
