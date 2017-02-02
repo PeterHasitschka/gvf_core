@@ -22,12 +22,13 @@ export class GroupGraphAbstract extends GraphAbstract {
     protected edges:EdgeAbstract[];
     protected graphElements:GroupAbstract[];
 
+    protected scaleExponent = 0.5;
+    protected scaleFactor = (1 / 4.0);
+
     constructor(protected plane:Plane) {
         super(plane);
 
         this.nodetype = GroupSimple;
-
-        //this.layoutClass = GraphLayoutRandom;
         this.layoutClass = GraphLayoutFdlCommunities;
     }
 
@@ -48,7 +49,7 @@ export class GroupGraphAbstract extends GraphAbstract {
 
         this.graphElements.forEach((g:GroupAbstract) => {
             let communityDataObj = <BasicGroup>g.getDataEntity();
-            g.setScale(communityDataObj.getEntities().length / max);
+            g.setScale(Math.pow(communityDataObj.getEntities().length, this.scaleExponent) * this.scaleFactor);
         });
         this.plane.getGraphScene().render();
     }
@@ -97,7 +98,6 @@ export class GroupGraphAbstract extends GraphAbstract {
         }.bind(this));
 
     }
-
 
 
 }

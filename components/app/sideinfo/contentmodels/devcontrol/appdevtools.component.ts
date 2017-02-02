@@ -4,6 +4,7 @@ import {UiService} from "../../../../../services/ui.service";
 import {Plane} from "../../../../plane/plane";
 import {GroupGraphAbstract} from "../../../../graphvis/graphs/graphgroupabstract";
 import {GroupCombinedGraphAbstract} from "../../../../graphvis/graphs/graphgroupcombinedabstract";
+import {CombinedCommunityGraph} from "../../../../../../afel/graph/graphs/combinedcommunitygraph";
 
 
 @Component({
@@ -34,7 +35,7 @@ export class SideInfoContentAppDevToolsComponent implements OnDestroy {
         let p1 = planes[2];
         let p2 = planes[3];
 
-        GroupCombinedGraphAbstract.generateComparedGraph(
+        CombinedCommunityGraph.generateComparedGraph(
             <GroupGraphAbstract>p1.getGraph(),
             <GroupGraphAbstract>p2.getGraph()
         );

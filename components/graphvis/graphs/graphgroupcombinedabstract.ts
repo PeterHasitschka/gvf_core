@@ -10,9 +10,11 @@ import {BasicGroup} from "../data/databasicgroup";
 
 export class GroupCombinedGraphAbstract extends GroupGraphAbstract {
 
+    protected static planeTitle = '<i class="fa fa-compress" aria-hidden="true"></i> <strong>Intersected</strong> Groups';
 
     constructor(protected plane:Plane) {
         super(plane);
+        this.dataGetterMethod = null;
     }
 
 
@@ -74,7 +76,7 @@ export class GroupCombinedGraphAbstract extends GroupGraphAbstract {
         });
         console.log(groupsToAdd);
 
-        let p = new Plane('<i class="fa fa-compress" aria-hidden="true"></i> <strong>Merged</strong> Communities',
+        let p = new Plane(this.planeTitle,
             this, UiService.getInstance(), function () {
                 return groupsToAdd;
             });
