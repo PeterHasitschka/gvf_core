@@ -20,10 +20,7 @@ import {GroupAbstract} from "./groups/groupelementabstract";
  */
 export abstract class GraphAbstract {
 
-    /**
-     * The data of a specific type (learner, resource, ...) for this plane
-     */
-    protected dataGetterMethod;
+
 
     protected nodetype;
     protected layoutClass:any;
@@ -39,29 +36,10 @@ export abstract class GraphAbstract {
 
     }
 
-    public setDataGetterMethod(fct:Function){
-        this.dataGetterMethod = fct;
-    }
 
 
-    /**
-     * Init method for loading data and creating the layout and graphelements
-     */
+
     public init():void {
-        this.loadData();
-        this.edges = this.createEdges();
-        this.layout = new this.layoutClass(this.plane, this.graphElements, this.edges);
-        this.edges.forEach((edge:EdgeAbstract) => {
-            this.plane.getGraphScene().addObject(edge);
-        });
-        this.layout.setInitPositions(() => {
-            //this.plane.getGraphScene().render();
-            this.layout.calculateLayout(function () {
-                console.log("Finished calculating layout");
-                this.plane.getGraphScene().render();
-                this.addEventListeners();
-            }.bind(this));
-        });
     }
 
     /**
@@ -88,20 +66,7 @@ export abstract class GraphAbstract {
     }
 
 
-    /**
-     * Loading data with the defined getter method
-     * Nodes get created and stored in array
-     * Afterwards layout gets calculated by the defined layout class
-     */
-    protected loadData():void {
-        let data = this.dataGetterMethod();
 
-        data.forEach((data:DataAbstract) => {
-            let n = new this.nodetype(0, 0, data, this.plane);
-            this.plane.getGraphScene().addObject(n);
-            this.graphElements.push(n);
-        });
-    }
 
     /**
      * Get a @see{NodeAbstract} Object by its data-id

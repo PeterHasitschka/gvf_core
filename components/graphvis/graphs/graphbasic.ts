@@ -12,6 +12,7 @@ import {NodeSimple} from "./nodes/nodelementsimple";
 import {BasicEntity} from "../data/databasicentity";
 import {BasicConnection} from "../data/databasicconnection";
 import {NodeAbstract} from "./nodes/nodeelementabstract";
+import {GraphAutoCreateAbstract} from "./graphautocreateabstract";
 
 
 /**
@@ -19,7 +20,7 @@ import {NodeAbstract} from "./nodes/nodeelementabstract";
  * Thus its Data consists of @see{Resource} data objects.
  * @author Peter Hasitschka
  */
-export class BasicGraph extends GraphAbstract {
+export class BasicGraph extends GraphAutoCreateAbstract {
 
     protected edges:EdgeAbstract[];
 

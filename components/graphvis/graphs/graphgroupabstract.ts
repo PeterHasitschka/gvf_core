@@ -10,6 +10,7 @@ import {ElementAbstract} from "./graphelementabstract";
 import {GraphLayoutFdlCommunities} from "./layouts/graphlayoutfdl_communities";
 import {NodeAbstract} from "./nodes/nodeelementabstract";
 import {UiService} from "../../../services/ui.service";
+import {GraphAutoCreateAbstract} from "./graphautocreateabstract";
 
 
 /**
@@ -17,7 +18,7 @@ import {UiService} from "../../../services/ui.service";
  * Thus its Data consists of @see{Resource} data objects.
  * @author Peter Hasitschka
  */
-export class GroupGraphAbstract extends GraphAbstract {
+export class GroupGraphAbstract extends GraphAutoCreateAbstract {
 
     protected edges:EdgeAbstract[];
     protected graphElements:GroupAbstract[];
