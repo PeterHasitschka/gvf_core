@@ -47,22 +47,16 @@ export abstract class GraphBipartiteProjectionAbstract extends GraphAbstract {
         let connections = this.getConnectionsData();
 
 
-
-
         data1.forEach((data:DataAbstract) => {
             let n = new this.nodetype(0, 0, data, this.plane);
             this.plane.getGraphScene().addObject(n);
             this.graphElements.push(n);
         });
 
-        this.edges = this.createBipartiteProjectionEdges(data1, data2, connections);
-
-
-
+        this.edges = this.createBipartiteProjectionEdges(data1[0].constructor, data2[0].constructor, connections);
 
 
         this.layout = new this.layoutClass(this.plane, this.graphElements, this.edges);
-
 
 
         // this.edges.forEach((edge:EdgeAbstract) => {
@@ -79,14 +73,67 @@ export abstract class GraphBipartiteProjectionAbstract extends GraphAbstract {
     }
 
 
-    protected createBipartiteProjectionEdges(dataset1, ddataset2, connections){
+    protected createBipartiteProjectionEdges(d1Type:Function, d2Type:Function, connections:BasicConnection[]) {
 
-        console.log(dataset1);
-        console.log(ddataset2);
-        console.log(connections);
+        // console.log(d1Type);
+        // console.log(d2Type);
+        // console.log(connections);
+
+        let d1Containedd2s = {};
+        let alreadyAffectedD1EntityPairs = [];
+
+        connections.forEach((c:BasicConnection) => {
+            let connectionEntities = c.getEntities();
+            let d1Entity;
+            let d2Entity;
+            if (connectionEntities.src.constructor === d1Type) {
+                d1Entity = connectionEntities.src;
+                if (connectionEntities.dst.constructor !== d2Type)
+                    console.error("SECOND CONNECTION TYPE MUST MATCH ", d2Type.name);
+                d2Entity = connectionEntities.dst;
+            }
+            else if (connectionEntities.dst.constructor === d1Type) {
+                d1Entity = connectionEntities.dst;
+                if (connectionEntities.src.constructor !== d2Type)
+                    console.error("SECOND CONNECTION TYPE MUST MATCH ", d2Type.name);
+                d2Entity = connectionEntities.src;
+            }
+            else
+                console.error("COULD NOT FIND DATA WITH TYPE ", d1Type.name);
 
 
+            if (typeof d1Containedd2s[d1Entity.getId()] === "undefined")
+                d1Containedd2s[d1Entity.getId()] = [];
+            d1Containedd2s[d1Entity.getId()].push(d2Entity.getId());
+        });
 
+        console.log(d1Containedd2s);
+
+
+        for (let d1_1Key in d1Containedd2s) {
+
+            for (let d1_2Key in d1Containedd2s) {
+                if (d1_1Key === d1_2Key)
+                    continue;
+
+                // Prevent going through the same combination twice
+                let keyCombPairStr = Math.min(parseInt(d1_1Key), parseInt(d1_2Key)) + "-" + Math.max(parseInt(d1_1Key), parseInt(d1_2Key));
+                if (alreadyAffectedD1EntityPairs.indexOf(keyCombPairStr) > -1)
+                    continue;
+                alreadyAffectedD1EntityPairs.push(keyCombPairStr);
+
+
+                let weight = 0;
+                d1Containedd2s[d1_1Key].forEach((d2Id) => {
+                    d1Containedd2s[d1_2Key].indexOf(d2Id) > -1 ? weight++ : null;
+                });
+                console.log("Weight", weight);
+                console.warn("CREATE EDGES HERE!");
+                // console.log(d1Containedd2s[d1_1Key], d1Containedd2s[d1_2Key]);
+            }
+        }
+
+        console.log(alreadyAffectedD1EntityPairs);
         return [];
     }
 
