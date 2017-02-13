@@ -85,7 +85,7 @@ export abstract class GraphBipartiteProjectionAbstract extends GraphAbstract {
         console.log(ddataset2);
         console.log(connections);
 
-        
+
 
         return [];
     }

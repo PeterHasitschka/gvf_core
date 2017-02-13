@@ -36,7 +36,14 @@ export abstract class GraphAbstract {
 
     }
 
+    /**
+     * The data of a specific type (learner, resource, ...) for this plane
+     */
+    protected dataGetterMethod;
 
+    public setDataGetterMethod(fct:Function){
+        this.dataGetterMethod = fct;
+    }
 
 
     public init():void {

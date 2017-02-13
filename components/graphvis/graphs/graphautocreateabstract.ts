@@ -20,14 +20,7 @@ import {GraphAbstract} from "./graphabstract";
  */
 export abstract class GraphAutoCreateAbstract  extends GraphAbstract{
 
-    /**
-     * The data of a specific type (learner, resource, ...) for this plane
-     */
-    protected dataGetterMethod;
 
-    public setDataGetterMethod(fct:Function){
-        this.dataGetterMethod = fct;
-    }
 
     /**
      * Init method for loading data and creating the layout and graphelements
