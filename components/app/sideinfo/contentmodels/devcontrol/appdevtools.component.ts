@@ -30,16 +30,7 @@ export class SideInfoContentAppDevToolsComponent implements OnDestroy {
         UiService.logLevelLimit = val;
     }
 
-    private compareCommunityPlanes() {
-        let planes = Plane.getPlanes();
-        let p1 = planes[2];
-        let p2 = planes[3];
-        alert("REMOVED functionality due to AFEL related stuff in CORE!");
-        // CombinedCommunityGraph.generateComparedGraph(
-        //     <GroupGraphAbstract>p1.getGraph(),
-        //     <GroupGraphAbstract>p2.getGraph()
-        // );
-    }
+
 
     ngOnDestroy() {
         alert("Destroyed");
