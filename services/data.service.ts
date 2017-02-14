@@ -6,7 +6,6 @@ import 'rxjs/add/operator/toPromise'
 import {BasicEntity} from "../components/graphvis/data/databasicentity";
 import {BasicConnection} from "../components/graphvis/data/databasicconnection";
 import {BasicGroup} from "../components/graphvis/data/databasicgroup";
-import {Learner} from "../../afel/graph/data/learner";
 import {NodeSimple} from "../components/graphvis/graphs/nodes/nodelementsimple";
 import {UiService} from "./ui.service";
 

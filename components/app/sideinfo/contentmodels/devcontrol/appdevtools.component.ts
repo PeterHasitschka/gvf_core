@@ -4,7 +4,7 @@ import {UiService} from "../../../../../services/ui.service";
 import {Plane} from "../../../../plane/plane";
 import {GroupGraphAbstract} from "../../../../graphvis/graphs/graphgroupabstract";
 import {GroupCombinedGraphAbstract} from "../../../../graphvis/graphs/graphgroupcombinedabstract";
-import {CombinedCommunityGraph} from "../../../../../../afel/graph/graphs/combinedcommunitygraph";
+// import {CombinedCommunityGraph} from "../../../../../../afel/graph/graphs/combinedcommunitygraph";
 
 
 @Component({
@@ -34,11 +34,11 @@ export class SideInfoContentAppDevToolsComponent implements OnDestroy {
         let planes = Plane.getPlanes();
         let p1 = planes[2];
         let p2 = planes[3];
-
-        CombinedCommunityGraph.generateComparedGraph(
-            <GroupGraphAbstract>p1.getGraph(),
-            <GroupGraphAbstract>p2.getGraph()
-        );
+        alert("REMOVED functionality due to AFEL related stuff in CORE!");
+        // CombinedCommunityGraph.generateComparedGraph(
+        //     <GroupGraphAbstract>p1.getGraph(),
+        //     <GroupGraphAbstract>p2.getGraph()
+        // );
     }
 
     ngOnDestroy() {

@@ -7,7 +7,7 @@ import {BasicEntity} from "../../data/databasicentity";
 import {NodeAbstract} from "../nodes/nodeelementabstract";
 import Object3D = THREE.Object3D;
 import {UiService} from "../../../../services/ui.service";
-import {LearnerGraph} from "../../../../../afel/graph/graphs/learnergraph";
+// import {LearnerGraph} from "../../../../../afel/graph/graphs/learnergraph";
 
 /**
  * A simple node, derived from @see{NodeAbstract}
@@ -86,12 +86,12 @@ export abstract class GroupAbstract extends ElementAbstract {
     }
 
 
-    public highlight(render=false) {
+    public highlight(render = false) {
         this.groupNodeMesh.material['color'].setHex(this.highlightColor);
         super.highlight(render);
     }
 
-    public deHighlight(render=false) {
+    public deHighlight(render = false) {
         this.subNodes.forEach((e:ElementAbstract) => {
             e.deHighlight(render);
         });
@@ -136,7 +136,7 @@ export abstract class GroupAbstract extends ElementAbstract {
                 data.getRegisteredGraphElements().forEach((otherGraphElement:ElementAbstract) => {
                     if (otherGraphElement === element)
                         return;
-                    if (otherGraphElement.getPlane().getGraph().constructor === LearnerGraph)
+                    if (otherGraphElement.getPlane().getGraph().constructor === this.getPlane().getGraph().constructor)
                         return;
                     UiService.getInstance().addNodesToIntergraphConnection(element, otherGraphElement, "red");
                 });
