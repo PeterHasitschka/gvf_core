@@ -21,6 +21,9 @@ import {BasicConnection} from "../data/databasicconnection";
  */
 export abstract class GraphBipartiteProjectionAbstract extends GraphAbstract {
 
+    protected nodetype;
+    protected bipartiteEdgeType;
+    protected weightLimit = 0;
 
     protected getPrimaryData():DataAbstract[] {
         return null;
@@ -54,14 +57,12 @@ export abstract class GraphBipartiteProjectionAbstract extends GraphAbstract {
         });
 
         this.edges = this.createBipartiteProjectionEdges(data1[0].constructor, data2[0].constructor, connections);
-
-
         this.layout = new this.layoutClass(this.plane, this.graphElements, this.edges);
+        this.edges.forEach((edge:EdgeAbstract) => {
+            //console.log(edge);
+            this.plane.getGraphScene().addObject(edge);
+        });
 
-
-        // this.edges.forEach((edge:EdgeAbstract) => {
-        //     this.plane.getGraphScene().addObject(edge);
-        // });
         this.layout.setInitPositions(() => {
             //this.plane.getGraphScene().render();
             this.layout.calculateLayout(function () {
@@ -78,6 +79,7 @@ export abstract class GraphBipartiteProjectionAbstract extends GraphAbstract {
         // console.log(d1Type);
         // console.log(d2Type);
         // console.log(connections);
+        let edges = [];
 
         let d1Containedd2s = {};
         let alreadyAffectedD1EntityPairs = [];
@@ -107,7 +109,7 @@ export abstract class GraphBipartiteProjectionAbstract extends GraphAbstract {
             d1Containedd2s[d1Entity.getId()].push(d2Entity.getId());
         });
 
-        console.log(d1Containedd2s);
+        //console.log(d1Containedd2s);
 
 
         for (let d1_1Key in d1Containedd2s) {
@@ -127,14 +129,32 @@ export abstract class GraphBipartiteProjectionAbstract extends GraphAbstract {
                 d1Containedd2s[d1_1Key].forEach((d2Id) => {
                     d1Containedd2s[d1_2Key].indexOf(d2Id) > -1 ? weight++ : null;
                 });
-                console.log("Weight", weight);
-                console.warn("CREATE EDGES HERE!");
+                //console.log("Weight", d1_1Key, d1_2Key, weight);
+                //console.warn("CREATE EDGES HERE!");
                 // console.log(d1Containedd2s[d1_1Key], d1Containedd2s[d1_2Key]);
+
+
+                if (weight < this.weightLimit)
+                    continue;
+
+                let n1 = this.getNodeByDataId(parseInt(d1_1Key));
+                let n2 = this.getNodeByDataId(parseInt(d1_2Key));
+
+                if (n1 === null || n2 === null) {
+                    console.warn("One of the graphelements for creating an edge is null!", n1, n2, d1_1Key, d1_2Key);
+                    return;
+                }
+
+                let learningConnection = new this.bipartiteEdgeType(n1, n2, this.plane);
+                n1.addEdge(learningConnection);
+                n2.addEdge(learningConnection);
+                edges.push(learningConnection);
+
             }
         }
 
-        console.log(alreadyAffectedD1EntityPairs);
-        return [];
+        //console.log(alreadyAffectedD1EntityPairs);
+        return edges;
     }
 
 
