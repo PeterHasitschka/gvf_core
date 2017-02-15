@@ -25,9 +25,9 @@ export abstract class GraphAbstract {
     protected nodetype;
     protected layoutClass:any;
     protected layout:LayoutInterface = null;
-    protected graphElements:ElementAbstract[];
+    protected graphElements:ElementAbstract[] = [];
     protected groups:BasicGroup[];
-    protected edges:EdgeAbstract[];
+    protected edges:EdgeAbstract[] = [];
 
 
     constructor(protected plane:Plane) {
