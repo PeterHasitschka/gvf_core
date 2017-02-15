@@ -1,4 +1,5 @@
 import {ElementAbstract} from "../graphs/graphelementabstract";
+import {BasicConnection} from "./databasicconnection";
 /**
  * Abstract Data Object
  * Holds an Id, that is incremented by each derived Class on its own
@@ -8,6 +9,7 @@ export abstract class DataAbstract {
 
     protected static dataList:DataAbstract[];
     protected registeredGraphElements:ElementAbstract[] = [];
+    protected connections:BasicConnection[] = [];
 
     /**
      * Data object, which at least holds an ID taken as parameter on constructor
@@ -67,4 +69,14 @@ export abstract class DataAbstract {
     public static getDataList():DataAbstract[] {
         return DataAbstract.dataList;
     }
+
+    public getConnections():BasicConnection[] {
+        return this.connections;
+    }
+
+    public addConnection(c:BasicConnection) {
+        this.connections.push(c);
+    }
+
+
 }

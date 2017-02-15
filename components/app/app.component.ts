@@ -35,7 +35,6 @@ export class AppComponent implements OnInit {
      * Constructor
      */
     constructor(private dataService:DataService, private uiService:UiService, private intergrapheventService:InterGraphEventService) {
-
         this.posEnum = SideInfoPositions;
     }
 
