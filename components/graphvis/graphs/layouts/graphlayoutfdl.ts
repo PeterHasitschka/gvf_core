@@ -14,7 +14,7 @@ export class GraphLayoutFdl extends GraphLayoutAbstract {
     protected WALL_REPULSION_FACTOR = 300;
     protected ITERATIONS = 150;
     protected VEOLOCITY_REDUCTION_DAMPING = 4000;
-
+    protected INTERVAL_TO_RENDER = 1;
     protected currentIteration = 0;
 
     constructor(protected plane:Plane, nodes:NodeAbstract[], edges:EdgeAbstract[]) {
@@ -36,8 +36,8 @@ export class GraphLayoutFdl extends GraphLayoutAbstract {
                 edge.updatePositions();
             });
 
-            // if (this.currentIteration % 3 === 0)
-            this.plane.getGraphScene().render();
+            if (this.currentIteration % this.INTERVAL_TO_RENDER === 0)
+                this.plane.getGraphScene().render();
 
             this.currentIteration++;
             if (this.currentIteration < this.ITERATIONS)
@@ -140,7 +140,7 @@ export class GraphLayoutFdl extends GraphLayoutAbstract {
 
 
             // Decrease velocity
-            this.VELOCITY *= (1 - (this.currentIteration / this.ITERATIONS)/ this.VEOLOCITY_REDUCTION_DAMPING);
+            this.VELOCITY *= (1 - (this.currentIteration / this.ITERATIONS) / this.VEOLOCITY_REDUCTION_DAMPING);
 
             /**
              * Finally calculate V's velocity
