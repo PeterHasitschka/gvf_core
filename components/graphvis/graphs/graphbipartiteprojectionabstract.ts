@@ -49,19 +49,27 @@ export abstract class GraphBipartiteProjectionAbstract extends GraphAbstract {
         let data2 = this.getSecondaryData();
         let connections = this.getConnectionsData();
 
-
+        console.log("Creating Nodes...");
         data1.forEach((data:DataAbstract) => {
             let n = new this.nodetype(0, 0, data, this.plane);
             this.plane.getGraphScene().addObject(n);
             this.graphElements.push(n);
         });
+        console.log("DONE Creating Nodes...");
 
+        console.log("Creating Edges...");
         this.edges = this.createBipartiteProjectionEdges(data1[0].constructor, data2[0].constructor, connections);
+        console.log("DONE Creating Edges...");
         this.layout = new this.layoutClass(this.plane, this.graphElements, this.edges);
+
+        console.log("Adding Edges...");
         this.edges.forEach((edge:EdgeAbstract) => {
             //console.log(edge);
             this.plane.getGraphScene().addObject(edge);
         });
+        console.log("DONE Adding Edges...");
+
+        console.log("Bipartite graph:",this.edges.length, this.graphElements.length);
 
         this.layout.setInitPositions(() => {
             //this.plane.getGraphScene().render();
@@ -109,7 +117,7 @@ export abstract class GraphBipartiteProjectionAbstract extends GraphAbstract {
             d1Containedd2s[d1Entity.getId()].push(d2Entity.getId());
         });
 
-        //console.log(d1Containedd2s);
+        console.log(d1Containedd2s);
 
 
         for (let d1_1Key in d1Containedd2s) {
@@ -153,7 +161,7 @@ export abstract class GraphBipartiteProjectionAbstract extends GraphAbstract {
             }
         }
 
-        //console.log(alreadyAffectedD1EntityPairs);
+        console.log(alreadyAffectedD1EntityPairs);
         return edges;
     }
 
