@@ -120,11 +120,11 @@ export class GraphLayoutFdl extends GraphLayoutAbstract {
 
             //Check if already outside of the wall
             if (posX < (0 - canvWHalf)) {
-                wallDistX = 10;
+                wallDistX = + 10;
                 //console.log("X < left edge", wallDistX);
             }
             else if (posX > canvWHalf) {
-                wallDistX = 10;
+                wallDistX = -10;
                 //console.log("X > right edge", wallDistX);
             }
             if (posY < (0 - canvHHalf)) {

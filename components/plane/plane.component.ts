@@ -72,6 +72,11 @@ export class PlaneComponent {
         }
     }
 
+    @HostListener('wheel', ['$event'])
+    onWheel(event) {
+        console.log(event.deltaY);
+    }
+
 
     onResize(event):void {
         let diffX = event.screenX - this.resizeInit.x;

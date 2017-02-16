@@ -50,6 +50,7 @@ export class GraphScene {
         this.threeScene.add(this.threeCamera);
 
         this.threeCamera.position.z = config.camera.z;
+        //this.threeCamera['zoom'] = 0.5;
 
         this.setSizeToPlane();
         this.threeRenderer.setClearColor(0xffffff, 0);
