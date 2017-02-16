@@ -21,7 +21,7 @@ export class GraphVisConfig {
         },
 
         backplane: {
-            color: 0xFFEEEE,
+            color: '#FFEEEE',
             padding: 0,
             z: -100
         }

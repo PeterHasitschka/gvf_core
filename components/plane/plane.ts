@@ -57,6 +57,7 @@ export class Plane {
         this.scene = new GraphScene(container, this);
         this.createBackPlane();
 
+
         /**
          * Create Graph, depending on graphtype-string
          */
@@ -94,8 +95,12 @@ export class Plane {
      * Creating a plane behind all graphelements. Useful when rotating etc.
      */
     private createBackPlane() {
-        var squareGeometry = new THREE.Geometry();
         let config = GraphVisConfig.scene.backplane;
+        this.setBackgroundColor(config.color);
+
+        /*
+        var squareGeometry = new THREE.Geometry();
+
         let padding = config.padding;
         let z = config.z;
         let halfW = this.canvasDimensions['x'] / 2 - padding;
@@ -119,6 +124,7 @@ export class Plane {
         //this.dummyRotate(this.scene.getObjectGroup(), new THREE.Vector3(0, 0 - halfW, z), -0.3);
         this.scene.addObject(squareMesh);
         this.backplaneMesh = squareMesh;
+        */
     }
 
     private dummyRotate(object, axis, radians) {
@@ -159,8 +165,9 @@ export class Plane {
         return this.graphclass;
     }
 
-    public setBackgroundColor(color:number) {
-        this.backplaneMesh.material['color'].setHex(color);
+    public setBackgroundColor(color:string) {
+        //this.backplaneMesh.material['color'].setHex(color);
+        document.getElementById(Plane.containerPrefix + this.containerId).style.setProperty("background", color);
     }
 
     public close() {
