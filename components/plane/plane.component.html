@@ -1,9 +1,13 @@
-<div class="graphvisplanecontainer" id="{{plane.getContainerPrefix()}}{{getId()}}">
+<div class="graphvisplanecontainer">
     <div class="graphvisplaneheader">
         <div class="graphvisplanetitle" [innerHTML]="plane.getName()"></div>
         <div class="graphvisplanectrl">
             <!--<div class="graphvisplanebtn" (click)="plane.close()"><i class="fa fa-window-close" aria-hidden="true"></i></div>-->
-            <div class="graphvisplanebtn" (click)="plane.minimize()"><i class="fa fa-window-minimize" aria-hidden="true"></i></div>
+            <div class="graphvisplanebtn" (click)="plane.minimize()"><i class="fa fa-window-minimize"
+                                                                        aria-hidden="true"></i></div>
         </div>
     </div>
+    <div class="graphvisplanecontainercontent" id="{{plane.getContainerPrefix()}}{{getId()}}">
+    </div>
+    <div class="graphvisplaneresizer"></div>
 </div>

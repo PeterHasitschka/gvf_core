@@ -42,6 +42,7 @@ export class GraphworkspaceComponent implements OnInit {
         });
     }
 
+
     /**
      * Returning all registered planes
      */

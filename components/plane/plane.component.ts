@@ -20,6 +20,12 @@ import {InterGraphEventService, INTERGRAPH_EVENTS} from "../../services/intergra
 export class PlaneComponent {
 
     private static counter:number = 0;
+    private static RESIZECSSCLASS = 'graphvisplaneresizer';
+
+    private resize = false;
+    private resizeInit = {x: null, y: null, w:null, h:null};
+    private resizeGraphPlaneHtmlElement = null;
+
 
     private allData = {
         learners: null,
@@ -43,11 +49,38 @@ export class PlaneComponent {
      */
     @HostListener('mousemove', ['$event'])
     onMousemove(event:MouseEvent) {
+
         if (this.intergrapheventService.planeHovered === this.getId())
             return;
         this.intergrapheventService.planeHovered = this.getId();
         this.intergrapheventService.send(INTERGRAPH_EVENTS.GRAPH_LEFT, null);
     }
+
+
+    @HostListener('mousedown', ['$event'])
+    onMousedown(event:MouseEvent) {
+
+        if (event['path'][0]['className'] === PlaneComponent.RESIZECSSCLASS) {
+            this.resize = true;
+            this.resizeInit.x = event.screenX;
+            this.resizeInit.y = event.screenY;
+
+            this.resizeGraphPlaneHtmlElement = event['path'][2];
+
+            this.resizeInit.w = this.resizeGraphPlaneHtmlElement.clientWidth;
+            this.resizeInit.h = this.resizeGraphPlaneHtmlElement.clientHeight;
+        }
+    }
+
+
+    onResize(event):void {
+        let diffX = event.screenX - this.resizeInit.x;
+        let diffY = event.screenY - this.resizeInit.y;
+
+        this.resizeGraphPlaneHtmlElement.style.width = this.resizeInit.w + diffX;
+        this.resizeGraphPlaneHtmlElement.style.height = this.resizeInit.h + diffY;
+    }
+
 
     /**
      * Initializing the scene on the @see{Plane} after making sure that
@@ -66,6 +99,13 @@ export class PlaneComponent {
 
         window.setTimeout(function () {
             this.plane.initScene(this.id);
+            this.intergrapheventService.addListener(INTERGRAPH_EVENTS.MOUSE_UP_GLOBAL, function () {
+                this.resize = false;
+            }.bind(this));
+            this.intergrapheventService.addListener(INTERGRAPH_EVENTS.MOUSE_DRAG_GLOBAL, function (e) {
+                if (this.resize)
+                    this.onResize(e.detail);
+            }.bind(this));
         }.bind(this), 0)
     }
 

@@ -9,7 +9,9 @@ export enum INTERGRAPH_EVENTS {
     NODE_LEFT,
     GROUP_HOVERED,
     GROUP_LEFT,
-    GRAPH_LEFT
+    GRAPH_LEFT,
+    MOUSE_UP_GLOBAL,
+    MOUSE_DRAG_GLOBAL
 }
 
 @Injectable()

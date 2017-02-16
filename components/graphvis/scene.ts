@@ -51,7 +51,7 @@ export class GraphScene {
 
         this.threeCamera.position.z = config.camera.z;
 
-        this.threeRenderer.setSize(canvasW, canvasH);
+        this.threeRenderer.setSize(canvasW, canvasH, false);
         this.threeRenderer.setClearColor(0xffffff, 0);
 
         this.container.appendChild(this.threeRenderer.domElement);
@@ -63,7 +63,6 @@ export class GraphScene {
         this.objectGroup = new THREE.Group();
         this.objectGroup.name = "Graph Scene Group";
         this.threeScene.add(this.objectGroup);
-
     }
 
     /**

@@ -16,7 +16,7 @@ export class Plane {
 
     private containerId:number;
     private scene:GraphScene;
-    static containerPrefix:string = "graphvisplanecontainer_";
+    static containerPrefix:string = "graphvisplanecontainercontent";
     private static planes:Plane[] = [];
     private graph:GraphAbstract;
     private canvasDimensions;
@@ -83,7 +83,7 @@ export class Plane {
      */
     private calculateCanvasSize():Object {
         var container = document.getElementById(Plane.containerPrefix + this.containerId);
-        return {x: container.clientWidth - 0, y: container.clientHeight - 30};
+        return {x: container.clientWidth - 0, y: container.clientHeight};
     }
 
     public getCanvasSize():Object {

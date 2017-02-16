@@ -29,7 +29,7 @@ export class AppComponent implements OnInit {
     @ViewChild(GraphworkspaceComponent) graphworkspace:GraphworkspaceComponent;
 
     private posEnum;
-
+    private isMouseDown = false;
 
     /**
      * Constructor
@@ -38,6 +38,24 @@ export class AppComponent implements OnInit {
         this.posEnum = SideInfoPositions;
     }
 
+
+    @HostListener('mouseup', ['$event'])
+    onMouseup(event:MouseEvent) {
+        this.intergrapheventService.send(INTERGRAPH_EVENTS.MOUSE_UP_GLOBAL, null);
+        this.isMouseDown = false;
+    }
+
+    @HostListener('mousedown', ['$event'])
+    onMousedown(event:MouseEvent) {
+        this.isMouseDown = true;
+    }
+
+    @HostListener('mousemove', ['$event'])
+    onMousemove(event:MouseEvent) {
+        if (this.isMouseDown) {
+            this.intergrapheventService.send(INTERGRAPH_EVENTS.MOUSE_DRAG_GLOBAL, event);
+        }
+    }
 
 
     ngOnInit() {
@@ -85,7 +103,7 @@ export class AppComponent implements OnInit {
 
 
         let pluginList = GvfPlugins.plugins.onInit;
-        UiService.consolelog("Loading " + pluginList.length + "plugins",this,null, 3);
+        UiService.consolelog("Loading " + pluginList.length + "plugins", this, null, 3);
         for (let pluginClass of pluginList) {
             let plugin = new pluginClass();
             plugin.runAfterInit();
