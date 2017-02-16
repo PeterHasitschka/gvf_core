@@ -23,7 +23,7 @@ export class PlaneComponent {
     private static RESIZECSSCLASS = 'graphvisplaneresizer';
 
     private resize = false;
-    private resizeInit = {x: null, y: null, w:null, h:null};
+    private resizeInit = {x: null, y: null, w: null, h: null};
     private resizeGraphPlaneHtmlElement = null;
 
 
@@ -81,6 +81,14 @@ export class PlaneComponent {
         this.resizeGraphPlaneHtmlElement.style.height = this.resizeInit.h + diffY;
     }
 
+    onStopResize():void {
+        if (!this.resize)
+            return;
+
+        this.resize = false;
+        this.plane.calculateCanvasSize();
+        this.plane.getGraphScene().setSizeToPlane();
+    }
 
     /**
      * Initializing the scene on the @see{Plane} after making sure that
@@ -100,7 +108,7 @@ export class PlaneComponent {
         window.setTimeout(function () {
             this.plane.initScene(this.id);
             this.intergrapheventService.addListener(INTERGRAPH_EVENTS.MOUSE_UP_GLOBAL, function () {
-                this.resize = false;
+                this.onStopResize();
             }.bind(this));
             this.intergrapheventService.addListener(INTERGRAPH_EVENTS.MOUSE_DRAG_GLOBAL, function (e) {
                 if (this.resize)

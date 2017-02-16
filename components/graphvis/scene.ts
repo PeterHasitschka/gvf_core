@@ -51,7 +51,7 @@ export class GraphScene {
 
         this.threeCamera.position.z = config.camera.z;
 
-        this.threeRenderer.setSize(canvasW, canvasH, false);
+        this.setSizeToPlane();
         this.threeRenderer.setClearColor(0xffffff, 0);
 
         this.container.appendChild(this.threeRenderer.domElement);
@@ -63,6 +63,20 @@ export class GraphScene {
         this.objectGroup = new THREE.Group();
         this.objectGroup.name = "Graph Scene Group";
         this.threeScene.add(this.objectGroup);
+    }
+
+    public setSizeToPlane() {
+        var canvasW = this.plane.getCanvasSize()["x"],
+            canvasH = this.plane.getCanvasSize()["y"];
+        this.threeRenderer.setSize(canvasW, canvasH, false);
+
+        this.threeCamera['left'] = -canvasW / 2;
+        this.threeCamera['right'] = canvasW / 2;
+        this.threeCamera['top'] = canvasH / 2;
+        this.threeCamera['bottom'] = -canvasH / 2;
+        this.threeCamera['updateProjectionMatrix']();
+
+        this.render();
     }
 
     /**

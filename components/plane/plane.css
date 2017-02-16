@@ -11,7 +11,10 @@ graph-plane {
     margin-bottom: 5px;
     width: calc(100% + 20px);
     margin-left: -10px;
+}
 
+.graphvisplanecontainer.semitransparent {
+    opacity:0.5;
 }
 
 .graphvisplaneheader {

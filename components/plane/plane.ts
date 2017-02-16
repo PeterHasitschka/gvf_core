@@ -48,7 +48,7 @@ export class Plane {
          * Determine HTML container
          */
         this.containerId = containerId;
-        this.canvasDimensions = this.calculateCanvasSize();
+        this.calculateCanvasSize();
         var container = document.getElementById(Plane.containerPrefix + this.containerId);
 
         /**
@@ -81,9 +81,9 @@ export class Plane {
     /**
      * Calculating the width and height of the defined container
      */
-    private calculateCanvasSize():Object {
+    public calculateCanvasSize() {
         var container = document.getElementById(Plane.containerPrefix + this.containerId);
-        return {x: container.clientWidth - 0, y: container.clientHeight};
+        this.canvasDimensions = {x: container.clientWidth - 0, y: container.clientHeight};
     }
 
     public getCanvasSize():Object {
@@ -172,10 +172,23 @@ export class Plane {
         this.uiService.setPlaneMinimized(this);
     }
 
+    public maximize() {
+        this.restore();
+        let planeHtml = document.getElementById(Plane.containerPrefix + this.containerId).parentElement.parentElement;
+        planeHtml.style.width = planeHtml.parentElement.clientWidth.toString();
+        planeHtml.style.height = planeHtml.parentElement.clientHeight.toString();
+        this.calculateCanvasSize();
+        this.getGraphScene().setSizeToPlane();
+    }
+
     public restore() {
         this.isMinimized = false;
         this.uiService.setPlaneRestored(this);
-        this.getGraphScene().render();
+        window.setTimeout(0, function () {
+            this.calculateCanvasSize();
+            this.getGraphScene().setSizeToPlane();
+            this.getGraphScene().render();
+        }.bind(this));
     }
 
     public getIsMinimized() {
