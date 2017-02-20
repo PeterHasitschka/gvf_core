@@ -182,8 +182,8 @@ export class Plane {
     public maximize() {
         this.restore();
         let planeHtml = document.getElementById(Plane.containerPrefix + this.containerId).parentElement.parentElement;
-        planeHtml.style.width = planeHtml.parentElement.clientWidth.toString();
-        planeHtml.style.height = planeHtml.parentElement.clientHeight.toString();
+        planeHtml.style.width = planeHtml.parentElement.parentElement.parentElement.clientWidth.toString();
+        planeHtml.style.height = planeHtml.parentElement.parentElement.parentElement.clientHeight.toString();
         this.calculateCanvasSize();
         this.getGraphScene().setSizeToPlane();
     }

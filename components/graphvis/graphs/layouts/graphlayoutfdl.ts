@@ -120,7 +120,7 @@ export class GraphLayoutFdl extends GraphLayoutAbstract {
 
             //Check if already outside of the wall
             if (posX < (0 - canvWHalf)) {
-                wallDistX = + 10;
+                wallDistX = +10;
                 //console.log("X < left edge", wallDistX);
             }
             else if (posX > canvWHalf) {
@@ -135,8 +135,11 @@ export class GraphLayoutFdl extends GraphLayoutAbstract {
                 //console.log("Y > upper edge", wallDistY);
             }
 
-            let wallRepX = 0 - Math.pow(wallDistX, -1) * this.WALL_REPULSION_FACTOR;
-            let wallRepY = 0 - Math.pow(wallDistY, -1) * this.WALL_REPULSION_FACTOR;
+            let wallRepX = 0;
+            let wallRepY = 0;
+
+            // wallRepX = 0 - Math.pow(wallDistX, -1) * this.WALL_REPULSION_FACTOR;
+            // wallRepY = 0 - Math.pow(wallDistY, -1) * this.WALL_REPULSION_FACTOR;
 
 
             // Decrease velocity
