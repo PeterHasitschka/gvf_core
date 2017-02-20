@@ -138,8 +138,10 @@ export class GraphLayoutFdl extends GraphLayoutAbstract {
             let wallRepX = 0;
             let wallRepY = 0;
 
-            // wallRepX = 0 - Math.pow(wallDistX, -1) * this.WALL_REPULSION_FACTOR;
-            // wallRepY = 0 - Math.pow(wallDistY, -1) * this.WALL_REPULSION_FACTOR;
+            if (this.WALL_REPULSION_FACTOR !== null) {
+                wallRepX = 0 - Math.pow(wallDistX, -1) * this.WALL_REPULSION_FACTOR;
+                wallRepY = 0 - Math.pow(wallDistY, -1) * this.WALL_REPULSION_FACTOR;
+            }
 
 
             // Decrease velocity
