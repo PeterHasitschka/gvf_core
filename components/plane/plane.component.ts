@@ -74,7 +74,11 @@ export class PlaneComponent {
 
     @HostListener('wheel', ['$event'])
     onWheel(event) {
-        console.log(event.deltaY);
+        if (event.deltaY < 0)
+            this.plane.getGraphScene().zoomIn();
+        else if (event.deltaY > 0)
+            this.plane.getGraphScene().zoomOut();
+        return false;
     }
 
 

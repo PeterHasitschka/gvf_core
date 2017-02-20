@@ -99,6 +99,17 @@ export class GraphScene {
 
     }
 
+    public zoomIn():void {
+        this.threeCamera['zoom'] *= GraphVisConfig.scene.camera.zoomfactor;
+        this.threeCamera['updateProjectionMatrix']();
+        this.render();
+    }
+
+    public zoomOut():void {
+        this.threeCamera['zoom'] /= GraphVisConfig.scene.camera.zoomfactor;
+        this.threeCamera['updateProjectionMatrix']();
+        this.render();
+    }
 
     public getThreeCamera():THREE.Camera {
         return this.threeCamera;

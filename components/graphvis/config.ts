@@ -17,7 +17,8 @@ export class GraphVisConfig {
         far: 10000,
 
         camera: {
-            z: 330
+            z: 330,
+            zoomfactor: 1.1
         },
 
         backplane: {
@@ -41,7 +42,7 @@ export class GraphVisConfig {
             color: 0xffcc55,
             highlight_color: 0x00FFFF,
             z_pos: -1.0,
-            opacity : 0.5,
+            opacity: 0.5,
 
         }
 
