@@ -208,8 +208,9 @@ export abstract class ElementAbstract extends THREE.Group implements GraphObject
         let workspace = UiService.getInstance().getGraphWorkSpaceSvgElement();
         let workspaceBounding = workspace.getBoundingClientRect();
 
-        let x = pos['x'] + canvasBounding.left - workspaceBounding.left + canvasBounding.width / 2;
-        let y = -pos['y'] + canvasBounding.top - workspaceBounding.top + canvasBounding.height / 2;
+        let zoom = this.plane.getGraphScene().getThreeCamera()['zoom'];
+        let x = pos['x'] * zoom + canvasBounding.left - workspaceBounding.left + canvasBounding.width / 2;
+        let y = -pos['y'] * zoom + canvasBounding.top - workspaceBounding.top + canvasBounding.height / 2;
 
         return ({x: x, y: y});
     }
