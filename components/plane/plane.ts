@@ -188,18 +188,6 @@ export class Plane {
         this.getGraphScene().setSizeToPlane();
     }
 
-    public requestFs(){
-        this.restore();
-        let planeHtml = document.getElementById(Plane.containerPrefix + this.containerId).parentElement.parentElement;
-        console.dir(planeHtml);
-        //planeHtml.requestFullScreen();
-    }
-
-    public cancelFs(){
-        this.restore();
-        let planeHtml = document.getElementById(Plane.containerPrefix + this.containerId).parentElement.parentElement;
-        //planeHtml.cancelFullScreen();
-    }
 
     public restore() {
         this.isMinimized = false;
