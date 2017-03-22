@@ -3,6 +3,10 @@
         <div class="graphvisplanetitle" [innerHTML]="plane.getName()"></div>
         <div class="graphvisplanectrl">
             <!--<div class="graphvisplanebtn" (click)="plane.close()"><i class="fa fa-window-close" aria-hidden="true"></i></div>-->
+            <div class="graphvisplanebtn" (click)="plane.requestFs()"><i class="fa fa-expand"
+                                                                                 aria-hidden="true"></i></div>
+            <div class="graphvisplanebtn" (click)="plane.cancelFs()"><i class="fa fa-compress"
+                                                                                aria-hidden="true"></i></div>
             <div class="graphvisplanebtn" (click)="plane.minimize()"><i class="fa fa-window-minimize"
                                                                         aria-hidden="true"></i></div>
             <div class="graphvisplanebtn" (click)="plane.maximize()"><i class="fa fa-window-maximize"
