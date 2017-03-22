@@ -13,7 +13,7 @@ export class ApiService {
 
     sendEvent(eventName:string, data) {
         let evt = new CustomEvent(eventName, {detail: data});
-        window.parent.dispatchEvent(evt);
+        //window.parent.dispatchEvent(evt);
     }
 
 }
