@@ -15,10 +15,10 @@ export abstract class NodeAbstract extends ElementAbstract {
         super(x, y, dataEntity, plane, options);
         this.name = "Node Abstract";
 
-
+        let nodeSize = typeof options['size'] !== "undefined" ? options['size'] : GraphVisConfig.graphelements.abstractnode.size;
 
         this.nodeMesh = new THREE.Mesh(new THREE.CircleGeometry(
-            GraphVisConfig.graphelements.abstractnode.size,
+            nodeSize,
             GraphVisConfig.graphelements.abstractnode.segments),
             new THREE.MeshBasicMaterial(
                 {
@@ -36,7 +36,7 @@ export abstract class NodeAbstract extends ElementAbstract {
     }
 
 
-    public highlight(render=false) {
+    public highlight(render = false) {
         this.nodeMesh.material['color'].setHex(this.highlightColor);
         // this.edges.forEach((e:EdgeAbstract) => {
         //     e.highlight();
@@ -45,7 +45,7 @@ export abstract class NodeAbstract extends ElementAbstract {
     }
 
 
-    public deHighlight(render=false) {
+    public deHighlight(render = false) {
         this.nodeMesh.material['color'].setHex(this.color);
         // this.edges.forEach((e:EdgeAbstract) => {
         //     e.deHighlight();
