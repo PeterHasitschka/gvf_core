@@ -1,19 +1,19 @@
 <div class="container-fluid">
     <div class="row headerrow">
         <div class="col-md-10">
-            <h1><i>Graph-Visualization-Framework</i> (GVF)</h1>
+            <h1 [innerHTML]="config.environment.title"></h1>
         </div>
         <div class="col-md-2">
             <p style="margin-top:10px">Prototype</p>
         </div>
     </div>
     <div class="row mainrow">
-        <div class="col-md-1 col-sm-12" id="mainleftcol">
+        <div *ngIf="config.environment.showleftcol" class="col-md-1 col-sm-12" id="mainleftcol">
             <sideinfo *ngFor="let sideinfoelement of (uiService.sideInfoElements)"
                       [infomodel]="sideinfoelement" [position]="posEnum.Left">
             </sideinfo>
         </div>
-        <div class="col-md-9  col-sm-12" id="mainmiddlecol">
+        <div [ngClass]="{'col-md-9' : config.environment.showleftcol, 'col-md-10' : !config.environment.showleftcol}" class="col-sm-12" id="mainmiddlecol">
             <graphworkspace></graphworkspace>
         </div>
         <div class="col-md-2  col-sm-12" id="mainrightcol">
@@ -22,7 +22,8 @@
             <!--<button (click)="addDummyGroupPlane()" type="button" class="btn btn-success">Add Dummy Community Plane-->
             <!--</button>-->
             <!--<br/>-->
-            <input id="show_interconnections_checkbox" type="checkbox" checked="{{uiService.getGraphWorkSpaceSvgElementVisible()}}"
+            <input id="show_interconnections_checkbox" type="checkbox"
+                   checked="{{uiService.getGraphWorkSpaceSvgElementVisible()}}"
                    (change)="onShowInterConnectionsClick($event)"/>
             <label for="show_interconnections_checkbox">Show the Inter-Graph-Connection-Canvas</label>
 

@@ -9,6 +9,11 @@ import {SimpleGroups} from "./graphs/graphgroupssimple";
  */
 export class GraphVisConfig {
 
+    public static environment = {
+        title: "<i>Graph-Visualization-Framework</i> (GVF)",
+        showleftcol : false
+    };
+
     /**
      * Scene related configuration
      */

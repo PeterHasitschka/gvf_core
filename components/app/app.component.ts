@@ -12,6 +12,7 @@ import {GvfPlugins} from "../../../plugins/plugins";
 import {GvfPluginInterface} from "../../../plugins/plugininterface";
 import {BasicGraph} from "../graphvis/graphs/graphbasic";
 import {SimpleGroups} from "../graphvis/graphs/graphgroupssimple";
+import {GraphVisConfig} from "../graphvis/config";
 
 @Component({
     selector: 'gvf-app',
@@ -30,12 +31,14 @@ export class AppComponent implements OnInit {
 
     private posEnum;
     private isMouseDown = false;
+    private config;
 
     /**
      * Constructor
      */
     constructor(private dataService:DataService, private uiService:UiService, private intergrapheventService:InterGraphEventService) {
         this.posEnum = SideInfoPositions;
+        this.config = GraphVisConfig;
     }
 
 
