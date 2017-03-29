@@ -25,4 +25,22 @@ export class BasicEntity extends DataAbstract {
     public static getDataList():BasicEntity[] {
         return BasicEntity.dataList;
     }
+
+
+    protected getConnectedNodeTypesByType(type) {
+
+        let out = [];
+        this.connections.forEach((c) => {
+
+            if (c.getEntities().dst.constructor === type) {
+                out.push(c.getEntities().dst);
+                return;
+            }
+            if (c.getEntities().src.constructor === type) {
+                out.push(c.getEntities().src);
+                return;
+            }
+        });
+        return out;
+    }
 }
