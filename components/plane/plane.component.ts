@@ -50,6 +50,10 @@ export class PlaneComponent {
     @HostListener('mousemove', ['$event'])
     onMousemove(event:MouseEvent) {
 
+        if (event.buttons === 1) {
+            this.cameraDrag(event.movementX, event.movementY);
+        }
+
         if (this.intergrapheventService.planeHovered === this.getId())
             return;
         this.intergrapheventService.planeHovered = this.getId();
@@ -130,5 +134,16 @@ export class PlaneComponent {
         return this.id;
     }
 
+
+    private cameraDrag(x, y) {
+        if (x === 0 && y === 0)
+            return;
+        let scene = this.plane.getGraphScene();
+        scene.getThreeCamera().translateX(0 - x);
+        scene.getThreeCamera().translateY(y);
+        scene.render();
+
+        //console.log(x, y);
+    }
 
 } 
