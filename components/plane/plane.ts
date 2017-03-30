@@ -97,34 +97,6 @@ export class Plane {
     private createBackPlane() {
         let config = GraphVisConfig.scene.backplane;
         this.setBackgroundColor(config.color);
-
-        /*
-        var squareGeometry = new THREE.Geometry();
-
-        let padding = config.padding;
-        let z = config.z;
-        let halfW = this.canvasDimensions['x'] / 2 - padding;
-        let halfH = this.canvasDimensions['y'] / 2 - padding;
-
-        squareGeometry.vertices.push(new THREE.Vector3(0 - halfW, halfH, 0));
-        squareGeometry.vertices.push(new THREE.Vector3(halfW, halfH, 0));
-        squareGeometry.vertices.push(new THREE.Vector3(halfW, 0 - halfH, 0));
-        squareGeometry.vertices.push(new THREE.Vector3(0 - halfW, 0 - halfH, 0));
-        squareGeometry.faces.push(new THREE.Face3(0, 1, 2));
-        squareGeometry.faces.push(new THREE.Face3(0, 2, 3));
-
-        var squareMaterial = new THREE.MeshBasicMaterial({
-            color: config.color,
-            side: THREE.DoubleSide
-        });
-
-        var squareMesh = new THREE.Mesh(squareGeometry, squareMaterial);
-        squareMesh.position.set(0, 0.0, z);
-        squareMesh.name = "Colored Back plane";
-        //this.dummyRotate(this.scene.getObjectGroup(), new THREE.Vector3(0, 0 - halfW, z), -0.3);
-        this.scene.addObject(squareMesh);
-        this.backplaneMesh = squareMesh;
-        */
     }
 
     private dummyRotate(object, axis, radians) {
@@ -205,5 +177,11 @@ export class Plane {
 
     public static getPlanes():Plane[] {
         return Plane.planes;
+    }
+
+
+    protected isCoordinateInsidePolygon(coordinate, polygon) {
+        var inside = require('point-in-polygon');
+        return inside(coordinate, polygon);
     }
 }
