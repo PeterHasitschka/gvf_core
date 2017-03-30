@@ -11,7 +11,7 @@ export class GraphVisConfig {
 
     public static environment = {
         title: "<i>Graph-Visualization-Framework</i> (GVF)",
-        showleftcol : false
+        showleftcol : true
     };
 
     /**
