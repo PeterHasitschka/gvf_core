@@ -3,12 +3,34 @@ import {Plane} from "../../plane/plane";
 import {NodeAbstract} from "./nodes/nodeelementabstract";
 import {BasicConnection} from "../data/databasicconnection";
 import {BasicEntity} from "../data/databasicentity";
+
+
+export enum AUTOGRAPH_EDGETYPES {
+    BY_DATA,
+    BY_FUNCTION
+}
+
 export class AutoGraph extends GraphAbstract {
 
     protected mappingStructure = {
         nodes: [
+            // {
+            //     data: DocumentDataEntity,
+            //     node: NodeDoc
+            // },
         ],
         edges: [
+            // {
+            //     type: AUTOGRAPH_EDGETYPES.BY_DATA,
+            //     dataConnection: AuthorAffiliationConnection,
+            //     edge: EdgeMovingAuthorAffiliation
+            // },
+            // {
+            //     type: AUTOGRAPH_EDGETYPES.BY_FUNCTION,
+            //     fct: this.getAffiliationOfAuthorsByDocNode.bind(this),
+            //     sourceNodeType: NodeDoc,
+            //     edge: EdgeBasic
+            // }
         ]
     };
 
@@ -42,25 +64,38 @@ export class AutoGraph extends GraphAbstract {
         });
 
 
-        this.graphElements.forEach((node:NodeAbstract) => {
-            node.getDataEntity().getConnections().forEach((connection:BasicConnection) => {
+        this.graphElements.forEach((srcNode:NodeAbstract) => {
+            srcNode.getDataEntity().getConnections().forEach((connection:BasicConnection) => {
 
                 let srcData = connection.getEntities().src;
                 let dstData = connection.getEntities().dst;
 
-                if (srcData !== node.getDataEntity())
+                if (srcData !== srcNode.getDataEntity())
                     return;
 
-                let srcNode = node;
-                let dstNode = this.getNodeByDataObject(dstData);
-
                 this.mappingStructure.edges.forEach((edgeMapping) => {
-                    if (connection.constructor === edgeMapping.dataConnection) {
-                        let edge = new edgeMapping.edge(srcNode, dstNode, this.plane);
-                        srcNode.addEdge(edge);
-                        dstNode.addEdge(edge);
-                        this.edges.push(edge);
-                        this.plane.getGraphScene().addObject(edge);
+
+                    if (edgeMapping.type === AUTOGRAPH_EDGETYPES.BY_DATA) {
+                        let dstNode = this.getNodeByDataObject(dstData);
+                        if (connection.constructor === edgeMapping.dataConnection) {
+                            let edge = new edgeMapping.edge(srcNode, dstNode, this.plane);
+                            srcNode.addEdge(edge);
+                            dstNode.addEdge(edge);
+                            this.edges.push(edge);
+                            this.plane.getGraphScene().addObject(edge);
+                        }
+                    } else if (edgeMapping.type === AUTOGRAPH_EDGETYPES.BY_FUNCTION) {
+                        if (edgeMapping.sourceNodeType !== srcNode.constructor)
+                            return;
+
+                        let nodesToConnect:NodeAbstract[] = edgeMapping.fct(srcNode);
+                        nodesToConnect.forEach((dstNode:NodeAbstract) => {
+                            let edge = new edgeMapping.edge(srcNode, dstNode, this.plane);
+                            srcNode.addEdge(edge);
+                            dstNode.addEdge(edge);
+                            this.edges.push(edge);
+                            this.plane.getGraphScene().addObject(edge);
+                        });
                     }
                 });
             });
