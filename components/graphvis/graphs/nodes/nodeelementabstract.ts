@@ -15,7 +15,7 @@ export abstract class NodeAbstract extends ElementAbstract {
         super(x, y, dataEntity, plane, options);
         this.name = "Node Abstract";
 
-        let nodeSize = typeof options['size'] !== "undefined" ? options['size'] : GraphVisConfig.graphelements.abstractnode.size;
+        let nodeSize = (options && typeof options['size'] !== "undefined") ? options['size'] : GraphVisConfig.graphelements.abstractnode.size;
 
         this.nodeMesh = new THREE.Mesh(new THREE.CircleGeometry(
             nodeSize,
