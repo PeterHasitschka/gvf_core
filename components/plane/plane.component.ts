@@ -1,7 +1,5 @@
 import {Component, Input, ViewEncapsulation, HostListener} from '@angular/core';
 import {Plane} from './plane';
-import {DataService} from '../../services/data.service';
-import {SideInfoPositions, SideInfoContentType, SideInfoModel} from "../app/sideinfo/sideinfomodel";
 import {UiService} from "../../services/ui.service";
 import {InterGraphEventService, INTERGRAPH_EVENTS} from "../../services/intergraphevents.service";
 
@@ -50,7 +48,7 @@ export class PlaneComponent {
     @HostListener('mousemove', ['$event'])
     onMousemove(event:MouseEvent) {
 
-        if (event.buttons === 1) {
+        if (event.buttons === 1 && !this.plane.getPolygonSelection().getActivated()) {
             this.cameraDrag(event.movementX, event.movementY);
         }
 
@@ -60,9 +58,17 @@ export class PlaneComponent {
         this.intergrapheventService.send(INTERGRAPH_EVENTS.GRAPH_LEFT, null);
     }
 
+    @HostListener('click', ['$event'])
+    onClick(event:MouseEvent) {
+        if (event.target['tagName'] === "CANVAS")
+            this.plane.onClick(event.offsetX, event.offsetY, event.ctrlKey);
+    }
+
 
     @HostListener('mousedown', ['$event'])
     onMousedown(event:MouseEvent) {
+        if (event.target['tagName'] === "CANVAS")
+            this.plane.onMouseDown(event.offsetX, event.offsetY, event.ctrlKey);
 
         if (event['path'][0]['className'] === PlaneComponent.RESIZECSSCLASS) {
             this.resize = true;

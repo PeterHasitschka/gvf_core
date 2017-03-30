@@ -3,6 +3,7 @@ import {GraphScene} from '../graphvis/scene';
 import {GraphVisConfig} from '../graphvis/config';
 import {GraphAbstract} from '../graphvis/graphs/graphabstract';
 import {UiService} from "../../services/ui.service";
+import {SelectionPolygon} from "../graphvis/graphs/polygonselection/polygon";
 
 /**
  * The Plane Object holds the @see{GraphScene} element and connects to the
@@ -23,6 +24,9 @@ export class Plane {
     private backplaneMesh:THREE.Mesh;
 
     private isMinimized = false;
+
+    private polygonSelection:SelectionPolygon;
+
 
     /**
      * @param{string} name - Defining the graph's name
@@ -77,7 +81,32 @@ export class Plane {
         // Load Data from DataService and build the graph
         this.graph.init();
 
+        this.polygonSelection = new SelectionPolygon(this);
+        this.getGraphScene().addObject(this.polygonSelection);
     }
+
+
+    public onMouseDown(x, y, ctrl) {
+        if (!this.polygonSelection.getActivated() && ctrl)
+            this.polygonSelection.startSelecting();
+
+        if (this.polygonSelection.getActivated() && !ctrl)
+            this.polygonSelection.stopSelecting();
+
+        if (!this.polygonSelection.getActivated())
+            return;
+
+        this.polygonSelection.addDot(x, y);
+    }
+
+
+    public onClick(x, y, ctrl) {
+
+
+
+
+    }
+
 
     /**
      * Calculating the width and height of the defined container
@@ -137,6 +166,10 @@ export class Plane {
         return this.graphclass;
     }
 
+    public getPolygonSelection() {
+        return this.polygonSelection;
+    }
+
     public setBackgroundColor(color:string) {
         //this.backplaneMesh.material['color'].setHex(color);
         document.getElementById(Plane.containerPrefix + this.containerId).style.setProperty("background", color);
@@ -180,8 +213,4 @@ export class Plane {
     }
 
 
-    protected isCoordinateInsidePolygon(coordinate, polygon) {
-        var inside = require('point-in-polygon');
-        return inside(coordinate, polygon);
-    }
 }

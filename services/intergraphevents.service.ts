@@ -10,6 +10,7 @@ export enum INTERGRAPH_EVENTS {
     GROUP_HOVERED,
     GROUP_LEFT,
     GRAPH_LEFT,
+    GRAPH_CLICKED,
     MOUSE_UP_GLOBAL,
     MOUSE_DRAG_GLOBAL
 }
@@ -53,7 +54,7 @@ export class InterGraphEventService {
      */
     public send(evtKey:INTERGRAPH_EVENTS, data) {
         let evt = new CustomEvent(INTERGRAPH_EVENTS[evtKey], {detail: data});
-        UiService.consolelog("Send Event: "+INTERGRAPH_EVENTS[evtKey],this, "#AA5500", 5);
+        UiService.consolelog("Send Event: " + INTERGRAPH_EVENTS[evtKey], this, "#AA5500", 5);
         window.dispatchEvent(evt);
 
     }
