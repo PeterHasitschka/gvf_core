@@ -106,7 +106,7 @@ export class SelectionPolygon extends THREE.Group {
         });
 
         let centerPos = this.getAverageNodePosition(affectedNodes);
-        this.metanode = new MetanodeSimple(centerPos.x, centerPos.y, affectedNodes, this.plane, {});
+        this.metanode = new MetanodeSimple(centerPos.x, centerPos.y, affectedNodes, this.plane);
 
         let movementsToFinish = affectedNodes.length;
 
