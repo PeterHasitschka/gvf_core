@@ -68,12 +68,7 @@ export class AppComponent implements OnInit {
             SideInfoPositions.Right,
             SideInfoContentType.Text,
             {
-                text: "Prototype of GVF.<br>" +
-                "Different graphs visualizing different entities and connections can be shown.<br>" +
-                "A basic simple FDL algorithm is used.<br>" +
-                "Basic Connections between different graphs can be shown.<br>" +
-                "Simple groups (communities) can be represented in seperate graphs (WIP)<br>" +
-                "<br>-- P.H., 26.01.2017"
+                text: "Prototype of GVF"
             }
             )
         );

@@ -26,7 +26,7 @@ export abstract class ElementAbstract extends THREE.Group implements GraphObject
     protected options = {};
     protected edges = [];
 
-    public static elementname = "GVF Element Group";
+    public static elementname = "GVF Element";
 
     /**
      * Constructor of the abstract node
@@ -63,8 +63,14 @@ export abstract class ElementAbstract extends THREE.Group implements GraphObject
         y = y === undefined ? 0.0 : y;
 
         this.setPosition(x, y);
-        this.dataEntity.registerGraphElement(this);
+        if (this.dataEntity)
+            this.dataEntity.registerGraphElement(this);
     }
+
+    public getUniqueId(){
+        return (this.name + " - plane" + this.plane.getId() + this.dataEntity.getId());
+    }
+
 
     /**
      * Set the position of the node.
@@ -96,6 +102,16 @@ export abstract class ElementAbstract extends THREE.Group implements GraphObject
 
         return this.position;
     }
+
+    public getPosition2DForAnimation() {
+        return {'x': this.position.x, 'y': this.position.y};
+    }
+
+    public setPosition2DForAnimation(pos) {
+        this.setPosition(pos.x, pos.y);
+    }
+
+
 
     /**
      * Add an edge to the object.

@@ -2,6 +2,11 @@ import {ElementAbstract} from "../graphelementabstract";
 import {Plane} from "../../../plane/plane";
 import Projector = THREE.Projector;
 import {HelperService} from "../../../../services/helper.service";
+import {MovingMetanode} from "../../../../../moving/graph/metanodes/metanode";
+import {MetanodeSimple} from "../metanodes/metanodesimple";
+import {AnimationService} from "../../../../services/animationservice";
+import {min} from "rxjs/operator/min";
+import {NodeAbstract} from "../nodes/nodeelementabstract";
 
 
 export class SelectionPolygon extends THREE.Group {
@@ -9,6 +14,7 @@ export class SelectionPolygon extends THREE.Group {
     private dots = [];
     private line;
     private activated = false;
+    private metanode;
 
     constructor(private plane:Plane) {
         super();
@@ -84,19 +90,73 @@ export class SelectionPolygon extends THREE.Group {
             coordinatesOfPolygon.push([d.position.x, d.position.y]);
         });
 
+
+        let affectedNodes = [];
+
         this.plane.getGraph().getGraphElements().forEach((e:ElementAbstract) => {
             let coordinate = [e.getPosition().x, e.getPosition().y];
 
             let wasSelected = this.isCoordinateInsidePolygon(coordinate, coordinatesOfPolygon);
 
-            if (wasSelected)
+            if (wasSelected) {
                 e.highlight(true);
+                affectedNodes.push(e);
+            }
+
         });
 
+        let centerPos = this.getAverageNodePosition(affectedNodes);
+
+        this.metanode = new MetanodeSimple(centerPos.x, centerPos.y, affectedNodes, this.plane, {});
+
+        affectedNodes.forEach((n:NodeAbstract) => {
+            AnimationService.getInstance().register(
+                "nodepos_" + n.getUniqueId(),
+                {'x': centerPos.x, 'y': centerPos.y},
+                null,
+                n.getPosition2DForAnimation.bind(n),
+                n.setPosition2DForAnimation.bind(n),
+                0,
+                0.5,
+                0.001,
+                0.1,
+                function () {
+                    //console.log("FINISHED");
+                }.bind(this),
+                true,
+                this.plane
+            );
+        });
+
+        this.add(this.metanode);
         this.cleanUp();
     }
 
-    protected isCoordinateInsidePolygon(coordinate, polygon):boolean {
+    /**
+     * For Demonstration the center of min and max area is taken...
+     * @param affectedNodes
+     */
+    protected getAverageNodePosition(affectedNodes:ElementAbstract[]) {
+        let minX = 1000000;
+        let minY = 1000000;
+        let maxX = -1000000;
+        let maxY = -1000000;
+
+        affectedNodes.forEach((n) => {
+            let pos = n.getPosition2DForAnimation();
+            minX = Math.min(pos.x, minX);
+            minY = Math.min(pos.y, minY);
+            maxX = Math.max(pos.x, maxX);
+            maxY = Math.max(pos.y, maxY);
+        });
+        return {
+            'x': (maxX - minX) / 2 + minX,
+            'y': (maxY - minY) / 2 + minY
+        };
+    }
+
+    protected
+    isCoordinateInsidePolygon(coordinate, polygon):boolean {
         var inside = require('point-in-polygon');
         return inside(coordinate, polygon);
     }

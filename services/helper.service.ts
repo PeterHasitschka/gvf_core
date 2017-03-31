@@ -49,4 +49,7 @@ export class HelperService {
         return vector;
     }
 
+
+
+
 }
