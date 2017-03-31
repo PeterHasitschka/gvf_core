@@ -2,7 +2,6 @@ import {ElementAbstract} from "../graphelementabstract";
 import {Plane} from "../../../plane/plane";
 import Projector = THREE.Projector;
 import {HelperService} from "../../../../services/helper.service";
-import {MovingMetanode} from "../../../../../moving/graph/metanodes/metanode";
 import {MetanodeSimple} from "../metanodes/metanodesimple";
 import {AnimationService} from "../../../../services/animationservice";
 import {min} from "rxjs/operator/min";
