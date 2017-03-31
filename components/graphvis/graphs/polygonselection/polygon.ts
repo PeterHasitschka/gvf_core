@@ -56,11 +56,11 @@ export class SelectionPolygon extends THREE.Group {
 
     public startSelecting() {
 
-        this.cleanUp();
+        this.cleanUpPolygon();
         this.activated = true;
     }
 
-    private cleanUp() {
+    private cleanUpPolygon() {
 
         this.dots.forEach((d) => {
             this.remove(d);
@@ -106,8 +106,9 @@ export class SelectionPolygon extends THREE.Group {
         });
 
         let centerPos = this.getAverageNodePosition(affectedNodes);
-
         this.metanode = new MetanodeSimple(centerPos.x, centerPos.y, affectedNodes, this.plane, {});
+
+        let movementsToFinish = affectedNodes.length;
 
         affectedNodes.forEach((n:NodeAbstract) => {
             AnimationService.getInstance().register(
@@ -121,15 +122,23 @@ export class SelectionPolygon extends THREE.Group {
                 0.001,
                 0.1,
                 function () {
-                    //console.log("FINISHED");
+                    movementsToFinish--;
+                    console.log(movementsToFinish);
+                    if (movementsToFinish === 0) {
+                        this.onFinishCollapsingNodes();
+                    }
                 }.bind(this),
                 true,
                 this.plane
             );
         });
 
+        this.cleanUpPolygon();
+    }
+
+    private onFinishCollapsingNodes() {
         this.add(this.metanode);
-        this.cleanUp();
+        this.plane.getGraphScene().render();
     }
 
     /**
