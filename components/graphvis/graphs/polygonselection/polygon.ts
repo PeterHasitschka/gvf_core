@@ -2,10 +2,9 @@ import {ElementAbstract} from "../graphelementabstract";
 import {Plane} from "../../../plane/plane";
 import Projector = THREE.Projector;
 import {HelperService} from "../../../../services/helper.service";
-import {MetanodeSimple} from "../metanodes/metanodesimple";
 import {AnimationService} from "../../../../services/animationservice";
-import {min} from "rxjs/operator/min";
 import {NodeAbstract} from "../nodes/nodeelementabstract";
+import {StarChart} from "../metanodes/starchart";
 
 
 export class SelectionPolygon extends THREE.Group {
@@ -105,7 +104,7 @@ export class SelectionPolygon extends THREE.Group {
         });
 
         let centerPos = this.getAverageNodePosition(affectedNodes);
-        this.metanode = new MetanodeSimple(centerPos.x, centerPos.y, affectedNodes, this.plane);
+        this.metanode = new StarChart(centerPos.x, centerPos.y, affectedNodes, this.plane);
 
         let movementsToFinish = affectedNodes.length;
 
