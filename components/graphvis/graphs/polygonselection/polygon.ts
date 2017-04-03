@@ -4,8 +4,6 @@ import Projector = THREE.Projector;
 import {HelperService} from "../../../../services/helper.service";
 import {AnimationService} from "../../../../services/animationservice";
 import {NodeAbstract} from "../nodes/nodeelementabstract";
-import {StarChart} from "../../../../../moving/graph/starchart/starchart";
-import {MetanodeSimple} from "../metanodes/metanodesimple";
 import {GraphVisConfig} from "../../config";
 
 

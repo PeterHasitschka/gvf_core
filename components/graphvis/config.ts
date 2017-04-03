@@ -1,7 +1,3 @@
-// import {ResourceGraph} from '../../../afel/graphs/resourcegraph';
-// import {LearnerGraph} from '../../../afel/graphs/learnergraph';
-import {BasicGraph} from "./graphs/graphbasic";
-import {SimpleGroups} from "./graphs/graphgroupssimple";
 import {MetanodeSimple} from "./graphs/metanodes/metanodesimple";
 
 /**
