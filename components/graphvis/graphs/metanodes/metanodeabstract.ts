@@ -2,18 +2,34 @@ import {Plane} from "../../../plane/plane";
 import {GraphVisConfig} from "../../config";
 import {InterGraphEventService, INTERGRAPH_EVENTS} from "../../../../services/intergraphevents.service";
 import {NodeAbstract} from "../nodes/nodeelementabstract";
-export abstract class MetanodeAbstract extends NodeAbstract {
+import {BasicGroup} from "../../data/databasicgroup";
+import {ElementAbstract} from "../graphelementabstract";
+export abstract class MetanodeAbstract extends ElementAbstract {
 
-    protected nodeMesh:THREE.Mesh;
+
+    protected meshs = {};
 
     constructor(x:number, y:number, protected nodes:NodeAbstract[], plane:Plane, options:Object) {
 
         super(x, y, null, plane, options);
+        this.createDataGroupFromNodes();
         this.name = "Meta-Node Abstract";
+        this.createMeshs(options);
+
+        for (var meshKey in this.meshs) {
+            this.add(this.meshs[meshKey]);
+        }
+
+        //this.nodeMeshs
+        //this.add(this.nodeMeshs);
+        //this.nodeMesh['onIntersectStart'] = this.onIntersectStart;
+    }
+
+    protected createMeshs(options) {
 
         let nodeSize = (options && typeof options['size'] !== "undefined") ? options['size'] : GraphVisConfig.graphelements.abstractnode.size;
 
-        this.nodeMesh = new THREE.Mesh(new THREE.CircleGeometry(
+        let nodeMesh = new THREE.Mesh(new THREE.CircleGeometry(
             nodeSize,
             GraphVisConfig.graphelements.abstractnode.segments),
             new THREE.MeshBasicMaterial(
@@ -21,31 +37,43 @@ export abstract class MetanodeAbstract extends NodeAbstract {
                     color: GraphVisConfig.graphelements.abstractnode.color
                 }));
 
-        this.add(this.nodeMesh);
-        //this.nodeMesh['onIntersectStart'] = this.onIntersectStart;
+        this.meshs['basenode'] = nodeMesh;
     }
 
 
+    /**
+     * The Metanode is created by nodes and not a data-group or list of entities.
+     * Create it after constructing to fulfill separation between graphical and logical representation.
+     */
+    protected createDataGroupFromNodes() {
+
+        let entities = [];
+
+        this.nodes.forEach((n:NodeAbstract) => {
+            entities.push(n.getDataEntity());
+        });
+
+        let group = new BasicGroup(BasicGroup.getDataList().length, entities, {});
+        this.setDataEntity(group);
+    }
+
     public setColor(color:number):void {
         super.setColor(color);
-        this.nodeMesh.material['color'].setHex(color);
+        if (this.meshs['basenode'])
+            this.meshs['basenode'].material['color'].setHex(color);
     }
 
 
     public highlight(render = false) {
-        this.nodeMesh.material['color'].setHex(this.highlightColor);
-        // this.edges.forEach((e:EdgeAbstract) => {
-        //     e.highlight();
-        // });
+        if (this.meshs['basenode'])
+            this.meshs['basenode'].material['color'].setHex(this.highlightColor);
         super.highlight(render);
     }
 
 
     public deHighlight(render = false) {
-        this.nodeMesh.material['color'].setHex(this.color);
-        // this.edges.forEach((e:EdgeAbstract) => {
-        //     e.deHighlight();
-        // });
+        if (this.meshs['basenode'])
+            this.meshs['basenode'].material['color'].setHex(this.color);
         super.deHighlight(render);
     }
 

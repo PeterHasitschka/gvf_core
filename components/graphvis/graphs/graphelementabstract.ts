@@ -26,7 +26,7 @@ export abstract class ElementAbstract extends THREE.Group implements GraphObject
     protected options = {};
     protected edges = [];
 
-    public static elementname = "GVF Element";
+    public static IDENTIFIER = "GVF Element";
 
     /**
      * Constructor of the abstract node
@@ -46,7 +46,7 @@ export abstract class ElementAbstract extends THREE.Group implements GraphObject
         if (typeof options !== "undefined" && options !== null)
             this.options = options;
 
-        this.name = ElementAbstract.elementname;
+        this.name = ElementAbstract.IDENTIFIER;
 
         var config = GraphVisConfig.graphelements;
 
@@ -67,7 +67,7 @@ export abstract class ElementAbstract extends THREE.Group implements GraphObject
             this.dataEntity.registerGraphElement(this);
     }
 
-    public getUniqueId(){
+    public getUniqueId() {
         return (this.name + " - plane" + this.plane.getId() + this.dataEntity.getId());
     }
 
@@ -94,6 +94,10 @@ export abstract class ElementAbstract extends THREE.Group implements GraphObject
     public setColor(color:number):void {
     }
 
+    public getColor():number{
+        return this.color;
+    }
+
     /**
      * Returns object containing x,y,z position
      * @returns {Vector3}
@@ -112,7 +116,6 @@ export abstract class ElementAbstract extends THREE.Group implements GraphObject
     }
 
 
-
     /**
      * Add an edge to the object.
      * The edge's graphElements are NOT affected by this
@@ -128,6 +131,11 @@ export abstract class ElementAbstract extends THREE.Group implements GraphObject
      */
     public getEdges():EdgeAbstract[] {
         return this.edges;
+    }
+
+
+    protected setDataEntity(dataEntity:DataAbstract) {
+        this.dataEntity = dataEntity;
     }
 
     /**
@@ -241,5 +249,9 @@ export abstract class ElementAbstract extends THREE.Group implements GraphObject
 
     public getPlane():Plane {
         return this.plane;
+    }
+
+    public getElementIdentifier():string {
+        return this.name;
     }
 }

@@ -4,7 +4,7 @@ import Projector = THREE.Projector;
 import {HelperService} from "../../../../services/helper.service";
 import {AnimationService} from "../../../../services/animationservice";
 import {NodeAbstract} from "../nodes/nodeelementabstract";
-import {StarChart} from "../metanodes/starchart";
+import {StarChart} from "../metanodes/starchart/starchart";
 
 
 export class SelectionPolygon extends THREE.Group {
@@ -121,7 +121,6 @@ export class SelectionPolygon extends THREE.Group {
                 0.1,
                 function () {
                     movementsToFinish--;
-                    console.log(movementsToFinish);
                     if (movementsToFinish === 0) {
                         this.onFinishCollapsingNodes();
                     }

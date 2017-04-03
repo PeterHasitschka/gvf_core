@@ -8,12 +8,12 @@ export abstract class NodeAbstract extends ElementAbstract {
 
 
     protected nodeMesh:THREE.Mesh;
-
+    public static IDENTIFIER = "Node Abstract";
 
     constructor(x:number, y:number, protected dataEntity:DataAbstract, plane:Plane, options:Object) {
 
         super(x, y, dataEntity, plane, options);
-        this.name = "Node Abstract";
+        this.name = NodeAbstract.IDENTIFIER;
 
         let nodeSize = (options && typeof options['size'] !== "undefined") ? options['size'] : GraphVisConfig.graphelements.abstractnode.size;
 
