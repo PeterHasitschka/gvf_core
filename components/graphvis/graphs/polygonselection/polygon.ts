@@ -4,7 +4,9 @@ import Projector = THREE.Projector;
 import {HelperService} from "../../../../services/helper.service";
 import {AnimationService} from "../../../../services/animationservice";
 import {NodeAbstract} from "../nodes/nodeelementabstract";
-import {StarChart} from "../metanodes/starchart/starchart";
+import {StarChart} from "../../../../../moving/graph/starchart/starchart";
+import {MetanodeSimple} from "../metanodes/metanodesimple";
+import {GraphVisConfig} from "../../config";
 
 
 export class SelectionPolygon extends THREE.Group {
@@ -103,8 +105,9 @@ export class SelectionPolygon extends THREE.Group {
 
         });
 
+        let metanodeType = GraphVisConfig.graphelements.metanode.type;
         let centerPos = this.getAverageNodePosition(affectedNodes);
-        this.metanode = new StarChart(centerPos.x, centerPos.y, affectedNodes, this.plane);
+        this.metanode = new metanodeType(centerPos.x, centerPos.y, affectedNodes, this.plane);
 
         let movementsToFinish = affectedNodes.length;
 

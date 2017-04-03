@@ -2,6 +2,7 @@
 // import {LearnerGraph} from '../../../afel/graphs/learnergraph';
 import {BasicGraph} from "./graphs/graphbasic";
 import {SimpleGroups} from "./graphs/graphgroupssimple";
+import {MetanodeSimple} from "./graphs/metanodes/metanodesimple";
 
 /**
  * Configurations related to the Graph Visualization
@@ -48,8 +49,11 @@ export class GraphVisConfig {
             highlight_color: 0x00FFFF,
             z_pos: -1.0,
             opacity: 0.5,
-
+        },
+        metanode : {
+            type : MetanodeSimple
         }
+
 
     };
 
