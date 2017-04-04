@@ -99,8 +99,8 @@ export class GraphScene {
         }
 
         Label.getLabelList().forEach((l) => {
-            if (l.getIsVisible());
-            l.updateSvgPos();
+            if (l.getIsVisible())
+                l.updateSvgPos();
         })
 
     }
@@ -136,6 +136,7 @@ export class GraphScene {
     public getContainer():HTMLElement {
         return this.container;
     }
+
     public getLabelContainer():SVGSVGElement {
         return <SVGSVGElement>this.container.getElementsByClassName("labelcontainer")[0];
     }

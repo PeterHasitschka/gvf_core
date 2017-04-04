@@ -17,6 +17,13 @@ export class Label extends THREE.Points {
 
     constructor(plane:Plane, text, posX, posY, options) {
 
+
+
+        var dotGeometry = new THREE.Geometry();
+        dotGeometry.vertices.push(new THREE.Vector3(0, 0, 0));
+        var dotMaterial = new THREE.PointsMaterial({size: 0, sizeAttenuation: false, color: 0x0000FF});
+        super(dotGeometry, dotMaterial);
+
         let preOptions = {
             color: "red",
             zval: 10,
@@ -35,12 +42,10 @@ export class Label extends THREE.Points {
             if (typeof  options[key] === "undefined")
                 options[key] = preOptions[key];
         }
+
+
         this.options = options;
 
-        var dotGeometry = new THREE.Geometry();
-        dotGeometry.vertices.push(new THREE.Vector3(0, 0, 0));
-        var dotMaterial = new THREE.PointsMaterial({size: 0, sizeAttenuation: false, color: 0x0000FF});
-        super(dotGeometry, dotMaterial);
         this.position.set(posX, posY, options.zval);
         this.plane = plane;
 
