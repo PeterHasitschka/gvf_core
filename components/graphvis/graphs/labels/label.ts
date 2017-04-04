@@ -5,6 +5,8 @@ export class Label extends THREE.Points {
 
     protected plane:Plane;
     protected svgElement;
+    protected options;
+    protected hidden = false;
 
     protected static labelList:Label[] = [];
 
@@ -13,29 +15,70 @@ export class Label extends THREE.Points {
     }
 
 
-    constructor(plane:Plane) {
+    constructor(plane:Plane, text, posX, posY, options) {
+
+        let preOptions = {
+            color: "red",
+            zval: 10,
+            centerX: true,
+            centerY: true,
+            rotateDegree: 0,
+            strokeWidth: 0.5,
+            strokeColor: 'black',
+            fontSize: 13,
+            hidden: false
+        };
+
+        for (var key in preOptions) {
+            if (typeof  options[key] === "undefined")
+                options[key] = preOptions[key];
+        }
+        this.options = options;
+
         var dotGeometry = new THREE.Geometry();
-        dotGeometry.vertices.push(new THREE.Vector3(0, 0, 10));
-        var dotMaterial = new THREE.PointsMaterial({size: 10, sizeAttenuation: false, color: 0xFF0000});
+        dotGeometry.vertices.push(new THREE.Vector3(0, 0, 0));
+        var dotMaterial = new THREE.PointsMaterial({size: 2, sizeAttenuation: false, color: 0x0000FF});
         super(dotGeometry, dotMaterial);
+        this.position.set(posX, posY, options.zval);
         this.plane = plane;
 
         var labelContainer = plane.getGraphScene().getLabelContainer();
 
+
         var template = <HTMLTemplateElement>document.createElement('template');
-        template.innerHTML = '<svg><text x="50" y="50" fill="red">I am a Label!</text></svg>';
+        let canvasPos = this.getPosCanvas();
+
+        template.innerHTML = '<svg><text x="0" y="0">' + text + '</text></svg>';
         this.svgElement = template.content.firstChild;
+
+        let textElm = this.svgElement.getElementsByTagName("text")[0];
+        textElm.setAttribute('fill', options.color);
+        textElm.setAttribute('transform', 'rotate(' + options.rotateDegree + ',' + canvasPos['x'] + ',' + canvasPos['y'] + ')');
+        textElm.setAttribute('style', "stroke: " + options.strokeColor + "; stroke-width: " + options.strokeWidth + "");
+        textElm.setAttribute('font-size', options.fontSize);
+        if (this.options.hidden)
+            this.hide();
 
         labelContainer.appendChild(this.svgElement);
         this.updateSvgPos();
-
         Label.labelList.push(this);
     }
 
+
     public updateSvgPos() {
         let posCanvas = this.getPosCanvas();
-        this.svgElement.getElementsByTagName("text")[0].setAttribute("x", posCanvas['x']);
-        this.svgElement.getElementsByTagName("text")[0].setAttribute("y", posCanvas['y']);
+        let textElm = this.svgElement.getElementsByTagName("text")[0];
+
+        var bbox = textElm.getBBox();
+        var width = bbox.width;
+        var height = bbox.height;
+        let posX = posCanvas['x'] - (this.options.centerX ? width / 2.0 : 0);
+        let posY = posCanvas['y'] + (this.options.centerY ? height / 2.0 : 0);
+        textElm.setAttribute("x", posX);
+        textElm.setAttribute("y", posY);
+        let rotateCenterX = posX + (width / 2);
+        let rotateCenterY = posY + (height / 2);
+        textElm.setAttribute("transform", 'rotate(' + this.options.rotateDegree + ',' + posCanvas['x'] + ',' + posCanvas['y'] + ')');
     }
 
     public getPosCanvas() {
@@ -46,12 +89,36 @@ export class Label extends THREE.Points {
     public setPosCanvas(x:number, y:number) {
         let helper = HelperService.getInstance();
         let posVec = helper.canvasCoordsToWorldCoords(this.plane, x, y);
-        console.log(posVec);
         this.geometry.vertices[0].setX(posVec.x);
         this.geometry.vertices[0].setY(posVec.y);
 
         this.updateSvgPos();
     }
 
+
+    public hide() {
+        if (this.hidden)
+            return;
+
+        this.hidden = true;
+
+        let textElm = this.svgElement.getElementsByTagName("text")[0];
+        textElm.setAttribute("visibility", "hidden");
+    }
+
+    public show() {
+        if (!this.hidden)
+            return;
+
+        this.hidden = false;
+
+        let textElm = this.svgElement.getElementsByTagName("text")[0];
+        textElm.setAttribute("visibility", "visible");
+        this.updateSvgPos();
+    }
+
+    public getIsVisible() {
+        return !this.hidden;
+    }
 
 }

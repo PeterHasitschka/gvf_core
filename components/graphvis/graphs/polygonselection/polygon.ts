@@ -119,7 +119,7 @@ export class SelectionPolygon extends THREE.Group {
                 0,
                 0.5,
                 0.001,
-                0.1,
+                1,
                 function () {
                     movementsToFinish--;
                     if (movementsToFinish === 0) {
@@ -136,6 +136,7 @@ export class SelectionPolygon extends THREE.Group {
 
     private onFinishCollapsingNodes() {
         this.add(this.metanode);
+        this.metanode.showLabels();
         this.plane.getGraphScene().render();
     }
 

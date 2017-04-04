@@ -99,6 +99,7 @@ export class GraphScene {
         }
 
         Label.getLabelList().forEach((l) => {
+            if (l.getIsVisible());
             l.updateSvgPos();
         })
 

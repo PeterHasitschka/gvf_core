@@ -2,6 +2,7 @@ import {Component, Input, ViewEncapsulation, HostListener} from '@angular/core';
 import {Plane} from './plane';
 import {UiService} from "../../services/ui.service";
 import {InterGraphEventService, INTERGRAPH_EVENTS} from "../../services/intergraphevents.service";
+import {Label} from "../graphvis/graphs/labels/label";
 
 
 @Component({
@@ -98,6 +99,10 @@ export class PlaneComponent {
 
         this.resizeGraphPlaneHtmlElement.style.width = this.resizeInit.w + diffX;
         this.resizeGraphPlaneHtmlElement.style.height = this.resizeInit.h + diffY;
+
+        Label.getLabelList().forEach((l) => {
+            l.hide();
+        });
     }
 
     onStopResize():void {
@@ -107,6 +112,10 @@ export class PlaneComponent {
         this.resize = false;
         this.plane.calculateCanvasSize();
         this.plane.getGraphScene().setSizeToPlane();
+
+        Label.getLabelList().forEach((l) => {
+            l.show();
+        });
     }
 
     /**

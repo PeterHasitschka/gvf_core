@@ -4,10 +4,12 @@ import {InterGraphEventService, INTERGRAPH_EVENTS} from "../../../../services/in
 import {NodeAbstract} from "../nodes/nodeelementabstract";
 import {BasicGroup} from "../../data/databasicgroup";
 import {ElementAbstract} from "../graphelementabstract";
+import {Label} from "../labels/label";
 export abstract class MetanodeAbstract extends ElementAbstract {
 
 
     protected meshs = {};
+    protected labels = [];
 
     constructor(x:number, y:number, protected nodes:NodeAbstract[], plane:Plane, options:Object) {
 
@@ -96,5 +98,12 @@ export abstract class MetanodeAbstract extends ElementAbstract {
         super.onIntersectLeave();
         InterGraphEventService.getInstance().send(INTERGRAPH_EVENTS.NODE_LEFT, this);
         //this.plane.getGraphScene().render();
+    }
+
+
+    public showLabels(){
+        this.labels.forEach((l:Label) => {
+            l.show();
+        })
     }
 }
