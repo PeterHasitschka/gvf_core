@@ -26,7 +26,9 @@ export class Label extends THREE.Points {
             strokeWidth: 0.5,
             strokeColor: 'black',
             fontSize: 13,
-            hidden: false
+            hidden: false,
+            turnAroundWhenUpsidedown: true,
+            turnAroundLimit: 100
         };
 
         for (var key in preOptions) {
@@ -37,7 +39,7 @@ export class Label extends THREE.Points {
 
         var dotGeometry = new THREE.Geometry();
         dotGeometry.vertices.push(new THREE.Vector3(0, 0, 0));
-        var dotMaterial = new THREE.PointsMaterial({size: 2, sizeAttenuation: false, color: 0x0000FF});
+        var dotMaterial = new THREE.PointsMaterial({size: 0, sizeAttenuation: false, color: 0x0000FF});
         super(dotGeometry, dotMaterial);
         this.position.set(posX, posY, options.zval);
         this.plane = plane;
@@ -53,7 +55,7 @@ export class Label extends THREE.Points {
 
         let textElm = this.svgElement.getElementsByTagName("text")[0];
         textElm.setAttribute('fill', options.color);
-        textElm.setAttribute('transform', 'rotate(' + options.rotateDegree + ',' + canvasPos['x'] + ',' + canvasPos['y'] + ')');
+        textElm.setAttribute('transform', 'rotate(' + this.getRotationDegree() + ',' + canvasPos['x'] + ',' + canvasPos['y'] + ')');
         textElm.setAttribute('style', "stroke: " + options.strokeColor + "; stroke-width: " + options.strokeWidth + "");
         textElm.setAttribute('font-size', options.fontSize);
         if (this.options.hidden)
@@ -64,6 +66,14 @@ export class Label extends THREE.Points {
         Label.labelList.push(this);
     }
 
+    protected getRotationDegree() {
+        let rot = this.options.rotateDegree;
+        if (this.options.turnAroundWhenUpsidedown &&
+            rot > this.options.turnAroundLimit &&
+            rot < 360 - this.options.turnAroundLimit)
+            rot = 0;
+        return rot;
+    }
 
     public updateSvgPos() {
         let posCanvas = this.getPosCanvas();
@@ -78,7 +88,9 @@ export class Label extends THREE.Points {
         textElm.setAttribute("y", posY);
         let rotateCenterX = posX + (width / 2);
         let rotateCenterY = posY + (height / 2);
-        textElm.setAttribute("transform", 'rotate(' + this.options.rotateDegree + ',' + posCanvas['x'] + ',' + posCanvas['y'] + ')');
+
+
+        textElm.setAttribute("transform", 'rotate(' + this.getRotationDegree() + ',' + posCanvas['x'] + ',' + posCanvas['y'] + ')');
     }
 
     public getPosCanvas() {
