@@ -18,11 +18,13 @@ export class Label extends THREE.Points {
     constructor(plane:Plane, text, posX, posY, options) {
 
 
+        super(new THREE.Geometry(), new THREE.PointsMaterial({
+            size: 0,
+            sizeAttenuation: false,
+            color: 0x0000FF
+        }));
 
-        var dotGeometry = new THREE.Geometry();
-        dotGeometry.vertices.push(new THREE.Vector3(0, 0, 0));
-        var dotMaterial = new THREE.PointsMaterial({size: 0, sizeAttenuation: false, color: 0x0000FF});
-        super(dotGeometry, dotMaterial);
+        this.geometry.vertices.push(new THREE.Vector3(0, 0, 0));
 
         let preOptions = {
             color: "red",
