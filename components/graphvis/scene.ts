@@ -2,6 +2,7 @@ import {GraphVisConfig} from './config';
 import {SceneMouseInteractions} from "./scenemouseinteractions";
 import {Plane} from "../plane/plane";
 import {UiService} from "../../services/ui.service";
+import {Label} from "./graphs/labels/label";
 
 
 //const THREE = require('../../../node_modules/three/build/three.js');
@@ -97,6 +98,10 @@ export class GraphScene {
             UiService.consolelog("Rendering Graph Scene " + this.plane.getId(), this, null, 10);
         }
 
+        Label.getLabelList().forEach((l) => {
+            l.updateSvgPos();
+        })
+
     }
 
     public zoomIn():void {
@@ -129,6 +134,13 @@ export class GraphScene {
 
     public getContainer():HTMLElement {
         return this.container;
+    }
+    public getLabelContainer():SVGSVGElement {
+        return <SVGSVGElement>this.container.getElementsByClassName("labelcontainer")[0];
+    }
+
+    public getCanvas():HTMLCanvasElement {
+        return <HTMLCanvasElement>this.container.getElementsByTagName("canvas")[0];
     }
 
     /**

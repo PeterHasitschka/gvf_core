@@ -50,6 +50,24 @@ export class HelperService {
     }
 
 
+    public worldCoordsToCanvasCoords(plane, obj:THREE.Object3D) {
 
+        var vector = new THREE.Vector3();
+
+        let canvasSize = plane.getCanvasSize();
+        let camera = plane.getGraphScene().getThreeCamera();
+
+        obj.updateMatrixWorld(true);
+        vector.setFromMatrixPosition(obj.matrixWorld);
+        vector.project(camera);
+
+        vector.x = ( vector.x * canvasSize['x'] * 0.5 ) + canvasSize['x'] * 0.5;
+        vector.y = -( vector.y * canvasSize['y'] * 0.5 ) + canvasSize['y'] * 0.5;
+
+        return {
+            x: vector.x,
+            y: vector.y
+        };
+    }
 
 }
