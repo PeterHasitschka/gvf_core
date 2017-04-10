@@ -231,6 +231,7 @@ export class Plane {
     public deleteSelectedElement() {
         if (this.selectedElement)
             this.selectedElement.delete();
+        this.setSelectedGraphElement(null);
     }
 
 }
