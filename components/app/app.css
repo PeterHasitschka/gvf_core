@@ -23,7 +23,6 @@ h1 {
 }
 
 #mainleftcol {
-
 }
 
 #mainmiddlecol {
@@ -39,6 +38,7 @@ h1 {
     padding-left: 5px;
     padding-right: 5px;
     /*height: 100%;*/
+    float: left;
 }
 
 #mainleftcol, #mainrightcol label {
