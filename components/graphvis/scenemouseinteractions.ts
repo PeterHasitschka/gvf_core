@@ -13,8 +13,9 @@ export class SceneMouseInteractions {
 
 
     constructor(private scene:GraphScene) {
-        scene.getContainer().addEventListener('mousemove', this.onSceneMouseMove.bind(this), false);
-        //UiService.getInstance().getGraphWorkSpaceSvgElement().addEventListener('mousemove', this.onSceneMouseMove.bind(this), false);
+        scene.getContainer().addEventListener('mousemove', this.onSceneMouseEvent.bind(this), false);
+        scene.getContainer().addEventListener('click', this.onSceneMouseEvent.bind(this), false);
+        //UiService.getInstance().getGraphWorkSpaceSvgElement().addEventListener('mousemove', this.onSceneMouseEvent.bind(this), false);
         //UiService.getInstance().getGraphWorkSpaceSvgElement().addEventListener('mouseclick', this.traverseSvgMouseClickInteractions.bind(this), false);
     }
 
@@ -23,12 +24,28 @@ export class SceneMouseInteractions {
      * Getting intersected objects and compares them with internal list, to decide if some were
      * left or just entered. The corresponding methods on the objects are called.
      */
-    public handleIntersections() {
+    public handleIntersections(click = false) {
         if (this.mouseContainerPos.x === null || this.mouseContainerPos.y === null)
             return;
 
         this.scene.getThreeRaycaster().setFromCamera(this.mouseContainerPos, this.scene.getThreeCamera());
         var intersects = this.scene.getThreeRaycaster().intersectObjects(this.scene.getObjectGroup().children, true);
+
+        /**
+         * Handle exactly one object (the nearest) when clicking on it!
+         */
+        if (click) {
+            let intersectedObj = intersects.pop();
+            if (!intersectedObj)
+                return;
+            let obj:any = intersectedObj['object'];
+            if (typeof obj.onClick === 'undefined') {
+                if (typeof obj.parent.onClick !== 'undefined')
+                    obj.parent.onClick();
+            }
+            return;
+        }
+
 
         //Check for new
         let newIntersected = {};
@@ -61,13 +78,14 @@ export class SceneMouseInteractions {
         this.currentlyIntersected = newIntersected;
     }
 
+
     /**
      * Setting the current mouse position
      * This method can handle events on the overlying SVG-Element and on the plane-canvas.
      * In the first case, the local position on the canvas is calculated
      * @param event
      */
-    private onSceneMouseMove(event) {
+    private onSceneMouseEvent(event) {
 
         let offsetX = event.offsetX;
         let offsetY = event.offsetY;
@@ -107,6 +125,7 @@ export class SceneMouseInteractions {
 
         this.mouseContainerPos.x = ( offsetX / this.scene.getThreeRenderer().getSize()["width"] ) * 2 - 1;
         this.mouseContainerPos.y = -( offsetY / this.scene.getThreeRenderer().getSize()["height"] ) * 2 + 1;
-        this.handleIntersections();
+
+        this.handleIntersections(event.type === "click");
     }
 }

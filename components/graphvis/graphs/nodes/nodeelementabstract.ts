@@ -73,4 +73,9 @@ export abstract class NodeAbstract extends ElementAbstract {
         InterGraphEventService.getInstance().send(INTERGRAPH_EVENTS.NODE_LEFT, this);
         //this.plane.getGraphScene().render();
     }
+
+
+    public onClick():void {
+        InterGraphEventService.getInstance().send(INTERGRAPH_EVENTS.NODE_CLICKED, this);
+    }
 }
