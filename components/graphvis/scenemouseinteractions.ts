@@ -31,6 +31,8 @@ export class SceneMouseInteractions {
         this.scene.getThreeRaycaster().setFromCamera(this.mouseContainerPos, this.scene.getThreeCamera());
         var intersects = this.scene.getThreeRaycaster().intersectObjects(this.scene.getObjectGroup().children, true);
 
+
+        let levelsToSearchUp = 3;
         /**
          * Handle exactly one object (the nearest) when clicking on it!
          */
@@ -39,10 +41,14 @@ export class SceneMouseInteractions {
             if (!intersectedObj)
                 return;
             let obj:any = intersectedObj['object'];
-            if (typeof obj.onClick === 'undefined') {
-                if (typeof obj.parent.onClick !== 'undefined')
-                    obj.parent.onClick();
+
+            let levelCtn = 0;
+            while (typeof obj.onClick === 'undefined' && levelCtn < levelsToSearchUp) {
+                obj = obj.parent;
+                levelCtn++;
             }
+            if (typeof obj.onClick !== 'undefined')
+                obj.onClick();
             return;
         }
 
@@ -51,13 +57,13 @@ export class SceneMouseInteractions {
         let newIntersected = {};
         intersects.forEach((intersectedObj) => {
             let obj:any = intersectedObj['object'];
-            if (typeof obj.onIntersectStart === 'undefined') {
-                if (typeof obj.parent.onIntersectStart !== 'undefined') {
-                    obj = obj.parent;
-                }
-                else
-                    return;
+            let levelCtn = 0;
+            while (typeof obj.onIntersectStart === 'undefined' && levelCtn < levelsToSearchUp) {
+                obj = obj.parent;
+                levelCtn++;
             }
+            if (typeof obj.onIntersectStart === 'undefined')
+                return;
 
             let id = obj['uuid'];
             if (typeof this.currentlyIntersected[id] === 'undefined') {

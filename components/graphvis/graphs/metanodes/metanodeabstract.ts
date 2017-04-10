@@ -5,11 +5,13 @@ import {NodeAbstract} from "../nodes/nodeelementabstract";
 import {BasicGroup} from "../../data/databasicgroup";
 import {ElementAbstract} from "../graphelementabstract";
 import {Label} from "../labels/label";
+import {AnimationService} from "../../../../services/animationservice";
 export abstract class MetanodeAbstract extends ElementAbstract {
 
 
     protected meshs = {};
     protected labels = [];
+
 
     constructor(x:number, y:number, protected nodes:NodeAbstract[], plane:Plane, options:Object) {
 
@@ -22,9 +24,7 @@ export abstract class MetanodeAbstract extends ElementAbstract {
             this.add(this.meshs[meshKey]);
         }
 
-        //this.nodeMeshs
-        //this.add(this.nodeMeshs);
-        //this.nodeMesh['onIntersectStart'] = this.onIntersectStart;
+        this.isdeletablebyuser = true;
     }
 
     protected createMeshs(options) {
@@ -100,8 +100,51 @@ export abstract class MetanodeAbstract extends ElementAbstract {
         //this.plane.getGraphScene().render();
     }
 
+    public onClick():void {
+        InterGraphEventService.getInstance().send(INTERGRAPH_EVENTS.NODE_CLICKED, this);
+        this.select(true);
+    }
 
-    public showLabels(){
+    public delete():void {
+        for (var meshKey in this.meshs) {
+            this.remove(this.meshs[meshKey]);
+        }
+
+        this.labels.forEach((l:Label) => {
+            this.remove(l);
+            l.delete();
+        });
+
+        this.restoreNodePositions();
+
+        super.delete();
+    }
+
+
+    protected restoreNodePositions() {
+        this.nodes.forEach((n:NodeAbstract) => {
+
+
+            AnimationService.getInstance().register(
+                "nodepos_" + n.getUniqueId(),
+                {'x': n.getOrigPosition().x, 'y': n.getOrigPosition().y},
+                null,
+                n.getPosition2DForAnimation.bind(n),
+                n.setPosition2DForAnimation.bind(n),
+                0,
+                0.5,
+                0.001,
+                1,
+                function () {
+                }.bind(this),
+                true,
+                this.plane
+            );
+        });
+    }
+
+
+    public showLabels() {
         this.labels.forEach((l:Label) => {
             l.show();
         })

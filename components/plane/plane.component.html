@@ -1,6 +1,10 @@
 <div class="graphvisplanecontainer" [ngClass]="{semitransparent: resize}">
     <div class="graphvisplaneheader">
         <div class="graphvisplanetitle" [innerHTML]="plane.getName()"></div>
+        <div class="graphvisplaneactions">
+            <div class="graphvisplanebtn" *ngIf="plane.isSelectedElementDeletable()" title="Delete Selected Element" (click)="plane.deleteSelectedElement()"><i class="fa fa-trash"
+                                                                                     aria-hidden="true"></i></div>
+        </div>
         <div class="graphvisplanectrl">
             <!--<div class="graphvisplanebtn" (click)="plane.close()"><i class="fa fa-window-close" aria-hidden="true"></i></div>-->
             <div class="graphvisplanebtn" (click)="plane.minimize()"><i class="fa fa-window-minimize"

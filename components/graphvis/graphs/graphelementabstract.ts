@@ -20,8 +20,12 @@ export abstract class ElementAbstract extends THREE.Group implements GraphObject
     protected zPos;
     protected color:number;
     protected isHighlighted = false;
+    protected isSelected = false;
     protected highlightColor:number;
+    protected selectColor:number;
+    protected isdeletablebyuser = false;
     protected plane:Plane;
+    protected origPos = null;
 
     protected options = {};
     protected edges = [];
@@ -52,10 +56,12 @@ export abstract class ElementAbstract extends THREE.Group implements GraphObject
 
         let color = config.abstractnode.color;
         let highlightColor = config.abstractnode.highlight_color;
+        let selectColor = config.abstractnode.select_color;
 
         this.plane = plane;
         this.color = color;
         this.highlightColor = highlightColor;
+        this.selectColor = selectColor;
         this.zPos = config.abstractnode.z_pos;
 
 
@@ -88,13 +94,21 @@ export abstract class ElementAbstract extends THREE.Group implements GraphObject
         });
     }
 
+    public saveOrigPosition(){
+        this.origPos = this.position.clone();
+    }
+
+    public getOrigPosition(){
+        return this.origPos;
+    }
+
     /**
      * Setting the color of the simple node (e.g. 0xffffff)
      */
     public setColor(color:number):void {
     }
 
-    public getColor():number{
+    public getColor():number {
         return this.color;
     }
 
@@ -144,6 +158,35 @@ export abstract class ElementAbstract extends THREE.Group implements GraphObject
      */
     public getDataEntity():DataAbstract {
         return this.dataEntity;
+    }
+
+    /**
+     * Abstract of SELECTING a node
+     * The defined highlight-color is applied
+     */
+    public select(render:boolean = false) {
+        if (this.isSelected)
+            return;
+        this.isSelected = true;
+        if (render)
+            this.plane.getGraphScene().render();
+
+        this.plane.setSelectedGraphElement(this);
+    }
+
+    /**
+     * Abstract of De-SELECTING a node
+     * The defined standard-color is applied
+     */
+    public deSelect(render:boolean = false) {
+        if (!this.isSelected)
+            return;
+        this.isSelected = false;
+        if (render)
+            this.plane.getGraphScene().render();
+
+        if (this.plane.getSelectedGraphElement() === this)
+            this.plane.setSelectedGraphElement(null);
     }
 
     /**
@@ -254,4 +297,16 @@ export abstract class ElementAbstract extends THREE.Group implements GraphObject
     public getElementIdentifier():string {
         return this.name;
     }
+
+    public isDeletableByUser():boolean {
+        return this.isdeletablebyuser;
+    }
+
+    public delete() {
+        UiService.consolelog("Deleting Graph element", this);
+        this.plane.getGraphScene().getThreeScene().remove(this);
+        this.plane.getGraphScene().render();
+    }
+
+
 }

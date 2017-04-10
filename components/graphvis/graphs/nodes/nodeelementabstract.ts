@@ -35,6 +35,15 @@ export abstract class NodeAbstract extends ElementAbstract {
         this.nodeMesh.material['color'].setHex(color);
     }
 
+    public select(render = false) {
+        this.nodeMesh.material['color'].setHex(this.selectColor);
+        super.select(render);
+    }
+
+    public deSelect(render = false) {
+        this.nodeMesh.material['color'].setHex(this.color);
+        super.deSelect(render);
+    }
 
     public highlight(render = false) {
         this.nodeMesh.material['color'].setHex(this.highlightColor);
@@ -46,7 +55,10 @@ export abstract class NodeAbstract extends ElementAbstract {
 
 
     public deHighlight(render = false) {
-        this.nodeMesh.material['color'].setHex(this.color);
+        if (!this.isSelected)
+            this.nodeMesh.material['color'].setHex(this.color);
+        else
+            this.nodeMesh.material['color'].setHex(this.selectColor);
         // this.edges.forEach((e:EdgeAbstract) => {
         //     e.deHighlight();
         // });
@@ -77,5 +89,6 @@ export abstract class NodeAbstract extends ElementAbstract {
 
     public onClick():void {
         InterGraphEventService.getInstance().send(INTERGRAPH_EVENTS.NODE_CLICKED, this);
+        this.select(true);
     }
 }

@@ -25,6 +25,7 @@ export class UiService {
 
     private minimizedPlanes:Plane[] = [];
 
+
     constructor() {
         this.sideInfoElements = [];
         if (!UiService.isCreating) {

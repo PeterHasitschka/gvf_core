@@ -110,6 +110,9 @@ export class SelectionPolygon extends THREE.Group {
         let movementsToFinish = affectedNodes.length;
 
         affectedNodes.forEach((n:NodeAbstract) => {
+
+            n.saveOrigPosition();
+
             AnimationService.getInstance().register(
                 "nodepos_" + n.getUniqueId(),
                 {'x': centerPos.x, 'y': centerPos.y},

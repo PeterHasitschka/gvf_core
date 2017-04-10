@@ -140,4 +140,14 @@ export class Label extends THREE.Points {
         return !this.hidden;
     }
 
+
+    public delete() {
+        this.svgElement.parentNode.removeChild(this.svgElement);
+        this.svgElement = null;
+
+        Label.getLabelList().forEach((l, k) => {
+            if (l === this)
+                Label.getLabelList().splice(k, 1);
+        })
+    }
 }

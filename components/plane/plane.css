@@ -26,11 +26,17 @@ graph-plane {
 
 .graphvisplanetitle {
     float: left;
-    width: 90%;
+    width: 50%;
     margin: 0;
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
+}
+
+.graphvisplaneactions {
+    float:left;
+    width:40%;
+    margin:0
 }
 
 .graphvisplanectrl {
@@ -38,7 +44,7 @@ graph-plane {
     float: right;
 }
 
-.graphvisplanectrl .graphvisplanebtn {
+.graphvisplanebtn {
     text-align: center;
     font-size: 11px;
     margin-top: 3px;

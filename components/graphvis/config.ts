@@ -8,7 +8,7 @@ export class GraphVisConfig {
 
     public static environment = {
         title: "<i>Graph-Visualization-Framework</i> (GVF)",
-        showleftcol : true
+        showleftcol: true
     };
 
     /**
@@ -36,6 +36,7 @@ export class GraphVisConfig {
             size: 3,
             color: 0xff33ff,
             highlight_color: 0xff3333,
+            select_color: 0xff0000,
             z_pos: 0.0,
         },
         abstractgroup: {
@@ -46,8 +47,8 @@ export class GraphVisConfig {
             z_pos: -1.0,
             opacity: 0.5,
         },
-        metanode : {
-            type : MetanodeSimple
+        metanode: {
+            type: MetanodeSimple
         }
 
 

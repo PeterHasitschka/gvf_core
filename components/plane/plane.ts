@@ -4,6 +4,7 @@ import {GraphVisConfig} from '../graphvis/config';
 import {GraphAbstract} from '../graphvis/graphs/graphabstract';
 import {UiService} from "../../services/ui.service";
 import {SelectionPolygon} from "../graphvis/graphs/polygonselection/polygon";
+import {ElementAbstract} from "../graphvis/graphs/graphelementabstract";
 
 /**
  * The Plane Object holds the @see{GraphScene} element and connects to the
@@ -22,6 +23,7 @@ export class Plane {
     private graph:GraphAbstract;
     private canvasDimensions;
     private backplaneMesh:THREE.Mesh;
+    private selectedElement:ElementAbstract;
 
     private isMinimized = false;
 
@@ -101,8 +103,6 @@ export class Plane {
 
 
     public onClick(x, y, ctrl) {
-
-
 
 
     }
@@ -212,5 +212,25 @@ export class Plane {
         return Plane.planes;
     }
 
+    public getSelectedGraphElement():ElementAbstract {
+        return this.selectedElement;
+    }
+
+    public setSelectedGraphElement(elm:ElementAbstract) {
+        if (this.selectedElement)
+            this.selectedElement.deSelect();
+        this.selectedElement = elm;
+    }
+
+    public isSelectedElementDeletable():boolean {
+        if (!this.selectedElement)
+            return false;
+        return this.selectedElement.isDeletableByUser();
+    }
+
+    public deleteSelectedElement() {
+        if (this.selectedElement)
+            this.selectedElement.delete();
+    }
 
 }
