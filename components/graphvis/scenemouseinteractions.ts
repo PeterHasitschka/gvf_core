@@ -41,7 +41,8 @@ export class SceneMouseInteractions {
             if (!intersectedObj)
                 return;
             let obj:any = intersectedObj['object'];
-
+            if (obj === null)
+                return;
             let levelCtn = 0;
             while (typeof obj.onClick === 'undefined' && levelCtn < levelsToSearchUp) {
                 obj = obj.parent;
