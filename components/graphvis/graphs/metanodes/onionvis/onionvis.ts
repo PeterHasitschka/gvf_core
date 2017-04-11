@@ -5,9 +5,11 @@ import {EdgeAbstract} from "../../edges/edgeelementabstract";
 import {AnimationService} from "../../../../../services/animationservice";
 import {GraphVisConfig} from "../../../config";
 import {Pie} from "../pie";
+import {Label} from "../../labels/label";
 export class OnionVis extends MetanodeAbstract {
 
     private centerNode:NodeAbstract;
+    protected labels:Label[];
 
     protected static onionSkins = [
         {
@@ -26,6 +28,7 @@ export class OnionVis extends MetanodeAbstract {
         super(x, y, [], plane, {'size': 50});
         this.name = "Onion-Vis Meta-Node";
         this.centerNode = centerNode;
+        this.labels = [];
         window.setTimeout(function () {
             this.calculateDistances(centerNode);
             AnimationService.getInstance().collapseNodes(this.nodes, plane, centerNode.getPosition(), function () {
@@ -97,12 +100,14 @@ export class OnionVis extends MetanodeAbstract {
         let minDist = 1;
 
         let sizeStep = 20;
-        let size = 50;
+        let size = this.centerNode['options'].size + sizeStep;
         let zVal = -1;
-        let zStep = 1;
+        let zStep = 2;
         OnionVis.onionSkins.forEach((onion) => {
+
             let matchingDistNodes = {};
             let nodesInThisRing = 0;
+
 
             this.nodes.forEach((n) => {
                 let dist = n.getADistance(this.centerNode);
@@ -118,15 +123,67 @@ export class OnionVis extends MetanodeAbstract {
             if (nodesInThisRing === 0)
                 return;
 
+
+            // Ring Label
+            let rotDegree = 0;
+            let labelRad = size - sizeStep / 2;
+            let labelPosX = labelRad * Math.sin(Math.PI);
+            let labelPosY = labelRad * Math.cos(Math.PI);
+            let ringLabel = new Label(this.plane, "10-20", labelPosX, labelPosY, {
+                rotateDegree: rotDegree,
+                color: "#FFFFFF",
+                fontSize: 18,
+                strokeColor: "#888888",
+                hidden: false
+            });
+            oniongroup.add(ringLabel);
+            this.labels.push(ringLabel);
+
+
+            // Create segments
             let ringStart = 0.0;
             for (var nodeClass in matchingDistNodes) {
                 let ratio = matchingDistNodes[nodeClass].length / nodesInThisRing;
                 let ringLength = Math.PI * 2 * ratio;
                 let ringPie = new Pie(ringStart, ringStart + ringLength, size, matchingDistNodes[nodeClass][0].getColor(), zVal);
                 oniongroup.add(ringPie);
-                ringStart += ringLength;
 
+
+                /*
+                 Label
+                 */
+                let ringLengthHalf = ringStart + ringLength / 2;
+
+                let labelRad = size - sizeStep / 2;
+                let labelPosX = labelRad * Math.sin(ringLengthHalf);
+                let labelPosY = labelRad * Math.cos(ringLengthHalf);
+
+                let rotDegree = (ringLengthHalf) * 360 / (Math.PI * 2);
+                let numNodesLabel = new Label(this.plane, matchingDistNodes[nodeClass].length, labelPosX, labelPosY, {
+                    rotateDegree: rotDegree,
+                    color: "#0000FF",
+                    fontSize: 10,
+                    strokeColor: "#888888",
+                    hidden: false
+                });
+                oniongroup.add(numNodesLabel);
+                this.labels.push(numNodesLabel);
+
+
+                ringStart += ringLength;
             }
+
+
+            // Separation ring
+            let sepRing = new THREE.Mesh(new THREE.CircleGeometry(
+                    size + 1,
+                GraphVisConfig.graphelements.abstractnode.segments),
+                new THREE.MeshBasicMaterial(
+                    {
+                        color: 0xFFFFFF
+                    }));
+            sepRing.position.setZ(zVal - 1);
+            oniongroup.add(sepRing);
 
 
             minDist = onion.max + 1;
@@ -135,15 +192,16 @@ export class OnionVis extends MetanodeAbstract {
         });
 
 
-        let nodeMesh = new THREE.Mesh(new THREE.CircleGeometry(
-            20,
+        let centerDummyNode = new THREE.Mesh(new THREE.CircleGeometry(
+            this.centerNode['options'].size,
             GraphVisConfig.graphelements.abstractnode.segments),
             new THREE.MeshBasicMaterial(
                 {
                     color: this.centerNode.getColor()
                 }));
-        oniongroup.add(nodeMesh);
 
+        oniongroup.add(centerDummyNode);
+        oniongroup.position.setZ(5);
 
         this.meshs['oniongroup'] = oniongroup;
     }
