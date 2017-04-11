@@ -20,11 +20,7 @@ export abstract class MetanodeAbstract extends ElementAbstract {
         this.metanodeOptions = options;
         this.createDataGroupFromNodes();
         this.name = "Meta-Node Abstract";
-        this.createMeshs(options);
 
-        for (var meshKey in this.meshs) {
-            this.add(this.meshs[meshKey]);
-        }
 
         this.isdeletablebyuser = true;
     }
