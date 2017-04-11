@@ -5,6 +5,8 @@ import {GraphAbstract} from '../graphvis/graphs/graphabstract';
 import {UiService} from "../../services/ui.service";
 import {SelectionPolygon} from "../graphvis/graphs/polygonselection/polygon";
 import {ElementAbstract} from "../graphvis/graphs/graphelementabstract";
+import {NodeAbstract} from "../graphvis/graphs/nodes/nodeelementabstract";
+import {InterGraphEventService, INTERGRAPH_EVENTS} from "../../services/intergraphevents.service";
 
 /**
  * The Plane Object holds the @see{GraphScene} element and connects to the
@@ -85,6 +87,18 @@ export class Plane {
 
         this.polygonSelection = new SelectionPolygon(this);
         this.getGraphScene().addObject(this.polygonSelection);
+
+        /**
+         * Handle empty click in this plane (e.g. deselect selected)
+         */
+        InterGraphEventService.getInstance().addListener(INTERGRAPH_EVENTS.EMPTY_SPACE_IN_PLANE_CLICKED, function(d){
+            if(this !== d.detail.plane)
+                return;
+
+            if (this.selectedElement)
+                this.selectedElement.deSelect(true);
+
+        }.bind(this));
     }
 
 
@@ -218,7 +232,7 @@ export class Plane {
 
     public setSelectedGraphElement(elm:ElementAbstract) {
         if (this.selectedElement)
-            this.selectedElement.deSelect();
+            this.selectedElement.deSelect(true);
         this.selectedElement = elm;
     }
 
@@ -232,6 +246,12 @@ export class Plane {
         if (this.selectedElement)
             this.selectedElement.delete();
         this.setSelectedGraphElement(null);
+    }
+
+    public isSelectedElementOnionable():boolean {
+        if (!this.selectedElement || !(this.selectedElement instanceof NodeAbstract))
+            return false;
+        return (<NodeAbstract>this.selectedElement).getIsOnionAble();
     }
 
 }

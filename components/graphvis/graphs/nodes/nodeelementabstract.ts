@@ -10,6 +10,12 @@ export abstract class NodeAbstract extends ElementAbstract {
     protected nodeMesh:THREE.Mesh;
     public static IDENTIFIER = "Node Abstract";
 
+    /**
+     * Wether the surrounding subgraph can be collapsed and visualized as OnionVis
+     * @type {boolean}
+     */
+    protected onionable = true;
+
     constructor(x:number, y:number, protected dataEntity:DataAbstract, plane:Plane, options:Object) {
 
         super(x, y, dataEntity, plane, options);
@@ -90,5 +96,9 @@ export abstract class NodeAbstract extends ElementAbstract {
     public onClick():void {
         InterGraphEventService.getInstance().send(INTERGRAPH_EVENTS.NODE_CLICKED, this);
         this.select(true);
+    }
+
+    public getIsOnionAble():boolean {
+        return this.onionable;
     }
 }

@@ -1,5 +1,6 @@
 import {GraphScene} from "./scene";
 import {UiService} from "../../services/ui.service";
+import {InterGraphEventService, INTERGRAPH_EVENTS} from "../../services/intergraphevents.service";
 
 /**
  * Class that manages mouse interactions by recognizing intersections on THREE Objects and
@@ -38,11 +39,14 @@ export class SceneMouseInteractions {
          */
         if (click) {
             let intersectedObj = intersects.pop();
-            if (!intersectedObj)
+            if (!intersectedObj) {
+                InterGraphEventService.getInstance().send(INTERGRAPH_EVENTS.EMPTY_SPACE_IN_PLANE_CLICKED, this.scene);
                 return;
+            }
             let obj:any = intersectedObj['object'];
-            if (obj === null)
-                return;
+            if (obj === null) {
+                return
+            }
             let levelCtn = 0;
             while (typeof obj.onClick === 'undefined' && levelCtn < levelsToSearchUp) {
                 obj = obj.parent;

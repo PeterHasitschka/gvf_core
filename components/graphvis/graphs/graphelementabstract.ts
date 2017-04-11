@@ -94,11 +94,11 @@ export abstract class ElementAbstract extends THREE.Group implements GraphObject
         });
     }
 
-    public saveOrigPosition(){
+    public saveOrigPosition() {
         this.origPos = this.position.clone();
     }
 
-    public getOrigPosition(){
+    public getOrigPosition() {
         return this.origPos;
     }
 
@@ -178,15 +178,16 @@ export abstract class ElementAbstract extends THREE.Group implements GraphObject
      * Abstract of De-SELECTING a node
      * The defined standard-color is applied
      */
-    public deSelect(render:boolean = false) {
+    public deSelect(render:boolean = true) {
         if (!this.isSelected)
             return;
         this.isSelected = false;
-        if (render)
-            this.plane.getGraphScene().render();
 
         if (this.plane.getSelectedGraphElement() === this)
             this.plane.setSelectedGraphElement(null);
+        
+        if (render)
+            this.plane.getGraphScene().render();
     }
 
     /**
