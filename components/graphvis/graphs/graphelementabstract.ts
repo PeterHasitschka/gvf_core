@@ -185,7 +185,7 @@ export abstract class ElementAbstract extends THREE.Group implements GraphObject
 
         if (this.plane.getSelectedGraphElement() === this)
             this.plane.setSelectedGraphElement(null);
-        
+
         if (render)
             this.plane.getGraphScene().render();
     }

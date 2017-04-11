@@ -11,11 +11,13 @@ export abstract class MetanodeAbstract extends ElementAbstract {
 
     protected meshs = {};
     protected labels = [];
+    protected metanodeOptions = {};
 
 
     constructor(x:number, y:number, protected nodes:NodeAbstract[], plane:Plane, options:Object) {
 
         super(x, y, null, plane, options);
+        this.metanodeOptions = options;
         this.createDataGroupFromNodes();
         this.name = "Meta-Node Abstract";
         this.createMeshs(options);
