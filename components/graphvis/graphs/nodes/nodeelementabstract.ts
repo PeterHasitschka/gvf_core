@@ -8,6 +8,8 @@ export abstract class NodeAbstract extends ElementAbstract {
 
 
     protected nodeMesh:THREE.Mesh;
+    protected distancesToOtherNodes = {};
+
     public static IDENTIFIER = "Node Abstract";
 
     /**
@@ -100,5 +102,13 @@ export abstract class NodeAbstract extends ElementAbstract {
 
     public getIsAggregatable():boolean {
         return this.aggregateable;
+    }
+
+    public setADistance(n:NodeAbstract, dist:number) {
+        this.distancesToOtherNodes[n.getUniqueId()] = dist;
+    }
+
+    public getADistance(n:NodeAbstract) {
+        return typeof this.distancesToOtherNodes[n.getUniqueId()] === "undefined" ? null : this.distancesToOtherNodes[n.getUniqueId()];
     }
 }

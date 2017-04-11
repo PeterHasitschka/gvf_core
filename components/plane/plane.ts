@@ -7,6 +7,7 @@ import {SelectionPolygon} from "../graphvis/graphs/polygonselection/polygon";
 import {ElementAbstract} from "../graphvis/graphs/graphelementabstract";
 import {NodeAbstract} from "../graphvis/graphs/nodes/nodeelementabstract";
 import {InterGraphEventService, INTERGRAPH_EVENTS} from "../../services/intergraphevents.service";
+import {OnionVis} from "../graphvis/graphs/metanodes/onionvis/onionvis";
 
 /**
  * The Plane Object holds the @see{GraphScene} element and connects to the
@@ -252,6 +253,16 @@ export class Plane {
         if (!this.selectedElement || !(this.selectedElement instanceof NodeAbstract))
             return false;
         return (<NodeAbstract>this.selectedElement).getIsAggregatable();
+    }
+
+    public createCollapsedAggregationOnNode() {
+        if (!this.isSelectedElementAggregateable())
+            return;
+
+        let pos = this.selectedElement.getPosition();
+        let onion = new OnionVis(pos.x, pos.y, <NodeAbstract>this.selectedElement, this);
+        this.getGraphScene().addObject(onion);
+        this.getGraphScene().render();
     }
 
 

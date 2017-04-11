@@ -67,6 +67,7 @@ export class SelectionPolygon extends THREE.Group {
         this.dots = [];
 
         this.remove(this.line);
+
         this.line = null;
         this.plane.getGraphScene().render();
     }
@@ -112,7 +113,7 @@ export class SelectionPolygon extends THREE.Group {
     }
 
     private onFinishCollapsingNodes() {
-        this.add(this.metanode);
+        this.plane.getGraphScene().addObject(this.metanode);
         this.metanode.showLabels();
         this.plane.getGraphScene().render();
     }
@@ -140,8 +141,7 @@ export class SelectionPolygon extends THREE.Group {
         };
     }
 
-    protected
-    isCoordinateInsidePolygon(coordinate, polygon):boolean {
+    protected isCoordinateInsidePolygon(coordinate, polygon):boolean {
         var inside = require('point-in-polygon');
         return inside(coordinate, polygon);
     }

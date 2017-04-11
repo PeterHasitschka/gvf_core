@@ -400,6 +400,5 @@ export class AnimationService {
                 plane
             );
         });
-        console.log(this.animations);
     }
 }

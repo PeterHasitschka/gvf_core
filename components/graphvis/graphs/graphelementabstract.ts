@@ -29,6 +29,9 @@ export abstract class ElementAbstract extends THREE.Group implements GraphObject
 
     protected options = {};
     protected edges = [];
+    protected uniqueId:string;
+
+    protected static idCounter = 0;
 
     public static IDENTIFIER = "GVF Element";
 
@@ -71,10 +74,14 @@ export abstract class ElementAbstract extends THREE.Group implements GraphObject
         this.setPosition(x, y);
         if (this.dataEntity)
             this.dataEntity.registerGraphElement(this);
+
+
+        this.uniqueId = "e" + ElementAbstract.idCounter;
+        ElementAbstract.idCounter++;
     }
 
     public getUniqueId() {
-        return (this.name + " - plane" + this.plane.getId() + this.dataEntity.getId());
+        return this.uniqueId;
     }
 
 
