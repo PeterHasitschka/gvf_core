@@ -100,7 +100,7 @@ export class OnionVis extends MetanodeAbstract {
         let minDist = 1;
 
         let sizeStep = 20;
-        let size = this.centerNode['options'].size + sizeStep;
+        let size = this.centerNode['options']['size'] + sizeStep;
         let zVal = -1;
         let zStep = 2;
         OnionVis.onionSkins.forEach((onion) => {
@@ -193,7 +193,7 @@ export class OnionVis extends MetanodeAbstract {
 
 
         let centerDummyNode = new THREE.Mesh(new THREE.CircleGeometry(
-            this.centerNode['options'].size,
+            this.centerNode['options']['size'],
             GraphVisConfig.graphelements.abstractnode.segments),
             new THREE.MeshBasicMaterial(
                 {
