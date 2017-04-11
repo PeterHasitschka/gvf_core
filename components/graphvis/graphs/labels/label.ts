@@ -98,6 +98,7 @@ export class Label extends THREE.Points {
 
 
         textElm.setAttribute("transform", 'rotate(' + this.getRotationDegree() + ',' + posCanvas['x'] + ',' + posCanvas['y'] + ')');
+        this.adjustZoom();
     }
 
     public getPosCanvas() {
@@ -149,5 +150,12 @@ export class Label extends THREE.Points {
             if (l === this)
                 Label.getLabelList().splice(k, 1);
         })
+    }
+
+    public adjustZoom() {
+        let globalZoom = this.plane.getGraphScene().getThreeCamera()['zoom'];
+        let textElm = this.svgElement.getElementsByTagName("text")[0];
+        let fontSize = this.options.fontSize;
+        textElm.setAttribute("font-size", fontSize * globalZoom);
     }
 }

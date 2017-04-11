@@ -108,12 +108,24 @@ export class GraphScene {
     public zoomIn():void {
         this.threeCamera['zoom'] *= GraphVisConfig.scene.camera.zoomfactor;
         this.threeCamera['updateProjectionMatrix']();
+
+        Label.getLabelList().forEach((l) => {
+            if (l.getIsVisible())
+                l.adjustZoom();
+        });
+
         this.render();
     }
 
     public zoomOut():void {
         this.threeCamera['zoom'] /= GraphVisConfig.scene.camera.zoomfactor;
         this.threeCamera['updateProjectionMatrix']();
+
+        Label.getLabelList().forEach((l) => {
+            if (l.getIsVisible())
+                l.adjustZoom();
+        });
+
         this.render();
     }
 

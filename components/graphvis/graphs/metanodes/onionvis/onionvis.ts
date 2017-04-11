@@ -126,13 +126,13 @@ export class OnionVis extends MetanodeAbstract {
 
             // Ring Label
             let rotDegree = 0;
-            let labelRad = size - sizeStep / 2;
+            let labelRad = size - sizeStep / 2 - 5;
             let labelPosX = labelRad * Math.sin(Math.PI);
             let labelPosY = labelRad * Math.cos(Math.PI);
             let ringLabel = new Label(this.plane, "10-20", labelPosX, labelPosY, {
                 rotateDegree: rotDegree,
                 color: "#FFFFFF",
-                fontSize: 18,
+                fontSize: 15,
                 strokeColor: "#888888",
                 hidden: false
             });
