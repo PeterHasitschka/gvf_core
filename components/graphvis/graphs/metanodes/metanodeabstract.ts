@@ -116,34 +116,11 @@ export abstract class MetanodeAbstract extends ElementAbstract {
             this.remove(l);
             l.delete();
         });
-
-        this.restoreNodePositions();
-
+        AnimationService.getInstance().restoreNodeOriginalPositions(this.nodes, this.plane, null);
         super.delete();
     }
 
 
-    protected restoreNodePositions() {
-        this.nodes.forEach((n:NodeAbstract) => {
-
-
-            AnimationService.getInstance().register(
-                "nodepos_" + n.getUniqueId(),
-                {'x': n.getOrigPosition().x, 'y': n.getOrigPosition().y},
-                null,
-                n.getPosition2DForAnimation.bind(n),
-                n.setPosition2DForAnimation.bind(n),
-                0,
-                0.5,
-                0.001,
-                1,
-                function () {
-                }.bind(this),
-                true,
-                this.plane
-            );
-        });
-    }
 
 
     public showLabels() {

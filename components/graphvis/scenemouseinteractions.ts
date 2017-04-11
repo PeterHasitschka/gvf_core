@@ -48,11 +48,11 @@ export class SceneMouseInteractions {
                 return
             }
             let levelCtn = 0;
-            while (typeof obj.onClick === 'undefined' && levelCtn < levelsToSearchUp) {
+            while (obj && typeof obj.onClick === 'undefined' && levelCtn < levelsToSearchUp) {
                 obj = obj.parent;
                 levelCtn++;
             }
-            if (typeof obj.onClick !== 'undefined')
+            if (obj && typeof obj.onClick !== 'undefined')
                 obj.onClick();
             return;
         }

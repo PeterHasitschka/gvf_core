@@ -1,5 +1,6 @@
 import {Injectable} from "@angular/core";
 import {Plane} from "../components/plane/plane";
+import {NodeAbstract} from "../components/graphvis/graphs/nodes/nodeelementabstract";
 @Injectable()
 
 
@@ -344,5 +345,61 @@ export class AnimationService {
 
             return this.length(a) > this.length(b);
         }
+    };
+
+
+    public collapseNodes(nodes:NodeAbstract[], plane:Plane, pos, callback:Function):void {
+        let movementsToFinish = nodes.length;
+        nodes.forEach((n:NodeAbstract) => {
+            n.saveOrigPosition();
+            this.register(
+                "nodepos_" + n.getUniqueId(),
+                {'x': pos.x, 'y': pos.y},
+                null,
+                n.getPosition2DForAnimation.bind(n),
+                n.setPosition2DForAnimation.bind(n),
+                0,
+                0.5,
+                0.001,
+                1,
+                function () {
+                    movementsToFinish--;
+                    if (movementsToFinish === 0) {
+                        if (callback)
+                            callback();
+                    }
+                },
+                true,
+                plane
+            );
+        });
+    }
+
+
+    public restoreNodeOriginalPositions(nodes:NodeAbstract[], plane:Plane, callback:Function):void {
+        let movementsToFinish = nodes.length;
+        nodes.forEach((n:NodeAbstract) => {
+            this.register(
+                "nodepos_" + n.getUniqueId(),
+                {'x': n.getOrigPosition().x, 'y': n.getOrigPosition().y},
+                null,
+                n.getPosition2DForAnimation.bind(n),
+                n.setPosition2DForAnimation.bind(n),
+                0,
+                0.5,
+                0.001,
+                1,
+                function () {
+                    movementsToFinish--;
+                    if (movementsToFinish === 0) {
+                        if (callback)
+                            callback();
+                    }
+                },
+                true,
+                plane
+            );
+        });
+        console.log(this.animations);
     }
 }

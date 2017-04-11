@@ -5,7 +5,7 @@
             <div class="graphvisplanebtn" *ngIf="plane.isSelectedElementDeletable()" title="Delete Selected Element"
                  (click)="plane.deleteSelectedElement()">
                 <i class="fa fa-trash" aria-hidden="true"></i></div>
-            <div class="graphvisplanebtn" *ngIf="plane.isSelectedElementOnionable()" title="Collapse Graph for Navigation (Onion-Style)"
+            <div class="graphvisplanebtn" *ngIf="plane.isSelectedElementAggregateable()" title="Collapse Graph for Navigation (Onion-Style)"
                  >
                 <i class="fa fa-compass" aria-hidden="true"></i></div>
         </div>

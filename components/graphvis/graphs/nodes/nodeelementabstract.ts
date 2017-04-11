@@ -14,7 +14,7 @@ export abstract class NodeAbstract extends ElementAbstract {
      * Wether the surrounding subgraph can be collapsed and visualized as OnionVis
      * @type {boolean}
      */
-    protected onionable = true;
+    protected aggregateable = true;
 
     constructor(x:number, y:number, protected dataEntity:DataAbstract, plane:Plane, options:Object) {
 
@@ -98,7 +98,7 @@ export abstract class NodeAbstract extends ElementAbstract {
         this.select(true);
     }
 
-    public getIsOnionAble():boolean {
-        return this.onionable;
+    public getIsAggregatable():boolean {
+        return this.aggregateable;
     }
 }

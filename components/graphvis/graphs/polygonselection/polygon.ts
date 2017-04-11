@@ -107,33 +107,7 @@ export class SelectionPolygon extends THREE.Group {
         let centerPos = this.getAverageNodePosition(affectedNodes);
         this.metanode = new metanodeType(centerPos.x, centerPos.y, affectedNodes, this.plane);
 
-        let movementsToFinish = affectedNodes.length;
-
-        affectedNodes.forEach((n:NodeAbstract) => {
-
-            n.saveOrigPosition();
-
-            AnimationService.getInstance().register(
-                "nodepos_" + n.getUniqueId(),
-                {'x': centerPos.x, 'y': centerPos.y},
-                null,
-                n.getPosition2DForAnimation.bind(n),
-                n.setPosition2DForAnimation.bind(n),
-                0,
-                0.5,
-                0.001,
-                1,
-                function () {
-                    movementsToFinish--;
-                    if (movementsToFinish === 0) {
-                        this.onFinishCollapsingNodes();
-                    }
-                }.bind(this),
-                true,
-                this.plane
-            );
-        });
-
+        AnimationService.getInstance().collapseNodes(affectedNodes, this.plane, centerPos, this.onFinishCollapsingNodes.bind(this));
         this.cleanUpPolygon();
     }
 

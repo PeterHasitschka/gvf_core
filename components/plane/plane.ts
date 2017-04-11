@@ -91,8 +91,8 @@ export class Plane {
         /**
          * Handle empty click in this plane (e.g. deselect selected)
          */
-        InterGraphEventService.getInstance().addListener(INTERGRAPH_EVENTS.EMPTY_SPACE_IN_PLANE_CLICKED, function(d){
-            if(this !== d.detail.plane)
+        InterGraphEventService.getInstance().addListener(INTERGRAPH_EVENTS.EMPTY_SPACE_IN_PLANE_CLICKED, function (d) {
+            if (this !== d.detail.plane)
                 return;
 
             if (this.selectedElement)
@@ -248,10 +248,11 @@ export class Plane {
         this.setSelectedGraphElement(null);
     }
 
-    public isSelectedElementOnionable():boolean {
+    public isSelectedElementAggregateable():boolean {
         if (!this.selectedElement || !(this.selectedElement instanceof NodeAbstract))
             return false;
-        return (<NodeAbstract>this.selectedElement).getIsOnionAble();
+        return (<NodeAbstract>this.selectedElement).getIsAggregatable();
     }
+
 
 }

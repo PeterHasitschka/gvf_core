@@ -2,6 +2,9 @@ import {Injectable} from "@angular/core";
 import {SideInfoModel} from "../components/app/sideinfo/sideinfomodel";
 import {GraphworkspaceComponent} from "../components/graphworkspace/graphworkspace.component";
 import {Plane} from "../components/plane/plane";
+import {ElementAbstract} from "../components/graphvis/graphs/graphelementabstract";
+import {NodeAbstract} from "../components/graphvis/graphs/nodes/nodeelementabstract";
+import {AnimationService} from "./animationservice";
 
 
 @Injectable()
