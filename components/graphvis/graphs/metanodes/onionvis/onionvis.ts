@@ -20,6 +20,9 @@ export class OnionVis extends MetanodeAbstract {
         },
         {
             max: 10
+        },
+        {
+            max: null
         }
     ];
 
@@ -111,7 +114,7 @@ export class OnionVis extends MetanodeAbstract {
 
             this.nodes.forEach((n) => {
                 let dist = n.getADistance(this.centerNode);
-                if (dist < minDist || dist > onion.max)
+                if (dist < minDist || (onion.max !== null && dist > onion.max))
                     return;
                 if (typeof matchingDistNodes[n.constructor.name] === "undefined")
                     matchingDistNodes[n.constructor.name] = [];
@@ -129,10 +132,11 @@ export class OnionVis extends MetanodeAbstract {
             let labelRad = size - sizeStep / 2 - 5;
             let labelPosX = labelRad * Math.sin(Math.PI);
             let labelPosY = labelRad * Math.cos(Math.PI);
-            let ringLabel = new Label(this.plane, "10-20", labelPosX, labelPosY, {
+            let label = minDist !== onion.max ? minDist + (onion.max !== null ? "-" + onion.max : "+") : minDist;
+            let ringLabel = new Label(this.plane, label, labelPosX, labelPosY, {
                 rotateDegree: rotDegree,
                 color: "#FFFFFF",
-                fontSize: 15,
+                fontSize: 17,
                 strokeColor: "#888888",
                 hidden: false
             });
@@ -186,7 +190,7 @@ export class OnionVis extends MetanodeAbstract {
             oniongroup.add(sepRing);
 
 
-            minDist = onion.max + 1;
+            minDist = onion.max !== null ? onion.max + 1 : null;
             size += sizeStep;
             zVal -= zStep;
         });
