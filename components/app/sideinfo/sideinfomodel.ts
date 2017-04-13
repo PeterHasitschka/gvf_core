@@ -13,7 +13,7 @@ export enum SideInfoContentType {
  * Model holding the title, the content-type and optional data for side-info content
  */
 export class SideInfoModel {
-    constructor(private title:String, private position:SideInfoPositions, private type:SideInfoContentType, private data?:{}) {
+    constructor(private title:String, private position:SideInfoPositions, private type:SideInfoContentType, private data?:{}, private priority:number = 100) {
     }
 
     public getTitle():String {
@@ -30,5 +30,9 @@ export class SideInfoModel {
 
     public getData():{} {
         return this.data;
+    }
+
+    public getPriority():number {
+        return this.priority;
     }
 }

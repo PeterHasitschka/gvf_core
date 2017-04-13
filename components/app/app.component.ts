@@ -64,17 +64,6 @@ export class AppComponent implements OnInit {
     ngOnInit() {
 
         this.uiService.addSideInfoElement(new SideInfoModel(
-            '<i class="fa fa-info-circle" aria-hidden="true"></i> Status',
-            SideInfoPositions.Right,
-            SideInfoContentType.Text,
-            {
-                text: "Prototype of GVF"
-            }
-            )
-        );
-
-
-        this.uiService.addSideInfoElement(new SideInfoModel(
             '<i class="fa fa-info-circle" aria-hidden="true"></i> Element-Info',
             SideInfoPositions.Right,
             SideInfoContentType.DynamicInfo,

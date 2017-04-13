@@ -76,8 +76,19 @@ export class UiService {
     }
 
     addSideInfoElement(sideInfo:SideInfoModel) {
+
+        let sortSideInfos = function compare(a:SideInfoModel, b:SideInfoModel) {
+            if (a.getPriority() < b.getPriority())
+                return -1;
+            if (a.getPriority() > b.getPriority())
+                return 1;
+            return 0;
+        };
+
         window.setTimeout(function () {
             this.sideInfoElements.push(sideInfo);
+            this.sideInfoElements.sort(sortSideInfos);
+
         }.bind(this));
     }
 
