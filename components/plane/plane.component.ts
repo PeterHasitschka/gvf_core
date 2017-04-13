@@ -153,6 +153,9 @@ export class PlaneComponent {
     private cameraDrag(x, y) {
         if (x === 0 && y === 0)
             return;
+        let zoom = this.plane.getGraphScene().getThreeCamera()['zoom'];
+        x /= zoom;
+        y /= zoom;
         let scene = this.plane.getGraphScene();
         scene.getThreeCamera().translateX(0 - x);
         scene.getThreeCamera().translateY(y);
