@@ -103,7 +103,7 @@ export class OnionVis extends MetanodeAbstract {
         let minDist = 1;
 
         let sizeStep = 20;
-        let size = this.centerNode['options']['size'] + sizeStep;
+        let size = (this.centerNode['options']['size'] ? this.centerNode['options']['size'] : 10 ) + sizeStep;
         let zVal = -1;
         let zStep = 2;
         OnionVis.onionSkins.forEach((onion) => {
