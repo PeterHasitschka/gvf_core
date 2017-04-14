@@ -34,10 +34,8 @@ export class Plane {
 
 
     /**
-     * @param{string} name - Defining the graph's name
-     * @param{string} graphtype
      */
-    constructor(private name:string, private graphclass, public uiService:UiService, private dataGetterFct = null) {
+    constructor(private name:string, private graphclass, public uiService:UiService, private dataGetterFct = null, private preMaximized=false) {
         Plane.planes.push(this);
     }
 
@@ -100,6 +98,9 @@ export class Plane {
                 this.selectedElement.deSelect(true);
 
         }.bind(this));
+
+        if (this.preMaximized)
+            this.maximize();
     }
 
 
