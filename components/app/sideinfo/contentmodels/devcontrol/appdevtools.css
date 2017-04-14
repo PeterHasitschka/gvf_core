@@ -1,3 +1,37 @@
 h4 {
     font-size: 16px;
 }
+
+.bold {
+    font-weight: bold;
+}
+
+.red {
+    font-weight: bold;
+    color:red;
+}
+
+.green {
+    color:green
+}
+
+.appdevtools_col50 {
+    width: calc(50% - 4px);
+    float: left;
+    background: white;
+    border: 1px solid;
+    margin: 2px;
+    padding:2px;
+}
+
+.appdevtools_col50 p {
+    margin-bottom: 0px;
+}
+
+.appdevtools_row {
+    width: 100%;
+    margin-bottom: 5px;
+    border: 1px solid gray;
+    padding: 4px;
+    float:left;
+}

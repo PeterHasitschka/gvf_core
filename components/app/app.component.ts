@@ -69,14 +69,14 @@ export class AppComponent implements OnInit {
             SideInfoContentType.DynamicInfo,
             {
                 //graphtype: this.plane.getGraphType()
-            }
+            }, 3
             )
         );
 
         this.uiService.addSideInfoElement(new SideInfoModel(
             '<i class="fa fa-hand-spock-o" aria-hidden="true"></i> App-Dev Tools',
             SideInfoPositions.Right,
-            SideInfoContentType.AppDevTools
+            SideInfoContentType.AppDevTools, {}, 2
         ));
 
 

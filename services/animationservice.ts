@@ -18,6 +18,7 @@ export class AnimationService {
     }
 
     private startAnimations() {
+
         if (this.animations.length)
             this.animate();
         window.requestAnimationFrame(this.startAnimations.bind(this));
@@ -359,10 +360,11 @@ export class AnimationService {
                 n.getPosition2DForAnimation.bind(n),
                 n.setPosition2DForAnimation.bind(n),
                 0,
-                0.5,
-                0.001,
                 1,
+                0.00001,
+                0.3,
                 function () {
+
                     movementsToFinish--;
                     if (movementsToFinish === 0) {
                         if (callback)

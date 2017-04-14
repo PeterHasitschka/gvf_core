@@ -29,8 +29,10 @@ export class GraphVisConfig {
             z: -100
         },
         debug: {
-            animationStatistics : true,
-            intervalledRenderStatistics: true
+            animationStatistics : false,
+            intervalledRenderStatistics: false,
+            clickDebug : false,
+            hoverDebug: false
         }
     };
 

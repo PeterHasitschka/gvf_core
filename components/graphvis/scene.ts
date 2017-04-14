@@ -165,4 +165,8 @@ export class GraphScene {
     public getObjectGroup():THREE.Object3D {
         return this.objectGroup;
     }
+
+    public getSceneMouseInteractions():SceneMouseInteractions {
+        return this.SceneMouseInteractions;
+    }
 }

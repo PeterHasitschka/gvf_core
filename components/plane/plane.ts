@@ -265,11 +265,20 @@ export class Plane {
         this.getGraphScene().render();
     }
 
-    public getRenderingStatistics() {
+    public getDebugRenderingStatistics() {
         return {
             renderingIntervals: (this.getGraphScene() && this.getGraphScene().getThreeRenderer()) ?
-                this.getGraphScene().getThreeRenderer().getNumRenderingsInInterval() : null
+                this.getGraphScene().getThreeRenderer().getNumRenderingsAvgPerSecond() : null
         }
     }
 
+    public getDebugClickStatistics() {
+        if (this.getGraphScene() && this.getGraphScene().getSceneMouseInteractions()) {
+            return {
+                clicked: this.getGraphScene().getSceneMouseInteractions().debug.click,
+                hovered: this.getGraphScene().getSceneMouseInteractions().debug.hover,
+                numIntersected: this.getGraphScene().getSceneMouseInteractions().debug.numIntersected
+            };
+        } else return [];
+    }
 }

@@ -1,6 +1,7 @@
 import {GraphScene} from "./scene";
 import {UiService} from "../../services/ui.service";
 import {InterGraphEventService, INTERGRAPH_EVENTS} from "../../services/intergraphevents.service";
+import {GraphVisConfig} from "./config";
 
 /**
  * Class that manages mouse interactions by recognizing intersections on THREE Objects and
@@ -11,6 +12,11 @@ export class SceneMouseInteractions {
 
     private mouseContainerPos = {x: null, y: null};
     private currentlyIntersected = {};
+    public debug = {
+        numIntersected: null,
+        click: [],
+        hover: []
+    };
 
 
     constructor(private scene:GraphScene) {
@@ -32,51 +38,121 @@ export class SceneMouseInteractions {
         this.scene.getThreeRaycaster().setFromCamera(this.mouseContainerPos, this.scene.getThreeCamera());
         var intersects = this.scene.getThreeRaycaster().intersectObjects(this.scene.getObjectGroup().children, true);
 
+        let debugClick = GraphVisConfig.scene.debug.clickDebug;
+        let debugHover = GraphVisConfig.scene.debug.hoverDebug;
 
-        let levelsToSearchUp = 3;
+
+        let levelsToSearchUp = 5;
         /**
          * Handle exactly one object (the nearest) when clicking on it!
          */
         if (click) {
-            let intersectedObj = intersects.pop();
-            if (!intersectedObj) {
-                InterGraphEventService.getInstance().send(INTERGRAPH_EVENTS.EMPTY_SPACE_IN_PLANE_CLICKED, this.scene);
-                return;
+            let clickableFound = false;
+
+            if (debugClick)
+                this.debug.click = [];
+            if (debugClick)
+                this.debug.numIntersected = intersects.length;
+
+            let BreakException = {};
+            try {
+                intersects.forEach((intersectedObj, i) => {
+
+                    if (clickableFound)
+                        throw BreakException;
+
+                    if (!intersectedObj) {
+                        InterGraphEventService.getInstance().send(INTERGRAPH_EVENTS.EMPTY_SPACE_IN_PLANE_CLICKED, this.scene);
+                        return;
+                    }
+                    let obj:any = intersectedObj['object'];
+                    if (obj === null) {
+                        return
+                    }
+                    let levelCtn = 0;
+                    if (debugClick) {
+                        obj['justclicked'] = false;
+                        this.debug.click.push(obj);
+                    }
+                    while (obj && typeof obj.onClick === 'undefined' && levelCtn < levelsToSearchUp) {
+                        obj = obj.parent;
+
+                        if (obj && debugClick) {
+                            obj['justclicked'] = false;
+                            this.debug.click.push(obj);
+                        }
+                        levelCtn++;
+                    }
+                    if (obj && typeof obj.onClick !== 'undefined') {
+                        obj.onClick();
+                        clickableFound = true;
+                        if (debugClick) {
+                            obj['justclicked'] = true;
+                        }
+                    }
+                    return;
+                });
+            } catch (e) {
+                if (e !== BreakException)
+                    throw e;
             }
-            let obj:any = intersectedObj['object'];
-            if (obj === null) {
-                return
-            }
-            let levelCtn = 0;
-            while (obj && typeof obj.onClick === 'undefined' && levelCtn < levelsToSearchUp) {
-                obj = obj.parent;
-                levelCtn++;
-            }
-            if (obj && typeof obj.onClick !== 'undefined')
-                obj.onClick();
-            return;
         }
 
+        /*
+         HOVERING
+         */
+        if (debugHover)
+            this.debug.hover = [];
+        if (debugHover)
+            this.debug.numIntersected = intersects.length;
 
         //Check for new
         let newIntersected = {};
-        intersects.forEach((intersectedObj) => {
-            let obj:any = intersectedObj['object'];
-            let levelCtn = 0;
-            while (typeof obj.onIntersectStart === 'undefined' && levelCtn < levelsToSearchUp) {
-                obj = obj.parent;
-                levelCtn++;
-            }
-            if (typeof obj.onIntersectStart === 'undefined')
-                return;
+        let BreakException = {};
+        let onlyOneIntersection = true;
+        let hoverableFound = false;
+        try {
+            intersects.forEach((intersectedObj) => {
 
-            let id = obj['uuid'];
-            if (typeof this.currentlyIntersected[id] === 'undefined') {
-                //console.log(obj.onIntersectStart);
-                obj.onIntersectStart();
-            }
-            newIntersected[id] = obj;
-        });
+                if (onlyOneIntersection && hoverableFound)
+                    throw BreakException;
+
+                let obj:any = intersectedObj['object'];
+                let levelCtn = 0;
+
+                if (debugHover) {
+                    obj['justhovered'] = false;
+                    this.debug.hover.push(obj);
+                }
+
+                while (typeof obj.onIntersectStart === 'undefined' && levelCtn < levelsToSearchUp) {
+                    obj = obj.parent;
+
+                    if (debugHover) {
+                        obj['justhovered'] = false;
+                        this.debug.hover.push(obj);
+                    }
+                    levelCtn++;
+                }
+                if (typeof obj.onIntersectStart === 'undefined')
+                    return;
+
+                let id = obj['uuid'];
+                if (typeof this.currentlyIntersected[id] === 'undefined') {
+                    //console.log(obj.onIntersectStart);
+                    if (debugHover) {
+                        obj['justhovered'] = true;
+                    }
+                    obj.onIntersectStart();
+                    hoverableFound = true;
+                }
+                newIntersected[id] = obj;
+            });
+        } catch (e) {
+            if (e !== BreakException)
+                throw e;
+        }
+
 
         //Check for old
         for (let oldId in this.currentlyIntersected) {

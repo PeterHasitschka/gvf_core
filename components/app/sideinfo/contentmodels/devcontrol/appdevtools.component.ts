@@ -27,11 +27,15 @@ export class SideInfoContentAppDevToolsComponent implements OnDestroy {
     private planes:Plane[];
     private animationDebug = false;
     private renderDebug = false;
+    private clickDebug = false;
+    private hoverDebug = false;
 
     constructor(private intergraphEventService:InterGraphEventService) {
         this.planes = Plane.getPlanes();
         this.renderDebug = GraphVisConfig.scene.debug.intervalledRenderStatistics;
         this.animationDebug = GraphVisConfig.scene.debug.animationStatistics;
+        this.clickDebug = GraphVisConfig.scene.debug.clickDebug;
+        this.hoverDebug = GraphVisConfig.scene.debug.hoverDebug;
     }
 
     private onSliderChange(val) {

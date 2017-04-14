@@ -1,14 +1,38 @@
-<div *ngIf="animationDebug">
+<div class="appdevtools_row" *ngIf="animationDebug">
     <h4>Animations</h4>
     <p>Current animations: {{animationService.getAnimationCount()}}</p>
 </div>
 
-<div *ngIf="renderDebug">
-    <h4>Renderings</h4>
-    <p *ngFor="let p of planes">Renderings Plane #{{p.getId()}}:
-        <span ngif="p.getGraphScene()">{{p.getRenderingStatistics().renderingIntervals}}</span>
+<div class="appdevtools_row" *ngIf="renderDebug">
+    <h4>Rendering Calls (Avg./Second)</h4>
+    <p *ngFor="let p of planes" [ngClass]="{'red' : p.getDebugRenderingStatistics().renderingIntervals,
+    'green':  !p.getDebugRenderingStatistics().renderingIntervals}">Renderings Plane #{{p.getId()}}:
+        <span ngif="p.getGraphScene()">{{p.getDebugRenderingStatistics().renderingIntervals}}</span>
     </p>
 </div>
 
-<h4>Log-Level ({{logLevel}})</h4>
-<input type="range" #ref min="1" max="10" step="1" (input)="onSliderChange(ref.value)" value="{{logLevel}}"/>
+<div class="appdevtools_row" *ngIf="clickDebug">
+    <h4>Clicks</h4>
+    <div class="appdevtools_col50" *ngFor="let p of planes">
+        <h5>Plane #{{p.getId()}}</h5>
+        <p>Total Intersected: {{p.getDebugClickStatistics().numIntersected}}</p>
+        <p [ngClass]="{'bold' : elm.justclicked}" *ngFor="let elm of p.getDebugClickStatistics().clicked">
+            {{elm.constructor.name}}
+        </p>
+    </div>
+
+</div><div class="appdevtools_row" *ngIf="hoverDebug">
+    <h4>Hovering</h4>
+    <div class="appdevtools_col50" *ngFor="let p of planes">
+        <h5>Plane #{{p.getId()}}</h5>
+        <p>Total Intersected: {{p.getDebugClickStatistics().numIntersected}}</p>
+        <p [ngClass]="{'bold' : elm.justhovered}" *ngFor="let elm of p.getDebugClickStatistics().hovered">
+            {{elm.constructor.name}}
+        </p>
+    </div>
+</div>
+
+<div class="appdevtools_row">
+    <h4>Log-Level ({{logLevel}})</h4>
+    <input type="range" #ref min="1" max="10" step="1" (input)="onSliderChange(ref.value)" value="{{logLevel}}"/>
+</div>
