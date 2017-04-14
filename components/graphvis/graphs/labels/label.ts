@@ -37,7 +37,7 @@ export class Label extends THREE.Points {
             fontSize: 13,
             hidden: false,
             turnAroundWhenUpsidedown: true,
-            turnAroundLimit: 100
+            turnAroundLimitDegree: 90
         };
 
         for (var key in preOptions) {
@@ -76,9 +76,9 @@ export class Label extends THREE.Points {
     protected getRotationDegree() {
         let rot = this.options.rotateDegree;
         if (this.options.turnAroundWhenUpsidedown &&
-            rot > this.options.turnAroundLimit &&
-            rot < 360 - this.options.turnAroundLimit)
-            rot = 0;
+            rot > this.options.turnAroundLimitDegree &&
+            rot < 360 - this.options.turnAroundLimitDegree)
+            rot = rot + 180;
         return rot;
     }
 

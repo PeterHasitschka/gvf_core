@@ -279,6 +279,10 @@ export class Plane {
                 hovered: this.getGraphScene().getSceneMouseInteractions().debug.hover,
                 numIntersected: this.getGraphScene().getSceneMouseInteractions().debug.numIntersected
             };
-        } else return [];
+        } else return {
+            clicked: [],
+            hovered: [],
+            numIntersected: null
+        };
     }
 }

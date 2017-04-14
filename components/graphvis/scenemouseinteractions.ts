@@ -114,40 +114,45 @@ export class SceneMouseInteractions {
         try {
             intersects.forEach((intersectedObj) => {
 
-                if (onlyOneIntersection && hoverableFound)
-                    throw BreakException;
+                    if (onlyOneIntersection && hoverableFound)
+                        throw BreakException;
 
-                let obj:any = intersectedObj['object'];
-                let levelCtn = 0;
+                    let obj:any = intersectedObj['object'];
+                    let levelCtn = 0;
 
-                if (debugHover) {
-                    obj['justhovered'] = false;
-                    this.debug.hover.push(obj);
-                }
-
-                while (typeof obj.onIntersectStart === 'undefined' && levelCtn < levelsToSearchUp) {
-                    obj = obj.parent;
+                    if (obj === null)
+                        return;
 
                     if (debugHover) {
                         obj['justhovered'] = false;
                         this.debug.hover.push(obj);
                     }
-                    levelCtn++;
-                }
-                if (typeof obj.onIntersectStart === 'undefined')
-                    return;
 
-                let id = obj['uuid'];
-                if (typeof this.currentlyIntersected[id] === 'undefined') {
-                    //console.log(obj.onIntersectStart);
-                    if (debugHover) {
-                        obj['justhovered'] = true;
+
+                    while (obj && typeof obj.onIntersectStart === 'undefined' && levelCtn < levelsToSearchUp) {
+                        obj = obj.parent;
+
+                        if (debugHover) {
+                            obj['justhovered'] = false;
+                            this.debug.hover.push(obj);
+                        }
+                        levelCtn++;
                     }
-                    obj.onIntersectStart();
-                    hoverableFound = true;
+                    if (!obj || typeof obj.onIntersectStart === 'undefined')
+                        return;
+
+                    let id = obj['uuid'];
+                    if (typeof this.currentlyIntersected[id] === 'undefined') {
+                        //console.log(obj.onIntersectStart);
+                        if (debugHover) {
+                            obj['justhovered'] = true;
+                        }
+                        obj.onIntersectStart();
+                        hoverableFound = true;
+                    }
+                    newIntersected[id] = obj;
                 }
-                newIntersected[id] = obj;
-            });
+            );
         } catch (e) {
             if (e !== BreakException)
                 throw e;

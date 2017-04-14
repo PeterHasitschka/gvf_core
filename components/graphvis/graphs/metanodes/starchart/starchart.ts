@@ -50,6 +50,7 @@ export abstract class StarChart extends MetanodeAbstract {
         },
 
         labels: {
+            pieNodeLabel: false,
             pieNodeLabelDistance: 110,
             pieNodeLabelFontSize: 20,
             pieNodeLabelStrokeColor: "#888888",
@@ -114,9 +115,12 @@ export abstract class StarChart extends MetanodeAbstract {
             nodePieGroup.add(nodePieMesh);
 
 
-            let nodePieLabel = this.createNodePieLabel(nodeConfig, startAngleRad, endAngleRad, color);
-            nodePieGroup.add(nodePieLabel);
-            this.labels.push(nodePieLabel);
+            if (StarChart.starChartConfig.labels.pieNodeLabel) {
+                let nodePieLabel = this.createNodePieLabel(nodeConfig, startAngleRad, endAngleRad, color);
+                nodePieGroup.add(nodePieLabel);
+                this.labels.push(nodePieLabel);
+            }
+
 
             /*
              Create the property pies and add them to the nodePieGroup
@@ -220,7 +224,7 @@ export abstract class StarChart extends MetanodeAbstract {
         let labelPosX = this.metanodeOptions.labels.piePropValLabelDistance * Math.sin((startAngleRad + endAngleRad) / 2);
         let labelPosY = this.metanodeOptions.labels.piePropValLabelDistance * Math.cos((startAngleRad + endAngleRad) / 2);
 
-        let rotDegree = ((startAngleRad + endAngleRad) / 2) * 360 / (Math.PI * 2);
+        let rotDegree = (((startAngleRad + endAngleRad) / 2 ) * 360 / (Math.PI * 2)) + 90;
         let hexStrColor = "#" + color.toString(16);
         let nodePieLabel = new Label(this.plane, title, labelPosX, labelPosY, {
             rotateDegree: rotDegree,
