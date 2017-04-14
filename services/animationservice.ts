@@ -14,7 +14,7 @@ export class AnimationService {
             return AnimationService.getInstance();
         }
 
-        this.startAnimations();
+
     }
 
     private startAnimations() {
@@ -27,6 +27,7 @@ export class AnimationService {
         if (AnimationService.instance == null) {
             AnimationService.isCreating = true;
             AnimationService.instance = new AnimationService();
+            AnimationService.instance.startAnimations();
             AnimationService.isCreating = false;
         }
         return AnimationService.instance;
@@ -198,7 +199,6 @@ export class AnimationService {
     };
 
     public animate() {
-
         let planesToRender = {};
 
         for (var a_count = 0; a_count < this.animations.length; a_count++) {
@@ -400,5 +400,9 @@ export class AnimationService {
                 plane
             );
         });
+    }
+
+    public getAnimationCount() {
+        return this.animations.length;
     }
 }

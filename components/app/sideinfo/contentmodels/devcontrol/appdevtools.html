@@ -1,3 +1,14 @@
+<div *ngIf="animationDebug">
+    <h4>Animations</h4>
+    <p>Current animations: {{animationService.getAnimationCount()}}</p>
+</div>
+
+<div *ngIf="renderDebug">
+    <h4>Renderings</h4>
+    <p *ngFor="let p of planes">Renderings Plane #{{p.getId()}}:
+        <span ngif="p.getGraphScene()">{{p.getRenderingStatistics().renderingIntervals}}</span>
+    </p>
+</div>
+
 <h4>Log-Level ({{logLevel}})</h4>
-<input  type="range" #ref min="1" max="10" step="1" (input)="onSliderChange(ref.value)" value="{{logLevel}}"/>
-<p>Open the browser's console to see to logging with this level</p>
+<input type="range" #ref min="1" max="10" step="1" (input)="onSliderChange(ref.value)" value="{{logLevel}}"/>

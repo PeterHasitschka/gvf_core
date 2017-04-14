@@ -3,6 +3,7 @@ import {SceneMouseInteractions} from "./scenemouseinteractions";
 import {Plane} from "../plane/plane";
 import {UiService} from "../../services/ui.service";
 import {Label} from "./graphs/labels/label";
+import {ThreeWebGlRendererMoving} from "./three/threewebglrenderer";
 
 
 //const THREE = require('../../../node_modules/three/build/three.js');
@@ -15,7 +16,7 @@ import {Label} from "./graphs/labels/label";
 export class GraphScene {
 
     private threeScene:THREE.Scene;
-    private threeRenderer:THREE.WebGLRenderer;
+    private threeRenderer:ThreeWebGlRendererMoving
     private threeCamera:THREE.Camera;
     private threeRaycaster:THREE.Raycaster;
     private SceneMouseInteractions:SceneMouseInteractions;
@@ -32,7 +33,7 @@ export class GraphScene {
         var canvasW = plane.getCanvasSize()["x"],
             canvasH = plane.getCanvasSize()["y"];
 
-        this.threeRenderer = new THREE.WebGLRenderer({alpha: true, antialias: true});
+        this.threeRenderer = new ThreeWebGlRendererMoving({alpha: true, antialias: true});
 
 
         this.threeCamera = new THREE.OrthographicCamera(
@@ -141,7 +142,7 @@ export class GraphScene {
         return this.threeScene;
     }
 
-    public getThreeRenderer():THREE.WebGLRenderer {
+    public getThreeRenderer():ThreeWebGlRendererMoving {
         return this.threeRenderer;
     }
 

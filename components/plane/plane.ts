@@ -167,8 +167,8 @@ export class Plane {
     }
 
     public getGraphScene():GraphScene {
-        if (!this.scene)
-            console.error("Could not get Graph Scene - Not initialized yet?");
+        // if (!this.scene)
+        //     console.error("Could not get Graph Scene - Not initialized yet?");
         return this.scene;
     }
 
@@ -265,5 +265,11 @@ export class Plane {
         this.getGraphScene().render();
     }
 
+    public getRenderingStatistics() {
+        return {
+            renderingIntervals: (this.getGraphScene() && this.getGraphScene().getThreeRenderer()) ?
+                this.getGraphScene().getThreeRenderer().getNumRenderingsInInterval() : null
+        }
+    }
 
 }

@@ -139,7 +139,7 @@ export class UiService {
     }
 
 
-    public static logLevelLimit = 5;
+    public static logLevelLimit = 1;
 
     /**
      * Logging to console.

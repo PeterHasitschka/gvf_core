@@ -27,6 +27,10 @@ export class GraphVisConfig {
             color: '#FFEEEE',
             padding: 0,
             z: -100
+        },
+        debug: {
+            animationStatistics : true,
+            intervalledRenderStatistics: true
         }
     };
 
