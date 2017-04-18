@@ -68,4 +68,19 @@ export class HelperService {
         };
     }
 
+    public isObjectInCameraField(plane, obj:THREE.Object3D):boolean {
+        var vector = new THREE.Vector3();
+
+        let canvasSize = plane.getCanvasSize();
+        let camera = plane.getGraphScene().getThreeCamera();
+
+        obj.updateMatrixWorld(true);
+        vector.setFromMatrixPosition(obj.matrixWorld);
+        vector.project(camera);
+
+        if (vector.x < -1 || vector.x > 1 || vector.y < -1 || vector.y > 1)
+            return false;
+        return true;
+    }
+
 }

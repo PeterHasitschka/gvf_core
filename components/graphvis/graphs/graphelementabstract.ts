@@ -6,7 +6,15 @@ import {EdgeAbstract} from "./edges/edgeelementabstract";
 import {WORKER_UI_STARTABLE_MESSAGING_SERVICE} from "@angular/platform-browser";
 import {UiService} from "../../../services/ui.service";
 import {InterGraphEventService, INTERGRAPH_EVENTS} from "../../../services/intergraphevents.service";
+import {HelperService} from "../../../services/helper.service";
+import {Label} from "./labels/label";
 
+
+export enum GRAPH_ELEMENT_LABEL_TYPE {
+    NONE,
+    TEXT,
+    ICON
+}
 
 /**
  * Abstract class of a Node or Group for the GraphVis
@@ -31,6 +39,15 @@ export abstract class ElementAbstract extends THREE.Group implements GraphObject
     protected edges = [];
     protected uniqueId:string;
 
+    protected labelType:GRAPH_ELEMENT_LABEL_TYPE = GRAPH_ELEMENT_LABEL_TYPE.NONE;
+    protected label:THREE.Object3D;
+    protected labelText:string = "";
+    protected labelTextColor:string = "white";
+    protected labelTextSize:number = 10;
+    protected labelIconPath:string = "/gvfcore/assets/icons/x.png";
+    protected labelIconSize:number = 20;
+    protected labelZoomLevelMin = 1.5;
+
     protected static idCounter = 0;
 
     public static IDENTIFIER = "GVF Element";
@@ -52,6 +69,7 @@ export abstract class ElementAbstract extends THREE.Group implements GraphObject
 
         if (typeof options !== "undefined" && options !== null)
             this.options = options;
+
 
         this.name = ElementAbstract.IDENTIFIER;
 
@@ -78,7 +96,61 @@ export abstract class ElementAbstract extends THREE.Group implements GraphObject
 
         this.uniqueId = "e" + ElementAbstract.idCounter;
         ElementAbstract.idCounter++;
+
     }
+
+    protected createLabel() {
+
+        if (this.labelType === GRAPH_ELEMENT_LABEL_TYPE.NONE) {
+            this.label = null;
+            return;
+        }
+
+        if (this.labelType === GRAPH_ELEMENT_LABEL_TYPE.ICON) {
+            this.label = null;
+
+            if (!this.labelIconPath) {
+                console.warn("No Icon set for node", this);
+                return;
+            }
+
+            var textureLoader = new THREE.TextureLoader();
+            textureLoader.load(this.labelIconPath, function (texture) {
+                texture.minFilter = THREE.LinearFilter;
+                let iconCircle = new THREE.Mesh(new THREE.CircleGeometry(
+                    this.labelIconSize,
+                    GraphVisConfig.graphelements.abstractnode.segments),
+                    new THREE.MeshBasicMaterial({
+                        map: texture,
+                        side: THREE.DoubleSide,
+                        transparent: true,
+                        color: 0xFFFFFF,
+                        visible: true,
+                    }));
+
+                texture.flipY = true;
+                this.label = iconCircle;
+                this.add(this.label);
+            }.bind(this));
+        }
+
+
+        if (this.labelType === GRAPH_ELEMENT_LABEL_TYPE.TEXT) {
+            this.label = null;
+
+            let label = new Label(this.plane, this.labelText, 0, 0, {
+                color: this.labelTextColor,
+                fontSize: this.labelTextSize,
+                strokeColor: null
+            });
+
+
+            this.label = label;
+            this.add(this.label);
+        }
+
+    }
+
 
     public getUniqueId() {
         return this.uniqueId;
@@ -314,6 +386,33 @@ export abstract class ElementAbstract extends THREE.Group implements GraphObject
         UiService.consolelog("Deleting Graph element", this);
         this.plane.getGraphScene().getThreeScene().remove(this);
         this.plane.getGraphScene().render();
+    }
+
+    public adjustZoom(zoomLevel:number) {
+        let isInField = HelperService.getInstance().isObjectInCameraField(this.plane, this);
+        if (isInField) {
+            if (this.labelType !== GRAPH_ELEMENT_LABEL_TYPE.NONE && typeof this.label === "undefined" && zoomLevel >= this.labelZoomLevelMin) {
+                this.createLabel();
+            }
+        }
+        if (isInField && this.label) {
+            if (zoomLevel < this.labelZoomLevelMin && this.label.visible) {
+                if (this.label instanceof Label)
+                    (<Label>this.label).hide();
+                this.label.traverse(function (object) {
+                    object.visible = false;
+                });
+            }
+            else if (zoomLevel >= this.labelZoomLevelMin && !this.label.visible) {
+                if (this.label instanceof Label)
+                    (<Label>this.label).show();
+                this.label.traverse(function (object) {
+                    object.visible = true;
+                });
+            }
+        }
+
+
     }
 
 

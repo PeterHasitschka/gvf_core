@@ -4,6 +4,7 @@ import {Plane} from "../plane/plane";
 import {UiService} from "../../services/ui.service";
 import {Label} from "./graphs/labels/label";
 import {ThreeWebGlRendererMoving} from "./three/threewebglrenderer";
+import {ElementAbstract} from "./graphs/graphelementabstract";
 
 
 //const THREE = require('../../../node_modules/three/build/three.js');
@@ -115,6 +116,12 @@ export class GraphScene {
                 l.adjustZoom();
         });
 
+        this.objectGroup.children.forEach((elm) => {
+          if (elm instanceof ElementAbstract) {
+            (<ElementAbstract>elm).adjustZoom(this.threeCamera['zoom']);
+          }
+        });
+
         this.render();
     }
 
@@ -125,6 +132,12 @@ export class GraphScene {
         Label.getLabelList().forEach((l) => {
             if (l.getIsVisible())
                 l.adjustZoom();
+        });
+
+        this.objectGroup.children.forEach((elm) => {
+            if (elm instanceof ElementAbstract) {
+                (<ElementAbstract>elm).adjustZoom(this.threeCamera['zoom']);
+            }
         });
 
         this.render();
