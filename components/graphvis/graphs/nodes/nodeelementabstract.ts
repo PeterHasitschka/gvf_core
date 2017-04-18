@@ -33,6 +33,8 @@ export abstract class NodeAbstract extends ElementAbstract {
                     color: GraphVisConfig.graphelements.abstractnode.color
                 }));
 
+        // For 'real' overlapping
+        this.zPos = Math.random() - 0.5;
         this.add(this.nodeMesh);
         //this.nodeMesh['onIntersectStart'] = this.onIntersectStart;
     }

@@ -55,6 +55,11 @@ export abstract class StarChart extends MetanodeAbstract {
             pieNodeLabelFontSize: 20,
             pieNodeLabelStrokeColor: "#888888",
             //
+            piePropLabelDistance: 200,
+            piePropLabelFontSize: 20,
+            piePropLabelStrokeColor: "#888888",
+            hidden: true,
+            //
             piePropValLabelDistance: 85,
             piePropValLabelFontSize: 18,
             piePropValLabelStrokeColor: "#888888",
@@ -181,7 +186,13 @@ export abstract class StarChart extends MetanodeAbstract {
             /*
              Go THROUGH VALUES
              */
+
+
             let propPieWidth = (propWidth - betweenPropPadding) / propValLength;
+            let propLabel = this.createPropLabel(propName, currStartAngle, currStartAngle + propWidth, color);
+            propGroup.add(propLabel);
+            this.labels.push(propLabel);
+
             for (var propVal in collectedPropVals.vals) {
 
                 let valOccurenceAmount = collectedPropVals.vals[propVal];
@@ -219,6 +230,22 @@ export abstract class StarChart extends MetanodeAbstract {
         return propGroup;
     }
 
+
+    private createPropLabel(title, startAngleRad, endAngleRad, color) {
+        let labelPosX = this.metanodeOptions.labels.piePropLabelDistance * Math.sin((startAngleRad + endAngleRad) / 2);
+        let labelPosY = this.metanodeOptions.labels.piePropLabelDistance * Math.cos((startAngleRad + endAngleRad) / 2);
+
+        let rotDegree = (((startAngleRad + endAngleRad) / 2 ) * 360 / (Math.PI * 2)) + 90;
+        let hexStrColor = "#" + color.toString(16);
+        let nodePieLabel = new Label(this.plane, title, labelPosX, labelPosY, {
+            rotateDegree: rotDegree,
+            color: hexStrColor,
+            fontSize: this.metanodeOptions.labels.piePropLabelFontSize,
+            strokeColor: this.metanodeOptions.labels.piePropLabelStrokeColor,
+            hidden: this.metanodeOptions.labels.hidden
+        });
+        return nodePieLabel;
+    }
 
     private createPropValPieLabel(title, startAngleRad, endAngleRad, color) {
         let labelPosX = this.metanodeOptions.labels.piePropValLabelDistance * Math.sin((startAngleRad + endAngleRad) / 2);

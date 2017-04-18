@@ -117,7 +117,7 @@ export abstract class ElementAbstract extends THREE.Group implements GraphObject
 
             var textureLoader = new THREE.TextureLoader();
             textureLoader.load(this.labelIconPath, function (texture) {
-                texture.minFilter = THREE.LinearFilter;
+                //texture.minFilter = THREE.LinearFilter;
                 let iconCircle = new THREE.Mesh(new THREE.CircleGeometry(
                     this.labelIconSize,
                     GraphVisConfig.graphelements.abstractnode.segments),
@@ -129,8 +129,9 @@ export abstract class ElementAbstract extends THREE.Group implements GraphObject
                         visible: true,
                     }));
 
-                texture.flipY = true;
+                //texture.flipY = true;
                 this.label = iconCircle;
+                this.label.position.set(0,0,0);
                 this.add(this.label);
             }.bind(this));
         }

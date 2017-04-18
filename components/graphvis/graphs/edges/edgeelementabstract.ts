@@ -50,8 +50,8 @@ export abstract class EdgeAbstract extends THREE.Line implements GraphObject {
         let material = new THREE.LineBasicMaterial({
             color: color,
             linewidth: config.abstractedge.thickness,
-            opacity : 1.0,
-            transparent : true
+            opacity: 1.0,
+            transparent: true
         });
         let geometry = new THREE.Geometry();
         geometry.vertices.push(new THREE.Vector3(startX, startY, config.abstractedge.z_pos));
@@ -114,7 +114,6 @@ export abstract class EdgeAbstract extends THREE.Line implements GraphObject {
         this.opacity = opacity;
         this.threeMaterial.opacity = opacity;
     }
-
 
 
     /**
