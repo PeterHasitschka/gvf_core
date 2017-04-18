@@ -63,7 +63,6 @@ export abstract class StarChart extends MetanodeAbstract {
             piePropValLabelDistance: 85,
             piePropValLabelFontSize: 18,
             piePropValLabelStrokeColor: "#888888",
-            hidden: true
         }
     };
 
