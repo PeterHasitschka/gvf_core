@@ -47,6 +47,7 @@ export abstract class ElementAbstract extends THREE.Group implements GraphObject
     protected labelIconPath:string = "/gvfcore/assets/icons/x.png";
     protected labelIconSize:number = 20;
     protected labelZoomLevelMin = 1.5;
+    protected labelZoomAdjustmentBlocked = false;
 
     protected static idCounter = 0;
 
@@ -388,7 +389,34 @@ export abstract class ElementAbstract extends THREE.Group implements GraphObject
         this.plane.getGraphScene().render();
     }
 
+    public hideLabel() {
+        if (!this.label)
+            return;
+        if (this.label instanceof Label)
+            (<Label>this.label).hide();
+        this.label.traverse(function (object) {
+            object.visible = false;
+        });
+    }
+
+    public showLabel() {
+        if (!this.label)
+            return;
+        if (this.label instanceof Label)
+            (<Label>this.label).show();
+        this.label.traverse(function (object) {
+            object.visible = true;
+        });
+    }
+
+    public setLabelZoomAdjustmentBlocked(blocked:boolean) {
+        this.labelZoomAdjustmentBlocked = blocked;
+    }
+
     public adjustZoom(zoomLevel:number) {
+        if (this.labelZoomAdjustmentBlocked)
+            return;
+
         let isInField = HelperService.getInstance().isObjectInCameraField(this.plane, this);
         if (isInField) {
             if (this.labelType !== GRAPH_ELEMENT_LABEL_TYPE.NONE && typeof this.label === "undefined" && zoomLevel >= this.labelZoomLevelMin) {
@@ -397,18 +425,10 @@ export abstract class ElementAbstract extends THREE.Group implements GraphObject
         }
         if (isInField && this.label) {
             if (zoomLevel < this.labelZoomLevelMin && this.label.visible) {
-                if (this.label instanceof Label)
-                    (<Label>this.label).hide();
-                this.label.traverse(function (object) {
-                    object.visible = false;
-                });
+                this.hideLabel();
             }
             else if (zoomLevel >= this.labelZoomLevelMin && !this.label.visible) {
-                if (this.label instanceof Label)
-                    (<Label>this.label).show();
-                this.label.traverse(function (object) {
-                    object.visible = true;
-                });
+                this.showLabel();
             }
         }
 

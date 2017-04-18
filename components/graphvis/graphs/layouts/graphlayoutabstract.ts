@@ -8,6 +8,9 @@ import {NodeAbstract} from "../nodes/nodeelementabstract";
  */
 export abstract class GraphLayoutAbstract implements LayoutInterface {
 
+
+    protected distributionFactor = 1.0;
+
     /**
      *
      * @param plane Plane-Instance
@@ -20,8 +23,8 @@ export abstract class GraphLayoutAbstract implements LayoutInterface {
     protected distributeRandom(onFinish):void {
         let padding = 0;
         let dimensions = this.plane.getCanvasSize();
-        let xRange = dimensions['x'] - padding;
-        let yRange = dimensions['y'] - padding;
+        let xRange = (dimensions['x'] - padding) * this.distributionFactor;
+        let yRange = (dimensions['y'] - padding) * this.distributionFactor;
         this.nodes.forEach(function (node:NodeAbstract, idx:number) {
             var posX = Math.random() * xRange - xRange / 2;
             var posY = Math.random() * yRange - yRange / 2;

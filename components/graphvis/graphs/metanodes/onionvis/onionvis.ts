@@ -39,6 +39,7 @@ export class OnionVis extends MetanodeAbstract {
                 for (var meshKey in this.meshs) {
                     this.add(this.meshs[meshKey]);
                 }
+                AnimationService.getInstance().finishAllAnimations();
                 this.plane.getGraphScene().render();
 
             }.bind(this));

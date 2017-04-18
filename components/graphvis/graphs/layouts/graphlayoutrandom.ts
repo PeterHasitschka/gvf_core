@@ -19,7 +19,10 @@ export class GraphLayoutRandom extends GraphLayoutAbstract {
     }
 
     public setInitPositions(onFinish):void {
-        this.distributeRandom(onFinish);
+        window.setTimeout(function () {
+            this.distributeRandom(onFinish);
+
+        }.bind(this), 0)
     }
 
 

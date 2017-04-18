@@ -178,7 +178,6 @@ export class AnimationService {
 
         var abs_diff = this.animMultiVarOperations.sub(max_val, min_val);
 
-
         if (this.animMultiVarOperations.length(abs_diff) > threshold) {
 
             //Normalize to a small value
@@ -207,6 +206,7 @@ export class AnimationService {
             var curr_anim = this.animations[a_count];
             var curr_val = curr_anim.getter_fct(curr_anim.object);
 
+
             if (curr_anim.max_diff === null)
                 curr_anim.max_diff = this.animMultiVarOperations.sub(curr_anim.goal, curr_val);
 
@@ -231,6 +231,7 @@ export class AnimationService {
                 if (curr_anim.add_to_current)
                     val_to_set = curr_anim.goal;
             }
+
 
             //Build parameter array for setter function
             var params_for_setting = [];
@@ -352,6 +353,8 @@ export class AnimationService {
     public collapseNodes(nodes:NodeAbstract[], plane:Plane, pos, callback:Function):void {
         let movementsToFinish = nodes.length;
         nodes.forEach((n:NodeAbstract) => {
+            n.hideLabel();
+            n.setLabelZoomAdjustmentBlocked(true);
             n.saveOrigPosition();
             this.register(
                 "nodepos_" + n.getUniqueId(),
@@ -362,14 +365,14 @@ export class AnimationService {
                 0,
                 1,
                 0.00001,
-                0.3,
+                0.1,
                 function () {
-
-                    movementsToFinish--;
-                    if (movementsToFinish === 0) {
-                        if (callback)
-                            callback();
-                    }
+                    if (callback)
+                        callback();
+                    // movementsToFinish--;
+                    // if (movementsToFinish === 0) {
+                    //
+                    // }
                 },
                 true,
                 plane
@@ -381,6 +384,8 @@ export class AnimationService {
     public restoreNodeOriginalPositions(nodes:NodeAbstract[], plane:Plane, callback:Function):void {
         let movementsToFinish = nodes.length;
         nodes.forEach((n:NodeAbstract) => {
+            n.setLabelZoomAdjustmentBlocked(false);
+
             this.register(
                 "nodepos_" + n.getUniqueId(),
                 {'x': n.getOrigPosition().x, 'y': n.getOrigPosition().y},
