@@ -70,6 +70,7 @@ export abstract class EdgeAbstract extends THREE.Line implements GraphObject {
         this.zPos = config.abstractedge.z_pos;
 
         this.origOpacity = this.opacity;
+        this.frustumCulled = false;
     }
 
     private addRandomColorValue(color:number):number {
