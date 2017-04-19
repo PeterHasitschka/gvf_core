@@ -5,8 +5,9 @@
             <div class="graphvisplanebtn" *ngIf="plane.isSelectedElementDeletable()" title="Delete Selected Element"
                  (click)="plane.deleteSelectedElement()">
                 <i class="fa fa-trash" aria-hidden="true"></i></div>
-            <div class="graphvisplanebtn" *ngIf="plane.isSelectedElementAggregateable()" (click)="plane.createCollapsedAggregationOnNode()" title="Collapse Graph for Navigation (Onion-Style)"
-                 >
+            <div class="graphvisplanebtn" *ngIf="plane.isSelectedElementAggregateable()"
+                 (click)="plane.createCollapsedAggregationOnNode()" title="Collapse Graph for Navigation (Onion-Style)"
+            >
                 <i class="fa fa-compass" aria-hidden="true"></i></div>
         </div>
         <div class="graphvisplanectrl">
@@ -19,6 +20,9 @@
     </div>
     <div class="graphvisplanecontainercontent" id="{{plane.getContainerPrefix()}}{{getId()}}">
         <div class="labelcontainer" width="100%" height="100%"></div>
+        <div *ngIf="plane.getShowGreyOverlay()" class="plane_grey_overlay">
+            <img src="gvfcore/assets/gears.gif"/>
+        </div>
     </div>
     <div class="graphvisplaneresizer"></div>
 </div>

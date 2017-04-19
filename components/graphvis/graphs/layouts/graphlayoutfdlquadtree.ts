@@ -3,6 +3,13 @@ import {Plane} from '../../../plane/plane';
 import {EdgeAbstract} from "../edges/edgeelementabstract";
 import {NodeAbstract} from "../nodes/nodeelementabstract";
 
+export enum WORKER_MSGS {
+    STARTCALCULATING,
+    FINISHEDCALCULATION,
+    ERROR
+}
+;
+
 /**
  * Force-Directed-Layout for Graphs
  */
@@ -14,12 +21,26 @@ export class GraphLayoutFdlQuadtree extends GraphLayoutAbstract {
     }
 
     public setInitPositions(onFinish):void {
-        this.distributeRandom(onFinish);
+        //this.distributeRandom(onFinish);
+        onFinish();
     }
 
 
     public calculateLayout(onFinish):void {
+        this.plane.setShowGreyOverlay(true);
+        window.setTimeout(function () {
+            this.calculate();
+            this.plane.getGraphScene().fitAllNodesInView(function () {
+                this.plane.setShowGreyOverlay(false);
+                onFinish();
+            }.bind(this));
+        }.bind(this),0);
 
+        return;
+    }
+
+
+    private calculate() {
         var createGraph = require('ngraph.graph');
         var g = createGraph();
 
@@ -38,7 +59,17 @@ export class GraphLayoutFdlQuadtree extends GraphLayoutAbstract {
             });
         });
 
-        var layout = require('ngraph.forcelayout')(g);
+        var physicsSettings = {
+            springLength: 30,
+            springCoeff: 0.0008,
+            gravity: -1.2,
+            theta: 0.8,
+            dragCoeff: 0.02,
+            timeStep: 20
+        };
+
+
+        var layout = require('ngraph.forcelayout')(g, physicsSettings);
         for (var i = 0; i < 1000; ++i) {
             layout.step();
         }
@@ -48,7 +79,6 @@ export class GraphLayoutFdlQuadtree extends GraphLayoutAbstract {
             (<NodeAbstract>tmpNodeMapping[node.id]).setPosition(pos.x, pos.y);
         });
 
-        onFinish();
     }
 }
 

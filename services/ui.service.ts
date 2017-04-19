@@ -160,4 +160,7 @@ export class UiService {
         else
             console.log("GVFLOG-LEVEL" + level + ": " + "%c" + srcObj.constructor.name + ": ", "color:" + classColor, text);
     }
+
+
+
 }

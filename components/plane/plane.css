@@ -91,3 +91,18 @@ graph-plane {
     position: absolute;
 }
 
+.plane_grey_overlay {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    background: rgba(0, 0, 0, 0.8);
+}
+
+.plane_grey_overlay img {
+    background: white;
+    position: relative;
+    top: calc(50% - 60px);
+    left: calc(50% - 60px);
+    border-radius: 10px;
+    opacity: 0.8;
+}

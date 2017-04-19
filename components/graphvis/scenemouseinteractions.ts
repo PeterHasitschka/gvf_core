@@ -23,33 +23,25 @@ export class SceneMouseInteractions {
     constructor(private scene:GraphScene) {
         scene.getContainer().addEventListener('mousemove', this.onSceneMouseEvent.bind(this), false);
         scene.getContainer().addEventListener('click', this.onSceneMouseEvent.bind(this), false);
-        //UiService.getInstance().getGraphWorkSpaceSvgElement().addEventListener('mousemove', this.onSceneMouseEvent.bind(this), false);
-        //UiService.getInstance().getGraphWorkSpaceSvgElement().addEventListener('mouseclick', this.traverseSvgMouseClickInteractions.bind(this), false);
     }
 
 
     private getParentFctStack(obj, fctName, debugStack=null) {
-
         let stack = [];
-
         let levelCtn = 0;
         let stopTraversalUp = false;
         while (!stopTraversalUp) {
-            console.log(obj, obj[fctName]);
             if (obj && typeof obj[fctName] !== "undefined") {
                 stack.push(obj);
-
                 if (debugStack) {
                     debugStack.push(obj);
                 }
             }
-
             obj = obj.parent;
             levelCtn++;
             if (!obj || levelCtn >= this.levelsToSearchUp)
                 stopTraversalUp = true;
         }
-        console.log(stack);
         return stack;
     }
 
@@ -67,7 +59,6 @@ export class SceneMouseInteractions {
 
         let debugClick = GraphVisConfig.scene.debug.clickDebug;
         let debugHover = GraphVisConfig.scene.debug.hoverDebug;
-
 
         /**
          * Handle exactly one object (the nearest) when clicking on it!
@@ -99,7 +90,6 @@ export class SceneMouseInteractions {
             }
         }
         else {
-
             if (debugHover)
                 this.debug.hover = [];
             if (debugHover)
@@ -140,70 +130,6 @@ export class SceneMouseInteractions {
             }
             this.currentlyIntersected = newIntersected;
         }
-
-
-        /*
-         HOVERING
-         */
-        // if (debugHover)
-        //     this.debug.hover = [];
-        // if (debugHover)
-        //     this.debug.numIntersected = intersects.length;
-        //
-        // //Check for new
-        // let newIntersected = {};
-        // let onlyOneIntersection = true;
-        // let BreakException = {};
-        // let hoverableFound = false;
-        // try {
-        //     intersects.forEach((intersectedObj) => {
-        //
-        //             if (onlyOneIntersection && hoverableFound)
-        //                 throw BreakException;
-        //
-        //             let obj:any = intersectedObj['object'];
-        //             let levelCtn = 0;
-        //
-        //             if (obj === null)
-        //                 return;
-        //
-        //             if (debugHover) {
-        //                 obj['justhovered'] = false;
-        //                 this.debug.hover.push(obj);
-        //             }
-        //
-        //
-        //             while (obj && typeof obj.onIntersectStart === 'undefined' && levelCtn < this.levelsToSearchUp) {
-        //                 obj = obj.parent;
-        //
-        //                 if (debugHover) {
-        //                     obj['justhovered'] = false;
-        //                     this.debug.hover.push(obj);
-        //                 }
-        //                 levelCtn++;
-        //             }
-        //             if (!obj || typeof obj.onIntersectStart === 'undefined')
-        //                 return;
-        //
-        //             let id = obj['uuid'];
-        //             if (typeof this.currentlyIntersected[id] === 'undefined') {
-        //                 //console.log(obj.onIntersectStart);
-        //                 if (debugHover) {
-        //                     obj['justhovered'] = true;
-        //                 }
-        //                 obj.onIntersectStart();
-        //                 hoverableFound = true;
-        //             }
-        //             newIntersected[id] = obj;
-        //         }
-        //     );
-        // } catch (e) {
-        //     if (e !== BreakException)
-        //         throw e;
-        // }
-
-
-
     }
 
 

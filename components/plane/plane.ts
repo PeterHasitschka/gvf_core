@@ -8,6 +8,7 @@ import {ElementAbstract} from "../graphvis/graphs/graphelementabstract";
 import {NodeAbstract} from "../graphvis/graphs/nodes/nodeelementabstract";
 import {InterGraphEventService, INTERGRAPH_EVENTS} from "../../services/intergraphevents.service";
 import {OnionVis} from "../graphvis/graphs/metanodes/onionvis/onionvis";
+import {HelperService} from "../../services/helper.service";
 
 /**
  * The Plane Object holds the @see{GraphScene} element and connects to the
@@ -30,12 +31,14 @@ export class Plane {
 
     private isMinimized = false;
 
+    private showGreyOverlay = false;
+
     private polygonSelection:SelectionPolygon;
 
 
     /**
      */
-    constructor(private name:string, private graphclass, public uiService:UiService, private dataGetterFct = null, private preMaximized=false) {
+    constructor(private name:string, private graphclass, public uiService:UiService, private dataGetterFct = null, private preMaximized = false) {
         Plane.planes.push(this);
     }
 
@@ -285,5 +288,13 @@ export class Plane {
             hovered: [],
             numIntersected: null
         };
+    }
+
+    public getShowGreyOverlay():boolean {
+        return this.showGreyOverlay;
+    }
+
+    public setShowGreyOverlay(show:boolean) {
+        this.showGreyOverlay = show;
     }
 }

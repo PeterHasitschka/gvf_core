@@ -5,6 +5,8 @@ import {UiService} from "../../services/ui.service";
 import {Label} from "./graphs/labels/label";
 import {ThreeWebGlRendererMoving} from "./three/threewebglrenderer";
 import {ElementAbstract} from "./graphs/graphelementabstract";
+import {HelperService} from "../../services/helper.service";
+import {NodeAbstract} from "./graphs/nodes/nodeelementabstract";
 
 
 //const THREE = require('../../../node_modules/three/build/three.js');
@@ -117,9 +119,9 @@ export class GraphScene {
         });
 
         this.objectGroup.children.forEach((elm) => {
-          if (elm instanceof ElementAbstract) {
-            (<ElementAbstract>elm).adjustZoom(this.threeCamera['zoom']);
-          }
+            if (elm instanceof ElementAbstract) {
+                (<ElementAbstract>elm).adjustZoom(this.threeCamera['zoom']);
+            }
         });
 
         this.render();
@@ -181,5 +183,44 @@ export class GraphScene {
 
     public getSceneMouseInteractions():SceneMouseInteractions {
         return this.SceneMouseInteractions;
+    }
+
+
+    public fitAllNodesInView(callback) {
+        UiService.consolelog("Fitting all nodes into view...", this, null, 1);
+        let minFactorOfNodesMustBeVisible = 0.8;
+
+        let maxStepsOut = 100;
+        let currSteps = 0;
+        while (this.factorNodesVisible(minFactorOfNodesMustBeVisible) && currSteps < maxStepsOut) {
+            this.plane.getGraphScene().getThreeCamera()['zoom'] *= 1.01;
+            this.plane.getGraphScene().getThreeCamera()['updateProjectionMatrix']();
+            currSteps++;
+        }
+
+        currSteps = 0;
+        while (!this.factorNodesVisible(minFactorOfNodesMustBeVisible) && currSteps < maxStepsOut) {
+            this.plane.getGraphScene().getThreeCamera()['zoom'] /= 1.1;
+            this.plane.getGraphScene().getThreeCamera()['updateProjectionMatrix']();
+            currSteps++;
+        }
+
+        if (callback)
+            callback();
+    }
+
+    private factorNodesVisible(minFactor:number):boolean {
+        let vis = 0;
+        let countAll = 0;
+        this.objectGroup.children.forEach((e:ElementAbstract, i) => {
+            if (!(e instanceof NodeAbstract))
+                return;
+            countAll++;
+            if (HelperService.getInstance().isObjectInCameraField(this.plane, e)) {
+                vis += 1;
+            }
+        });
+        let out = vis / countAll >= minFactor;
+        return out;
     }
 }
