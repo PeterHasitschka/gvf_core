@@ -6,6 +6,7 @@ import {AnimationService} from "../../../../../services/animationservice";
 import {GraphVisConfig} from "../../../config";
 import {Pie} from "../pie";
 import {Label} from "../../labels/label";
+import match = require("core-js/fn/symbol/match");
 export class OnionVis extends MetanodeAbstract {
 
     private centerNode:NodeAbstract;
@@ -107,6 +108,7 @@ export class OnionVis extends MetanodeAbstract {
         let size = (this.centerNode['options']['size'] ? this.centerNode['options']['size'] : 10 ) + sizeStep;
         let zVal = -1;
         let zStep = 2;
+        let groupedNodes = [];
         OnionVis.onionSkins.forEach((onion) => {
 
             let matchingDistNodes = {};
@@ -154,6 +156,11 @@ export class OnionVis extends MetanodeAbstract {
                 oniongroup.add(ringPie);
 
 
+                ringPie.setOnClickFct(function (nodes) {
+                    console.log(nodes);
+                }.bind(this), matchingDistNodes[nodeClass]);
+
+
                 /*
                  Label
                  */
@@ -176,6 +183,7 @@ export class OnionVis extends MetanodeAbstract {
 
 
                 ringStart += ringLength;
+
             }
 
 
@@ -195,7 +203,6 @@ export class OnionVis extends MetanodeAbstract {
             size += sizeStep;
             zVal -= zStep;
         });
-
 
         let centerDummyNode = new THREE.Mesh(new THREE.CircleGeometry(
             this.centerNode['options']['size'],

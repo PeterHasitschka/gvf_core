@@ -6,6 +6,8 @@ export class Pie extends THREE.Mesh {
 
     private startAngle;
     private endAngle;
+    private onClickFct;
+    private onClickParam;
 
     /**
      *
@@ -55,6 +57,8 @@ export class Pie extends THREE.Mesh {
      */
     public onIntersectStart():void {
         InterGraphEventService.getInstance().send(INTERGRAPH_EVENTS.METANODE_PIE_HOVERED, this);
+
+
         //this.plane.getGraphScene().render();
     }
 
@@ -65,5 +69,18 @@ export class Pie extends THREE.Mesh {
     public onIntersectLeave():void {
         InterGraphEventService.getInstance().send(INTERGRAPH_EVENTS.METANODE_PIE_LEFT, this);
         //this.plane.getGraphScene().render();
+    }
+
+    public setOnClickFct(fct:Function, param:any){
+        this.onClickFct = fct;
+        this.onClickParam = param;
+    }
+    public onClick():void{
+        console.log("clicked");
+
+        if (this.onClickFct)
+            this.onClickFct(this.onClickParam);
+
+
     }
 }

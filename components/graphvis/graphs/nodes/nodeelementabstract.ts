@@ -9,6 +9,7 @@ export abstract class NodeAbstract extends ElementAbstract {
 
     protected nodeMesh:THREE.Mesh;
     protected distancesToOtherNodes = {};
+    protected isCurrentlyInMetaNode = false;
 
     public static IDENTIFIER = "Node Abstract";
 
@@ -112,5 +113,13 @@ export abstract class NodeAbstract extends ElementAbstract {
 
     public getADistance(n:NodeAbstract) {
         return typeof this.distancesToOtherNodes[n.getUniqueId()] === "undefined" ? null : this.distancesToOtherNodes[n.getUniqueId()];
+    }
+
+    public setIsCurrentlyInMetaNode(isInMetanode:boolean) {
+        this.isCurrentlyInMetaNode = isInMetanode;
+    }
+
+    public getIsCurrentlyInMetaNode():boolean {
+        return this.isCurrentlyInMetaNode;
     }
 }
