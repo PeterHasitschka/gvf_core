@@ -71,16 +71,17 @@ export class Pie extends THREE.Mesh {
         //this.plane.getGraphScene().render();
     }
 
-    public setOnClickFct(fct:Function, param:any){
+    public setOnClickFct(fct:Function, param:any) {
         this.onClickFct = fct;
         this.onClickParam = param;
     }
-    public onClick():void{
+
+    public onClick():boolean {
         console.log("clicked");
 
         if (this.onClickFct)
             this.onClickFct(this.onClickParam);
 
-
+        return true;
     }
 }
