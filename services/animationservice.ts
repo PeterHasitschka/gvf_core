@@ -9,6 +9,8 @@ export class AnimationService {
     static instance:AnimationService;
     static isCreating:Boolean = false;
 
+    private calcExponential = false;
+
     constructor() {
         if (!AnimationService.isCreating) {
             return AnimationService.getInstance();
@@ -211,13 +213,23 @@ export class AnimationService {
             if (curr_anim.max_diff === null)
                 curr_anim.max_diff = this.animMultiVarOperations.sub(curr_anim.goal, curr_val);
 
-            var delta = this.getStepByExpSlowdown(curr_val,
-                curr_anim.goal,
-                curr_anim.max_diff,
-                curr_anim.factor,
-                curr_anim.pow,
-                curr_anim.threshold
-            );
+            var delta;
+            if (this.calcExponential) {
+                delta = this.getStepByExpSlowdown(curr_val,
+                    curr_anim.goal,
+                    curr_anim.max_diff,
+                    curr_anim.factor,
+                    curr_anim.pow,
+                    curr_anim.threshold
+                );
+            } else {
+                let speed = curr_anim.factor * 10;
+                let steps = Math.max(100 / speed, 1);
+                delta = this.animMultiVarOperations.div(curr_anim.max_diff, steps);
+                if (curr_anim.iterations === steps)
+                    delta = this.animMultiVarOperations.sub(curr_val, curr_val);
+            }
+
 
             if (this.animMultiVarOperations.length(delta) !== 0.0) {
                 var val_to_set = delta;
@@ -272,7 +284,7 @@ export class AnimationService {
     public animMultiVarOperations = {
         add: function (a, b) {
 
-            if (typeof a !== 'object' || typeof b !== 'object')
+            if (typeof a !== 'object' && typeof b !== 'object')
                 return a + b;
             var c = {};
             for (var k in a) {
@@ -283,7 +295,7 @@ export class AnimationService {
         },
         sub: function (a, b) {
 
-            if (typeof a !== 'object' || typeof b !== 'object')
+            if (typeof a !== 'object' && typeof b !== 'object')
                 return a - b;
             var c = {};
             for (var k in a) {
@@ -313,8 +325,7 @@ export class AnimationService {
             return c;
         },
         div: function (a, b) {
-
-            if (typeof a !== 'object' || typeof b !== 'object')
+            if (typeof a !== 'object' && typeof b !== 'object')
                 return a / b;
             var c = {};
             if (typeof a !== 'object')
@@ -343,7 +354,7 @@ export class AnimationService {
             return Math.sqrt(c);
         },
         gt: function (a, b) {
-            if (typeof a !== 'object' || typeof b !== 'object')
+            if (typeof a !== 'object' && typeof b !== 'object')
                 return a > b;
 
             return this.length(a) > this.length(b);
@@ -369,13 +380,12 @@ export class AnimationService {
                 0.00001,
                 0.1,
                 function () {
-                    if (callback)
-                        callback();
-                    // movementsToFinish--;
-                    // if (movementsToFinish === 0) {
-                    //
-                    // }
-                },
+                    movementsToFinish--;
+                    if (movementsToFinish === 0) {
+                        if (callback)
+                            callback();
+                    }
+                }.bind(this),
                 true,
                 plane
             );
