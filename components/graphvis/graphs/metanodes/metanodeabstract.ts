@@ -114,6 +114,7 @@ export abstract class MetanodeAbstract extends ElementAbstract {
             this.remove(l);
             l.delete();
         });
+        AnimationService.getInstance().finishAllAnimations();
         AnimationService.getInstance().restoreNodeOriginalPositions(this.nodes, this.plane, null);
 
         this.nodes.forEach((n:NodeAbstract) =>{

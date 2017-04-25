@@ -86,13 +86,14 @@ export class AnimationService {
          * @TODO: Find out why sometimes the animations are undefined and return later.
          * Dirty-Fix: More iterations and catching undefined anims
          */
-        while (this.animations.length)
+        while (this.animations.length) {
             this.animations.forEach((curr_anim) => {
                 if (!curr_anim)
                     return;
                 //console.log("Animation", ["Canceling animation", curr_anim], 7);
                 this.finish(curr_anim);
             });
+        }
         //console.log("Animation", "Finished Canceling all animations", 6);
     }
 
@@ -350,12 +351,13 @@ export class AnimationService {
     };
 
 
-    public collapseNodes(nodes:NodeAbstract[], plane:Plane, pos, callback:Function):void {
+    public collapseNodes(nodes:NodeAbstract[], plane:Plane, pos, callback:Function, saveOrigPos = true):void {
         let movementsToFinish = nodes.length;
         nodes.forEach((n:NodeAbstract) => {
             n.hideLabel();
             n.setLabelZoomAdjustmentBlocked(true);
-            n.saveOrigPosition();
+            if (saveOrigPos)
+                n.saveOrigPosition();
             this.register(
                 "nodepos_" + n.getUniqueId(),
                 {'x': pos.x, 'y': pos.y},

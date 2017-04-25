@@ -68,7 +68,6 @@ export class GraphLayoutFdlQuadtree extends GraphLayoutAbstract {
             timeStep: 20
         };
 
-
         var layout = require('ngraph.forcelayout')(g, physicsSettings);
         for (var i = 0; i < 1000; ++i) {
             layout.step();

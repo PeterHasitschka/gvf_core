@@ -12,6 +12,8 @@ export class OnionVis extends MetanodeAbstract {
     private centerNode:NodeAbstract;
     protected labels:Label[];
 
+    protected currentActivePies:Pie[] = [];
+
     protected static onionSkins = [
         {
             max: 1
@@ -35,19 +37,28 @@ export class OnionVis extends MetanodeAbstract {
         this.labels = [];
         window.setTimeout(function () {
             this.calculateDistances(centerNode);
-            AnimationService.getInstance().collapseNodes(this.nodes, plane, centerNode.getPosition(), function () {
+            this.collapseNodes(this.nodes, function () {
                 this.createOnions(null);
                 for (var meshKey in this.meshs) {
                     this.add(this.meshs[meshKey]);
                 }
                 AnimationService.getInstance().finishAllAnimations();
                 this.plane.getGraphScene().render();
-
             }.bind(this));
 
         }.bind(this), 0);
-
     }
+
+    protected collapseNodes(nodes:NodeAbstract[], cb, saveOrigPos = true) {
+        console.log("COLLAPSING", nodes);
+        AnimationService.getInstance().collapseNodes(this.nodes, this.plane, this.centerNode.getPosition(), cb, saveOrigPos);
+    }
+
+    protected expandNodes(nodes:NodeAbstract[], cb) {
+        console.log("EXPANDING", nodes);
+        AnimationService.getInstance().restoreNodeOriginalPositions(nodes, this.plane, cb);
+    }
+
 
     /**
      * Calculate the shortest distances to connected nodes using the DIJKSTRA algorithm.
@@ -155,10 +166,17 @@ export class OnionVis extends MetanodeAbstract {
                 let ringPie = new Pie(ringStart, ringStart + ringLength, size, matchingDistNodes[nodeClass][0].getColor(), zVal);
                 oniongroup.add(ringPie);
 
+                ringPie['affectedOnionNodes'] = matchingDistNodes[nodeClass];
 
-                ringPie.setOnClickFct(function (nodes) {
-                    console.log(nodes);
-                }.bind(this), matchingDistNodes[nodeClass]);
+                ringPie.setOnClickFct(function (pie) {
+                    this.currentActivePies.forEach((pieToCollapse:Pie) => {
+                        this.collapseNodes(pieToCollapse['affectedOnionNodes'], null, false);
+                    });
+                    this.currentActivePies = [];
+                    this.currentActivePies.push(pie);
+                    AnimationService.getInstance().finishAllAnimations();
+                    this.expandNodes(pie['affectedOnionNodes'], null);
+                }.bind(this), ringPie);
 
 
                 /*
