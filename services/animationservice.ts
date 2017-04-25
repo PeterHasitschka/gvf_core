@@ -21,7 +21,7 @@ export class AnimationService {
 
     private startAnimations() {
 
-        if (this.animations.length)
+        if (this.numAnimations > 0)
             this.animate();
         window.requestAnimationFrame(this.startAnimations.bind(this));
     }
@@ -36,23 +36,27 @@ export class AnimationService {
         return AnimationService.instance;
     }
 
-    private animations = [];
-
+    private animations = {};
+    private numAnimations = 0;
 
     public finishAnimation(identifier) {
         //console.log("Animation", "Canceling animation '" + identifier + "'", 5);
 
         var canceled = false;
 
-        this.animations.forEach((curr_anim) => {
+        for (var id in this.animations) {
+            let curr_anim = this.animations[id];
+            if (!curr_anim)
+                return;
+
             if (canceled)
                 return;
             if (curr_anim.identifier === identifier) {
                 this.finish(curr_anim);
                 canceled = true;
             }
-        });
-
+        }
+        ;
     }
 
 
@@ -61,6 +65,8 @@ export class AnimationService {
      * @param {object} animation
      */
     private finish(animation) {
+
+        console.log("FINISH", animation.identifier);
         var params_for_setting = [];
         if (animation.object)
             params_for_setting.push(animation.object);
@@ -88,14 +94,18 @@ export class AnimationService {
          * @TODO: Find out why sometimes the animations are undefined and return later.
          * Dirty-Fix: More iterations and catching undefined anims
          */
-        while (this.animations.length) {
-            this.animations.forEach((curr_anim) => {
+        while (this.numAnimations > 0) {
+            for (var id in this.animations) {
+                let curr_anim = this.animations[id];
                 if (!curr_anim)
                     return;
                 //console.log("Animation", ["Canceling animation", curr_anim], 7);
                 this.finish(curr_anim);
-            });
+            }
         }
+        // Reset
+        this.animations = {};
+        this.numAnimations = 0;
         //console.log("Animation", "Finished Canceling all animations", 6);
     }
 
@@ -149,18 +159,25 @@ export class AnimationService {
             plane: plane
         };
 
-        this.animations.push(anim_obj);
+        let animExisted = (typeof this.animations[identifier] !== "undefined" && this.animations[identifier] !== null);
+        this.animations[identifier] = anim_obj;
+        if (!animExisted)
+            this.numAnimations++;
+
         //console.log("Animation", "Registered animation '" + identifier + "'", 7);
     };
 
 
     public unregister(identifier) {
-        for (var i = 0; i < this.animations.length; i++) {
-            if (this.animations[i].identifier === identifier) {
-                this.animations.splice(i, 1);
-                break;
-            }
-        }
+        let animExists = (typeof this.animations[identifier] !== "undefined" && this.animations[identifier] !== null);
+        if (!animExists)
+            return;
+
+        this.animations[identifier] = null;
+        this.numAnimations--;
+
+        if (this.numAnimations === 0)
+            this.animations = {};
     }
 
 
@@ -204,9 +221,11 @@ export class AnimationService {
     public animate() {
         let planesToRender = {};
 
-        for (var a_count = 0; a_count < this.animations.length; a_count++) {
+        for (var id in this.animations) {
+            var curr_anim = this.animations[id];
+            if (!curr_anim)
+                return;
 
-            var curr_anim = this.animations[a_count];
             var curr_val = curr_anim.getter_fct(curr_anim.object);
 
 
@@ -226,8 +245,10 @@ export class AnimationService {
                 let speed = curr_anim.factor * 10;
                 let steps = Math.max(100 / speed, 1);
                 delta = this.animMultiVarOperations.div(curr_anim.max_diff, steps);
-                if (curr_anim.iterations === steps)
+                if (curr_anim.iterations === steps) {
                     delta = this.animMultiVarOperations.sub(curr_val, curr_val);
+                    console.log("finished!");
+                }
             }
 
 
@@ -422,6 +443,6 @@ export class AnimationService {
     }
 
     public getAnimationCount() {
-        return this.animations.length;
+        return this.numAnimations;
     }
 }
