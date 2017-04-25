@@ -143,7 +143,8 @@ export class Label extends THREE.Points {
 
 
     public delete() {
-        this.svgElement.parentNode.removeChild(this.svgElement);
+        if (this.svgElement)
+            this.svgElement.parentNode.removeChild(this.svgElement);
         this.svgElement = null;
 
         Label.getLabelList().forEach((l, k) => {

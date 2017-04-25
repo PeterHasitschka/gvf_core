@@ -21,8 +21,8 @@ export abstract class MetanodeAbstract extends ElementAbstract {
         this.createDataGroupFromNodes();
         this.name = "Meta-Node Abstract";
 
-        this.nodes.forEach((n:NodeAbstract) =>{
-           n.setIsCurrentlyInMetaNode(true);
+        this.nodes.forEach((n:NodeAbstract) => {
+            n.setIsCurrentlyInMetaNode(true);
         });
         this.isdeletablebyuser = true;
     }
@@ -105,7 +105,7 @@ export abstract class MetanodeAbstract extends ElementAbstract {
         this.select(true);
     }
 
-    public delete():void {
+    public delete(cb = null, fast=false):void {
         for (var meshKey in this.meshs) {
             this.remove(this.meshs[meshKey]);
         }
@@ -115,16 +115,14 @@ export abstract class MetanodeAbstract extends ElementAbstract {
             l.delete();
         });
         AnimationService.getInstance().finishAllAnimations();
-        AnimationService.getInstance().restoreNodeOriginalPositions(this.nodes, this.plane, null);
+        AnimationService.getInstance().restoreNodeOriginalPositions(this.nodes, this.plane, cb, fast);
 
-        this.nodes.forEach((n:NodeAbstract) =>{
+        this.nodes.forEach((n:NodeAbstract) => {
             n.setIsCurrentlyInMetaNode(false);
         });
 
         super.delete();
     }
-
-
 
 
     public showLabels() {

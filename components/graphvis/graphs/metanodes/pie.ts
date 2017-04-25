@@ -4,10 +4,10 @@ import {InterGraphEventService, INTERGRAPH_EVENTS} from "../../../../services/in
  */
 export class Pie extends THREE.Mesh {
 
-    private startAngle;
-    private endAngle;
-    private onClickFct;
-    private onClickParam;
+    protected startAngle;
+    protected endAngle;
+    protected onClickFct;
+    protected onClickParam;
 
     /**
      *

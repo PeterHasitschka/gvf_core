@@ -247,9 +247,9 @@ export class Plane {
         return this.selectedElement.isDeletableByUser();
     }
 
-    public deleteSelectedElement() {
+    public deleteSelectedElement(cb=null) {
         if (this.selectedElement)
-            this.selectedElement.delete();
+            this.selectedElement.delete(cb);
         this.setSelectedGraphElement(null);
     }
 

@@ -4,15 +4,19 @@ import {Plane} from "../../../../plane/plane";
 import {EdgeAbstract} from "../../edges/edgeelementabstract";
 import {AnimationService} from "../../../../../services/animationservice";
 import {GraphVisConfig} from "../../../config";
-import {Pie} from "../pie";
+
 import {Label} from "../../labels/label";
 import match = require("core-js/fn/symbol/match");
+import {OnionSegment} from "./onionsegment";
 export class OnionVis extends MetanodeAbstract {
+
+    public static activeOnionVis:OnionVis[] = [];
+
 
     private centerNode:NodeAbstract;
     protected labels:Label[];
 
-    protected currentActivePies:Pie[] = [];
+    protected currentActiveOnionSegments:OnionSegment[] = [];
 
     protected static onionSkins = [
         {
@@ -35,7 +39,10 @@ export class OnionVis extends MetanodeAbstract {
         this.name = "Onion-Vis Meta-Node";
         this.centerNode = centerNode;
         this.labels = [];
-        window.setTimeout(function () {
+
+        let numOnionsToBeEaten = OnionVis.activeOnionVis.length;
+
+        let createOnionFct = function () {
             this.calculateDistances(centerNode);
             this.collapseNodes(this.nodes, function () {
                 this.createOnions(null);
@@ -46,17 +53,50 @@ export class OnionVis extends MetanodeAbstract {
                 this.plane.getGraphScene().render();
             }.bind(this));
 
-        }.bind(this), 0);
+        }.bind(this);
+
+        if (OnionVis.activeOnionVis.length) {
+            OnionVis.activeOnionVis.forEach((onionToEat:OnionVis) => {
+                if (this.plane.getSelectedGraphElement().getUniqueId() === onionToEat.getUniqueId())
+                    this.plane.deleteSelectedElement(function () {
+                        createOnionFct();
+                    }.bind(this));
+                else
+                onionToEat.delete(function () {
+                    createOnionFct();
+                }.bind(this), true);
+            });
+
+        }
+        else
+            createOnionFct();
+
+        OnionVis.activeOnionVis = [this];
     }
 
     protected collapseNodes(nodes:NodeAbstract[], cb, saveOrigPos = true) {
-        console.log("COLLAPSING", nodes);
         AnimationService.getInstance().collapseNodes(this.nodes, this.plane, this.centerNode.getPosition(), cb, saveOrigPos);
     }
 
-    protected expandNodes(nodes:NodeAbstract[], cb) {
-        console.log("EXPANDING", nodes);
-        AnimationService.getInstance().restoreNodeOriginalPositions(nodes, this.plane, cb);
+    protected expandOnionSegmentNodes(segment:OnionSegment, cb) {
+        let nodes = segment.getAffectedNodes();
+
+        let angles = segment.getAngles();
+
+        let angleLength = angles.end - angles.start;
+        let angleStep = angleLength / nodes.length;
+
+        let radius = 400;
+
+        let currAng = angles.start;
+
+        nodes.forEach((n:NodeAbstract) => {
+            let tmpRad = radius * (Math.random() + 0.5);
+            let relPosX = tmpRad * Math.sin(currAng);
+            let relPosY = tmpRad * Math.cos(currAng);
+            n.setPosition(relPosX + this.centerNode.getPosition().x, relPosY + this.centerNode.getPosition().y);
+            currAng += angleStep;
+        });
     }
 
 
@@ -163,20 +203,20 @@ export class OnionVis extends MetanodeAbstract {
             for (var nodeClass in matchingDistNodes) {
                 let ratio = matchingDistNodes[nodeClass].length / nodesInThisRing;
                 let ringLength = Math.PI * 2 * ratio;
-                let ringPie = new Pie(ringStart, ringStart + ringLength, size, matchingDistNodes[nodeClass][0].getColor(), zVal);
-                oniongroup.add(ringPie);
+                let ringPieSegment = new OnionSegment(ringStart, ringStart + ringLength, size, matchingDistNodes[nodeClass][0].getColor(), zVal);
+                oniongroup.add(ringPieSegment);
 
-                ringPie['affectedOnionNodes'] = matchingDistNodes[nodeClass];
+                ringPieSegment.setAffectedNodes(matchingDistNodes[nodeClass]);
 
-                ringPie.setOnClickFct(function (pie) {
-                    this.currentActivePies.forEach((pieToCollapse:Pie) => {
-                        this.collapseNodes(pieToCollapse['affectedOnionNodes'], null, false);
+                ringPieSegment.setOnClickFct(function (segment:OnionSegment) {
+                    this.currentActiveOnionSegments.forEach((pieToCollapse:OnionSegment) => {
+                        this.collapseNodes(pieToCollapse.getAffectedNodes(), null, false);
                     });
-                    this.currentActivePies = [];
-                    this.currentActivePies.push(pie);
+                    this.currentActiveOnionSegments = [];
+                    this.currentActiveOnionSegments.push(segment);
                     AnimationService.getInstance().finishAllAnimations();
-                    this.expandNodes(pie['affectedOnionNodes'], null);
-                }.bind(this), ringPie);
+                    this.expandOnionSegmentNodes(segment, null);
+                }.bind(this), ringPieSegment);
 
 
                 /*
