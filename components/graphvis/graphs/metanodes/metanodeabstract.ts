@@ -105,7 +105,7 @@ export abstract class MetanodeAbstract extends ElementAbstract {
         this.select(true);
     }
 
-    public delete(cb = null, fast=false):void {
+    public delete(cb = null, restoreNodePositions = true):void {
         for (var meshKey in this.meshs) {
             this.remove(this.meshs[meshKey]);
         }
@@ -114,8 +114,11 @@ export abstract class MetanodeAbstract extends ElementAbstract {
             this.remove(l);
             l.delete();
         });
-        AnimationService.getInstance().finishAllAnimations();
-        AnimationService.getInstance().restoreNodeOriginalPositions(this.nodes, this.plane, cb);
+        if (restoreNodePositions) {
+            AnimationService.getInstance().finishAllAnimations();
+            AnimationService.getInstance().restoreNodeOriginalPositions(this.nodes, this.plane, cb);
+        } else if (cb)
+            cb();
 
         this.nodes.forEach((n:NodeAbstract) => {
             n.setIsCurrentlyInMetaNode(false);
