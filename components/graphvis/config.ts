@@ -55,7 +55,8 @@ export class GraphVisConfig {
             opacity: 0.5,
         },
         metanode: {
-            type: MetanodeSimple
+            type: MetanodeSimple,
+            zoom : 0.7
         }
 
 

@@ -131,7 +131,7 @@ export abstract class ElementAbstract extends THREE.Group implements GraphObject
 
                 //texture.flipY = true;
                 this.label = iconCircle;
-                this.label.position.set(0,0,0);
+                this.label.position.set(0, 0, 0);
                 this.add(this.label);
             }.bind(this));
         }
@@ -175,12 +175,13 @@ export abstract class ElementAbstract extends THREE.Group implements GraphObject
         });
     }
 
-    public saveOrigPosition() {
-        this.origPos = this.position.clone();
+    public saveOrigPosition(overwrite = false) {
+        if (this.origPos === null || overwrite)
+            this.origPos = this.position.clone();
     }
 
     public getOrigPosition() {
-        return this.origPos;
+        return this.origPos ? this.origPos : this.position;
     }
 
     /**
@@ -384,7 +385,7 @@ export abstract class ElementAbstract extends THREE.Group implements GraphObject
         return this.isdeletablebyuser;
     }
 
-    public delete(cb=null) {
+    public delete(cb = null) {
         UiService.consolelog("Deleting Graph element", this);
         this.plane.getGraphScene().getThreeScene().remove(this);
         this.plane.getGraphScene().render();

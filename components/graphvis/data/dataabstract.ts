@@ -77,6 +77,4 @@ export abstract class DataAbstract {
     public addConnection(c:BasicConnection) {
         this.connections.push(c);
     }
-
-
 }

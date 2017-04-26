@@ -45,6 +45,7 @@ export class OnionVis extends MetanodeAbstract {
         let createOnionFct = function () {
             //console.log("Creating the new onion now! The centernode is ", centerNode);
             this.calculateDistances(centerNode);
+            this.zoomAndCenter();
             this.collapseNodes(this.nodes, function () {
                 this.setPosition(this.centerNode.getPosition().x, this.centerNode.getPosition().y);
                 this.createOnions(null);
@@ -53,6 +54,7 @@ export class OnionVis extends MetanodeAbstract {
                 }
                 OnionVis.activeOnions.push(this);
                 AnimationService.getInstance().finishAllAnimations();
+                this.plane.setSelectedGraphElement(this);
                 this.plane.getGraphScene().render();
             }.bind(this));
         }.bind(this);
@@ -77,7 +79,7 @@ export class OnionVis extends MetanodeAbstract {
                         // console.log("All onions deleted.");
                         createOnionFct();
                     }
-                }.bind(this));
+                }.bind(this), false);
             });
         } else
             createOnionFct();
@@ -288,11 +290,13 @@ export class OnionVis extends MetanodeAbstract {
         this.meshs['oniongroup'] = oniongroup;
     }
 
-    public delete(cb) {
+    public delete(cb, restorePositions = true) {
         OnionVis.activeOnions.forEach((o:OnionVis, i) => {
             if (this.uniqueId === o.uniqueId)
                 OnionVis.activeOnions.splice(i, 1);
         });
-        super.delete(cb);
+        AnimationService.getInstance().restoreNodeOriginalPositions([this.centerNode], this.plane, cb);
+        super.delete(cb, restorePositions);
     }
+
 }

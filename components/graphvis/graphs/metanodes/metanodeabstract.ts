@@ -27,6 +27,15 @@ export abstract class MetanodeAbstract extends ElementAbstract {
         this.isdeletablebyuser = true;
     }
 
+    protected zoomAndCenter() {
+        let zoomGoal = GraphVisConfig.graphelements.metanode.zoom;
+        let center = this.getCenterPos();
+
+        this.plane.getGraphScene().moveCameraAnimated(center);
+        this.plane.getGraphScene().zoomCameraAnimated(zoomGoal);
+
+    }
+
     protected createMeshs(options) {
 
         let nodeSize = (options && typeof options['size'] !== "undefined") ? options['size'] : GraphVisConfig.graphelements.abstractnode.size;
@@ -122,6 +131,7 @@ export abstract class MetanodeAbstract extends ElementAbstract {
 
         this.nodes.forEach((n:NodeAbstract) => {
             n.setIsCurrentlyInMetaNode(false);
+            n.deHighlight(false);
         });
 
         super.delete();
@@ -132,5 +142,10 @@ export abstract class MetanodeAbstract extends ElementAbstract {
         this.labels.forEach((l:Label) => {
             l.show();
         })
+    }
+
+
+    protected getCenterPos() {
+        return this.getPosition();
     }
 }

@@ -76,10 +76,12 @@ export abstract class StarChart extends MetanodeAbstract {
      */
     constructor(x:number, y:number, nodes:NodeAbstract[], plane:Plane, config) {
         super(x, y, nodes, plane, config);
+        this.zoomAndCenter();
         this.createMeshs(null);
         for (var meshKey in this.meshs) {
             this.add(this.meshs[meshKey]);
         }
+        this.plane.setSelectedGraphElement(this);
         this.plane.getGraphScene().render();
         this.name = "Start Chart Meta-Node";
     }

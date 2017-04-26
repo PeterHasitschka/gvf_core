@@ -7,6 +7,7 @@ import {ThreeWebGlRendererMoving} from "./three/threewebglrenderer";
 import {ElementAbstract} from "./graphs/graphelementabstract";
 import {HelperService} from "../../services/helper.service";
 import {NodeAbstract} from "./graphs/nodes/nodeelementabstract";
+import {AnimationService} from "../../services/animationservice";
 
 
 //const THREE = require('../../../node_modules/three/build/three.js');
@@ -110,25 +111,22 @@ export class GraphScene {
     }
 
     public zoomIn():void {
-        this.threeCamera['zoom'] *= GraphVisConfig.scene.camera.zoomfactor;
-        this.threeCamera['updateProjectionMatrix']();
-
-        Label.getLabelList().forEach((l) => {
-            if (l.getIsVisible())
-                l.adjustZoom();
-        });
-
-        this.objectGroup.children.forEach((elm) => {
-            if (elm instanceof ElementAbstract) {
-                (<ElementAbstract>elm).adjustZoom(this.threeCamera['zoom']);
-            }
-        });
-
-        this.render();
+        let val = this.threeCamera['zoom'] * GraphVisConfig.scene.camera.zoomfactor;
+        this.setZoomVal(val);
     }
 
     public zoomOut():void {
-        this.threeCamera['zoom'] /= GraphVisConfig.scene.camera.zoomfactor;
+        let val = this.threeCamera['zoom'] / GraphVisConfig.scene.camera.zoomfactor;
+        this.setZoomVal(val);
+    }
+
+    public getZoomVal():number{
+        return this.threeCamera['zoom'];
+    }
+
+    public setZoomVal(val):void{
+        this.threeCamera['zoom'] = val;
+
         this.threeCamera['updateProjectionMatrix']();
 
         Label.getLabelList().forEach((l) => {
@@ -141,7 +139,6 @@ export class GraphScene {
                 (<ElementAbstract>elm).adjustZoom(this.threeCamera['zoom']);
             }
         });
-
         this.render();
     }
 
@@ -222,5 +219,56 @@ export class GraphScene {
         });
         let out = vis / countAll >= minFactor;
         return out;
+    }
+
+    public setCameraPosition(pos) {
+        this.threeCamera.position.setX(pos.x);
+        this.threeCamera.position.setY(pos.y);
+        this.threeCamera['updateProjectionMatrix']();
+    }
+
+    public getCameraPosition() {
+        return {
+            x: this.threeCamera.position.x,
+            y: this.threeCamera.position.y
+        }
+    }
+
+    public moveCameraAnimated(goal) {
+        AnimationService.getInstance().register(
+            "camerapos",
+            {'x': goal.x, 'y': goal.y},
+            null,
+            this.getCameraPosition.bind(this),
+            this.setCameraPosition.bind(this),
+            0,
+            0.1,
+            0.001,
+            1,
+            function () {
+
+            },
+            true,
+            this.plane
+        );
+    }
+
+    public zoomCameraAnimated(goal) {
+        AnimationService.getInstance().register(
+            "camerazoom",
+            goal,
+            null,
+            this.getZoomVal.bind(this),
+            this.setZoomVal.bind(this),
+            0,
+            0.1,
+            0.001,
+            2,
+            function () {
+
+            },
+            true,
+            this.plane
+        );
     }
 }
