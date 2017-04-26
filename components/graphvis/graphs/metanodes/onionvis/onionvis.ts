@@ -10,13 +10,13 @@ import match = require("core-js/fn/symbol/match");
 import {OnionSegment} from "./onionsegment";
 export class OnionVis extends MetanodeAbstract {
 
-    public static activeOnionVis:OnionVis[] = [];
-
-
     private centerNode:NodeAbstract;
     protected labels:Label[];
 
     protected currentActiveOnionSegments:OnionSegment[] = [];
+
+    protected static onlyOneOnionAllowed = true;
+    protected static activeOnions:OnionVis[] = [];
 
     protected static onionSkins = [
         {
@@ -40,38 +40,47 @@ export class OnionVis extends MetanodeAbstract {
         this.centerNode = centerNode;
         this.labels = [];
 
-        let numOnionsToBeEaten = OnionVis.activeOnionVis.length;
+        //console.log("Onion constructor");
 
         let createOnionFct = function () {
+            //console.log("Creating the new onion now! The centernode is ", centerNode);
             this.calculateDistances(centerNode);
             this.collapseNodes(this.nodes, function () {
+                this.setPosition(this.centerNode.getPosition().x, this.centerNode.getPosition().y);
                 this.createOnions(null);
                 for (var meshKey in this.meshs) {
                     this.add(this.meshs[meshKey]);
                 }
+                OnionVis.activeOnions.push(this);
                 AnimationService.getInstance().finishAllAnimations();
                 this.plane.getGraphScene().render();
             }.bind(this));
-
         }.bind(this);
 
-        if (OnionVis.activeOnionVis.length) {
-            OnionVis.activeOnionVis.forEach((onionToEat:OnionVis) => {
-                if (this.plane.getSelectedGraphElement().getUniqueId() === onionToEat.getUniqueId())
-                    this.plane.deleteSelectedElement(function () {
-                        createOnionFct();
-                    }.bind(this));
-                else
-                onionToEat.delete(function () {
-                    createOnionFct();
-                }.bind(this), true);
-            });
-
+        /*
+         If an onionvis already exists, delete it.
+         */
+        if (this.plane.getSelectedGraphElement().constructor === OnionVis) {
+            //console.log("An onion was selected... deselect");
+            this.plane.deselectSelectedGraphElement();
         }
-        else
-            createOnionFct();
 
-        OnionVis.activeOnionVis = [this];
+        if (OnionVis.onlyOneOnionAllowed && OnionVis.activeOnions.length) {
+            // console.log("Delete all existing onions first...");
+            let onionsToEat = OnionVis.activeOnions.length;
+            OnionVis.activeOnions.forEach((o:OnionVis) => {
+                // console.log("delete an onion...");
+                o.delete(function () {
+                    // console.log("Finished deleting one onion...");
+                    onionsToEat--;
+                    if (onionsToEat === 0) {
+                        // console.log("All onions deleted.");
+                        createOnionFct();
+                    }
+                }.bind(this));
+            });
+        } else
+            createOnionFct();
     }
 
     protected collapseNodes(nodes:NodeAbstract[], cb, saveOrigPos = true) {
@@ -89,14 +98,17 @@ export class OnionVis extends MetanodeAbstract {
         let radius = 400;
 
         let currAng = angles.start;
-
+        // console.log("expand around centernode", this.centerNode);
         nodes.forEach((n:NodeAbstract) => {
-            let tmpRad = radius * (Math.random() + 0.5);
+            let randVal = 1; //Math.random() + 0.5;
+            let tmpRad = radius * randVal;
             let relPosX = tmpRad * Math.sin(currAng);
             let relPosY = tmpRad * Math.cos(currAng);
             n.setPosition(relPosX + this.centerNode.getPosition().x, relPosY + this.centerNode.getPosition().y);
             currAng += angleStep;
         });
+
+        this.plane.getGraphScene().render();
     }
 
 
@@ -276,5 +288,11 @@ export class OnionVis extends MetanodeAbstract {
         this.meshs['oniongroup'] = oniongroup;
     }
 
-
+    public delete(cb) {
+        OnionVis.activeOnions.forEach((o:OnionVis, i) => {
+            if (this.uniqueId === o.uniqueId)
+                OnionVis.activeOnions.splice(i, 1);
+        });
+        super.delete(cb);
+    }
 }

@@ -231,6 +231,12 @@ export class Plane {
         return Plane.planes;
     }
 
+
+    public deselectSelectedGraphElement() {
+        if (this.selectedElement)
+            this.selectedElement.deSelect(false);
+    }
+
     public getSelectedGraphElement():ElementAbstract {
         return this.selectedElement;
     }
@@ -247,7 +253,7 @@ export class Plane {
         return this.selectedElement.isDeletableByUser();
     }
 
-    public deleteSelectedElement(cb=null) {
+    public deleteSelectedElement(cb = null) {
         if (this.selectedElement)
             this.selectedElement.delete(cb);
         this.setSelectedGraphElement(null);
@@ -259,11 +265,14 @@ export class Plane {
         return (<NodeAbstract>this.selectedElement).getIsAggregatable();
     }
 
-    public createCollapsedAggregationOnNode() {
-        if (!this.isSelectedElementAggregateable())
+    public createOnionVis() {
+        if (!this.isSelectedElementAggregateable()) {
+            // console.log("Create OnionVis: Selected element is not aggregatable.");
             return;
+        }
 
         let pos = this.selectedElement.getPosition();
+        // console.log("The selected element to get the onion's init pos: ",this.selectedElement);
         let onion = new OnionVis(pos.x, pos.y, <NodeAbstract>this.selectedElement, this);
         this.getGraphScene().addObject(onion);
         this.getGraphScene().render();

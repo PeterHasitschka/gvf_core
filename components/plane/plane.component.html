@@ -6,7 +6,7 @@
                  (click)="plane.deleteSelectedElement()">
                 <i class="fa fa-trash" aria-hidden="true"></i></div>
             <div class="graphvisplanebtn" *ngIf="plane.isSelectedElementAggregateable()"
-                 (click)="plane.createCollapsedAggregationOnNode()" title="Collapse Graph for Navigation (Onion-Style)"
+                 (click)="plane.createOnionVis()" title="Collapse Graph for Navigation (Onion-Style)"
             >
                 <i class="fa fa-compass" aria-hidden="true"></i></div>
         </div>

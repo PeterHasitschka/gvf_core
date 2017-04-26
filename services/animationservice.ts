@@ -11,19 +11,17 @@ export class AnimationService {
 
     private calcExponential = false;
 
+    private animations = {};
+    private numAnimations = 0;
+
+    private maxIterations = null;
+    private currIteartions = 0;
+
+
     constructor() {
         if (!AnimationService.isCreating) {
             return AnimationService.getInstance();
         }
-
-
-    }
-
-    private startAnimations() {
-
-        if (this.numAnimations > 0)
-            this.animate();
-        window.requestAnimationFrame(this.startAnimations.bind(this));
     }
 
     static getInstance() {
@@ -36,77 +34,14 @@ export class AnimationService {
         return AnimationService.instance;
     }
 
-    private animations = {};
-    private numAnimations = 0;
+    private startAnimations() {
+        if (this.maxIterations !== null && (this.currIteartions > this.maxIterations))
+            return;
+        this.currIteartions++;
 
-    public finishAnimation(identifier) {
-        //console.log("Animation", "Canceling animation '" + identifier + "'", 5);
-
-        var canceled = false;
-
-        for (var id in this.animations) {
-            let curr_anim = this.animations[id];
-            if (!curr_anim)
-                return;
-
-            if (canceled)
-                return;
-            if (curr_anim.identifier === identifier) {
-                this.finish(curr_anim);
-                canceled = true;
-            }
-        }
-        ;
-    }
-
-
-    /**
-     * Finish a specific animation by object
-     * @param {object} animation
-     */
-    private finish(animation) {
-
-        console.log("FINISH", animation.identifier);
-        var params_for_setting = [];
-        if (animation.object)
-            params_for_setting.push(animation.object);
-
-        var val = animation.goal;
-        if (!animation.add_to_current) {
-            val -= animation.getter_fct(animation.object);
-        }
-        for (var param_count = 0; param_count < animation.setter_fct_param_num; param_count++)
-            params_for_setting.push(null);
-
-        params_for_setting.push(val);
-
-        animation.setter_fct.apply(null, params_for_setting);
-        this.unregister(animation.identifier);
-
-        return;
-    };
-
-
-    public finishAllAnimations() {
-        //console.log("Animation", "Canceling all animations", 6);
-
-        /*
-         * @TODO: Find out why sometimes the animations are undefined and return later.
-         * Dirty-Fix: More iterations and catching undefined anims
-         */
-        while (this.numAnimations > 0) {
-            for (var id in this.animations) {
-                let curr_anim = this.animations[id];
-                if (!curr_anim)
-                    return;
-                //console.log("Animation", ["Canceling animation", curr_anim], 7);
-                this.finish(curr_anim);
-            }
-        }
-        // Reset
-        this.animations = {};
-        this.numAnimations = 0;
-        //console.log("Animation", "Finished Canceling all animations", 6);
+        if (this.numAnimations > 0)
+            this.animate();
+        window.requestAnimationFrame(this.startAnimations.bind(this));
     }
 
     /**
@@ -163,21 +98,85 @@ export class AnimationService {
         this.animations[identifier] = anim_obj;
         if (!animExisted)
             this.numAnimations++;
-
-        //console.log("Animation", "Registered animation '" + identifier + "'", 7);
     };
 
 
-    public unregister(identifier) {
-        let animExists = (typeof this.animations[identifier] !== "undefined" && this.animations[identifier] !== null);
-        if (!animExists)
-            return;
+    public animate() {
+        let planesToRender = {};
 
-        this.animations[identifier] = null;
-        this.numAnimations--;
+        for (var id in this.animations) {
+            var curr_anim = this.animations[id];
+            if (!curr_anim)
+                continue;
 
-        if (this.numAnimations === 0)
-            this.animations = {};
+            var curr_val = curr_anim.getter_fct(curr_anim.object);
+
+            if (curr_anim.max_diff === null)
+                curr_anim.max_diff = this.animMultiVarOperations.sub(curr_anim.goal, curr_val);
+
+            var delta;
+            if (this.calcExponential) {
+                delta = this.getStepByExpSlowdown(curr_val,
+                    curr_anim.goal,
+                    curr_anim.max_diff,
+                    curr_anim.factor,
+                    curr_anim.pow,
+                    curr_anim.threshold
+                );
+            } else {
+                let speed = curr_anim.factor * 10;
+                let steps = Math.max(100 / speed, 1);
+                delta = this.animMultiVarOperations.div(curr_anim.max_diff, steps);
+                if (curr_anim.iterations === steps) {
+                    delta = this.animMultiVarOperations.sub(curr_val, curr_val);
+                }
+            }
+
+            if (this.animMultiVarOperations.length(delta) !== 0.0) {
+                var val_to_set = delta;
+                if (curr_anim.add_to_current)
+                    val_to_set = this.animMultiVarOperations.add(curr_val, delta);
+            }
+            else {
+                //Set value to the final difference
+                val_to_set = this.animMultiVarOperations.sub(curr_anim.goal, curr_val);
+
+                //If absolute values -> Set to goal
+                if (curr_anim.add_to_current)
+                    val_to_set = curr_anim.goal;
+            }
+
+            //Build parameter array for setter function
+            var params_for_setting = [];
+
+            if (curr_anim.object)
+                params_for_setting.push(curr_anim.object);
+
+            for (var param_count = 0; param_count < curr_anim.setter_fct_param_num; param_count++)
+                params_for_setting.push(null);
+            params_for_setting.push(val_to_set);
+
+            //Call setter fct
+            curr_anim.setter_fct.apply(null, params_for_setting);
+
+            //Animation ready
+            if (this.animMultiVarOperations.length(delta) === 0.0) {
+                //console.log("Animation", "Animation '"  curr_anim.identifier + "' ready", 7);
+
+                this.unregister(curr_anim.identifier);
+                curr_anim.callback_fct();
+                continue;
+            }
+
+            curr_anim.iterations++;
+
+            if (typeof planesToRender[curr_anim.plane.getId()] === "undefined")
+                planesToRender[curr_anim.plane.getId()] = curr_anim.plane;
+        }
+
+        for (let planeId in planesToRender) {
+            planesToRender[planeId].getGraphScene().render();
+        }
     }
 
 
@@ -218,87 +217,136 @@ export class AnimationService {
 
     };
 
-    public animate() {
-        let planesToRender = {};
 
+
+
+    public finishAllAnimations() {
+        while (this.numAnimations > 0) {
+            for (var id in this.animations) {
+                let curr_anim = this.animations[id];
+                if (!curr_anim)
+                    return;
+                this.finish(curr_anim);
+            }
+        }
+        // Reset
+        this.animations = {};
+        this.numAnimations = 0;
+    }
+
+    public finishAnimation(identifier) {
+        var canceled = false;
         for (var id in this.animations) {
-            var curr_anim = this.animations[id];
+            let curr_anim = this.animations[id];
             if (!curr_anim)
                 return;
-
-            var curr_val = curr_anim.getter_fct(curr_anim.object);
-
-
-            if (curr_anim.max_diff === null)
-                curr_anim.max_diff = this.animMultiVarOperations.sub(curr_anim.goal, curr_val);
-
-            var delta;
-            if (this.calcExponential) {
-                delta = this.getStepByExpSlowdown(curr_val,
-                    curr_anim.goal,
-                    curr_anim.max_diff,
-                    curr_anim.factor,
-                    curr_anim.pow,
-                    curr_anim.threshold
-                );
-            } else {
-                let speed = curr_anim.factor * 10;
-                let steps = Math.max(100 / speed, 1);
-                delta = this.animMultiVarOperations.div(curr_anim.max_diff, steps);
-                if (curr_anim.iterations === steps) {
-                    delta = this.animMultiVarOperations.sub(curr_val, curr_val);
-                    console.log("finished!");
-                }
-            }
-
-
-            if (this.animMultiVarOperations.length(delta) !== 0.0) {
-                var val_to_set = delta;
-                if (curr_anim.add_to_current)
-                    val_to_set = this.animMultiVarOperations.add(curr_val, delta);
-            }
-            else {
-                //Set value to the final difference
-                val_to_set = this.animMultiVarOperations.sub(curr_anim.goal, curr_val);
-
-                //If absolute values -> Set to goal
-                if (curr_anim.add_to_current)
-                    val_to_set = curr_anim.goal;
-            }
-
-
-            //Build parameter array for setter function
-            var params_for_setting = [];
-
-            if (curr_anim.object)
-                params_for_setting.push(curr_anim.object);
-
-            for (var param_count = 0; param_count < curr_anim.setter_fct_param_num; param_count++)
-                params_for_setting.push(null);
-            params_for_setting.push(val_to_set);
-
-            //Call setter fct
-            curr_anim.setter_fct.apply(null, params_for_setting);
-
-
-            //Animation ready
-            if (this.animMultiVarOperations.length(delta) === 0.0) {
-                //console.log("Animation", "Animation '"  curr_anim.identifier + "' ready", 7);
-
-                this.unregister(curr_anim.identifier);
-                curr_anim.callback_fct();
+            if (canceled)
                 return;
+            if (curr_anim.identifier === identifier) {
+                this.finish(curr_anim);
+                canceled = true;
             }
-
-            curr_anim.iterations++;
-
-            if (typeof planesToRender[curr_anim.plane.getId()] === "undefined")
-                planesToRender[curr_anim.plane.getId()] = curr_anim.plane;
         }
+    }
+    /**
+     * Finish a specific animation by object
+     * @param {object} animation
+     */
+    private finish(animation) {
+        var params_for_setting = [];
+        if (animation.object)
+            params_for_setting.push(animation.object);
 
-        for (let planeId in planesToRender) {
-            planesToRender[planeId].getGraphScene().render();
+        var val = animation.goal;
+        if (!animation.add_to_current) {
+            val -= animation.getter_fct(animation.object);
         }
+        for (var param_count = 0; param_count < animation.setter_fct_param_num; param_count++)
+            params_for_setting.push(null);
+
+        params_for_setting.push(val);
+
+        animation.setter_fct.apply(null, params_for_setting);
+        this.unregister(animation.identifier);
+        return;
+    };
+
+
+    public unregister(identifier) {
+        let animExists = (typeof this.animations[identifier] !== "undefined" && this.animations[identifier] !== null);
+        if (!animExists)
+            return;
+
+        this.animations[identifier] = null;
+        this.numAnimations--;
+
+        if (this.numAnimations === 0)
+            this.animations = {};
+    }
+
+
+    public collapseNodes(nodes:NodeAbstract[], plane:Plane, pos, callback:Function, saveOrigPos = true):void {
+        let movementsToFinish = nodes.length;
+        nodes.forEach((n:NodeAbstract) => {
+            n.hideLabel();
+            n.setLabelZoomAdjustmentBlocked(true);
+            if (saveOrigPos)
+                n.saveOrigPosition();
+            this.register(
+                "nodepos_" + n.getUniqueId(),
+                {'x': pos.x, 'y': pos.y},
+                null,
+                n.getPosition2DForAnimation.bind(n),
+                n.setPosition2DForAnimation.bind(n),
+                0,
+                1,
+                0.00001,
+                0.1,
+                function () {
+                    movementsToFinish--;
+                    if (movementsToFinish === 0) {
+                        if (callback)
+                            callback();
+                    }
+                }.bind(this),
+                true,
+                plane
+            );
+        });
+    }
+
+
+    public restoreNodeOriginalPositions(nodes:NodeAbstract[], plane:Plane, callback:Function):void {
+        let movementsToFinish = nodes.length;
+        nodes.forEach((n:NodeAbstract) => {
+            n.setLabelZoomAdjustmentBlocked(false);
+
+            this.register(
+                "nodepos_" + n.getUniqueId(),
+                {'x': n.getOrigPosition().x, 'y': n.getOrigPosition().y},
+                null,
+                n.getPosition2DForAnimation.bind(n),
+                n.setPosition2DForAnimation.bind(n),
+                0,
+                0.5,
+                0.001,
+                1,
+                function () {
+                    movementsToFinish--;
+                    // console.log("MOVEMENTS TO BE FINSHED", movementsToFinish);
+                    if (movementsToFinish === 0) {
+                        if (callback)
+                            callback();
+                    }
+                },
+                true,
+                plane
+            );
+        });
+    }
+
+    public getAnimationCount() {
+        return this.numAnimations;
     }
 
 
@@ -381,68 +429,4 @@ export class AnimationService {
             return this.length(a) > this.length(b);
         }
     };
-
-
-    public collapseNodes(nodes:NodeAbstract[], plane:Plane, pos, callback:Function, saveOrigPos = true):void {
-        let movementsToFinish = nodes.length;
-        nodes.forEach((n:NodeAbstract) => {
-            n.hideLabel();
-            n.setLabelZoomAdjustmentBlocked(true);
-            if (saveOrigPos)
-                n.saveOrigPosition();
-            this.register(
-                "nodepos_" + n.getUniqueId(),
-                {'x': pos.x, 'y': pos.y},
-                null,
-                n.getPosition2DForAnimation.bind(n),
-                n.setPosition2DForAnimation.bind(n),
-                0,
-                1,
-                0.00001,
-                0.1,
-                function () {
-                    movementsToFinish--;
-                    if (movementsToFinish === 0) {
-                        if (callback)
-                            callback();
-                    }
-                }.bind(this),
-                true,
-                plane
-            );
-        });
-    }
-
-
-    public restoreNodeOriginalPositions(nodes:NodeAbstract[], plane:Plane, callback:Function):void {
-        let movementsToFinish = nodes.length;
-        nodes.forEach((n:NodeAbstract) => {
-            n.setLabelZoomAdjustmentBlocked(false);
-
-            this.register(
-                "nodepos_" + n.getUniqueId(),
-                {'x': n.getOrigPosition().x, 'y': n.getOrigPosition().y},
-                null,
-                n.getPosition2DForAnimation.bind(n),
-                n.setPosition2DForAnimation.bind(n),
-                0,
-                0.5,
-                0.001,
-                1,
-                function () {
-                    movementsToFinish--;
-                    if (movementsToFinish === 0) {
-                        if (callback)
-                            callback();
-                    }
-                },
-                true,
-                plane
-            );
-        });
-    }
-
-    public getAnimationCount() {
-        return this.numAnimations;
-    }
 }
