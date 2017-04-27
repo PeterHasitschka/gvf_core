@@ -41,11 +41,10 @@ export class AutoGraph extends GraphAbstract {
 
     public init() {
         super.init();
-
+        console.log(" ----------- " + this.mappingStructure.edges[0].type + " -----------------------");
         this.mappingStructure.nodes.forEach((nodeMapping) => {
             let dataList = nodeMapping.data.getDataList();
             dataList.forEach((dataEntity) => {
-
                 /*
                  Be sure that a node is only created once!
                  */
@@ -65,18 +64,22 @@ export class AutoGraph extends GraphAbstract {
 
 
         this.graphElements.forEach((srcNode:NodeAbstract) => {
+
+            let connectionsUsed = [];
+
             srcNode.getDataEntity().getConnections().forEach((connection:BasicConnection) => {
 
-                let srcData = connection.getEntities().src;
-                let dstData = connection.getEntities().dst;
+                let connectedEntity = connection.getEntities().src.constructor !== srcNode.getDataEntity().constructor ?
+                    connection.getEntities().src : connection.getEntities().dst;
 
-                if (srcData !== srcNode.getDataEntity())
+                if (connection.getAlreadyPaintedFlag(this.plane.getId()))
                     return;
+                connection.setAlreadyPaintedFlag(this.plane.getId());
 
                 this.mappingStructure.edges.forEach((edgeMapping) => {
 
                     if (edgeMapping.type === AUTOGRAPH_EDGETYPES.BY_DATA) {
-                        let dstNode = this.getNodeByDataObject(dstData);
+                        let dstNode = this.getNodeByDataObject(connectedEntity);
                         if (connection.constructor === edgeMapping.dataConnection) {
                             let edge = new edgeMapping.edge(srcNode, dstNode, this.plane);
                             srcNode.addEdge(edge);
@@ -85,10 +88,14 @@ export class AutoGraph extends GraphAbstract {
                             this.plane.getGraphScene().addObject(edge);
                         }
                     } else if (edgeMapping.type === AUTOGRAPH_EDGETYPES.BY_FUNCTION) {
+
+
                         if (edgeMapping.sourceNodeType !== srcNode.constructor)
                             return;
 
                         let nodesToConnect:NodeAbstract[] = edgeMapping.fct(srcNode);
+
+
                         nodesToConnect.forEach((dstNode:NodeAbstract) => {
                             let edge = new edgeMapping.edge(srcNode, dstNode, this.plane);
                             srcNode.addEdge(edge);
@@ -122,7 +129,7 @@ export class AutoGraph extends GraphAbstract {
         this.layout = new this.layoutClass(this.plane, this.graphElements, this.edges);
         this.layout.setInitPositions(() => {
             this.layout.calculateLayout(function () {
-                console.log("Finished calculating layout");
+                console.log("Finished calculating layout " + this.graphElements.length + " nodes, " + this.edges.length + " edges");
                 this.plane.getGraphScene().render();
                 this.addEventListeners();
             }.bind(this));

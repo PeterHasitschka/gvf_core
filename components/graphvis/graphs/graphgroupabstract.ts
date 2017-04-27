@@ -15,7 +15,6 @@ import {GraphAutoCreateAbstract} from "./graphautocreateabstract";
 
 /**
  * Basic graph
- * Thus its Data consists of @see{Resource} data objects.
  * @author Peter Hasitschka
  */
 export class GroupGraphAbstract extends GraphAutoCreateAbstract {
