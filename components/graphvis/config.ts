@@ -33,7 +33,7 @@ export class GraphVisConfig {
             intervalledRenderStatistics: false,
             clickDebug: false,
             hoverDebug: false,
-            dataDebug: false
+            dataDebug: true
         }
     };
 

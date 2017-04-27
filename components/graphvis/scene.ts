@@ -120,11 +120,11 @@ export class GraphScene {
         this.setZoomVal(val);
     }
 
-    public getZoomVal():number{
+    public getZoomVal():number {
         return this.threeCamera['zoom'];
     }
 
-    public setZoomVal(val):void{
+    public setZoomVal(val):void {
         this.threeCamera['zoom'] = val;
 
         this.threeCamera['updateProjectionMatrix']();
@@ -234,7 +234,7 @@ export class GraphScene {
         }
     }
 
-    public moveCameraAnimated(goal) {
+    public moveCameraAnimated(goal, cb = null) {
         AnimationService.getInstance().register(
             "camerapos",
             {'x': goal.x, 'y': goal.y},
@@ -246,14 +246,15 @@ export class GraphScene {
             0.001,
             1,
             function () {
-
+                if (cb)
+                    cb();
             },
             true,
             this.plane
         );
     }
 
-    public zoomCameraAnimated(goal) {
+    public zoomCameraAnimated(goal, cb = null) {
         AnimationService.getInstance().register(
             "camerazoom",
             goal,
@@ -265,7 +266,8 @@ export class GraphScene {
             0.001,
             2,
             function () {
-
+                if (cb)
+                    cb();
             },
             true,
             this.plane

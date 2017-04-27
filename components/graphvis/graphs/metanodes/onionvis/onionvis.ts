@@ -90,7 +90,7 @@ export class OnionVis extends MetanodeAbstract {
     }
 
     protected expandOnionSegmentNodes(segment:OnionSegment, cb) {
-        let nodes = segment.getAffectedNodes();
+        let nodes = this.getBestOfNodes(segment.getAffectedNodes());
 
         let angles = segment.getAngles();
 
@@ -111,6 +111,16 @@ export class OnionVis extends MetanodeAbstract {
         });
 
         this.plane.getGraphScene().render();
+    }
+
+    protected getBestOfNodes(nodes:NodeAbstract[]) {
+        let outArray = [];
+
+        nodes.forEach((n:NodeAbstract, i) => {
+            if (i < 10)
+                outArray.push(n);
+        });
+        return outArray;
     }
 
 
