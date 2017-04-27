@@ -12,7 +12,6 @@ import {GroupGraphAbstract} from "./graphgroupabstract";
 
 /**
  * Basic graph
- * Thus its Data consists of @see{Resource} data objects.
  * @author Peter Hasitschka
  */
 export class SimpleGroups extends GroupGraphAbstract {

@@ -9,8 +9,11 @@ export class BasicConnection extends DataAbstract {
 
     protected static dataList:BasicConnection[] = [];
 
+    // Can be used by graphs to check if already used
+    protected paintingFlags = {};
+
     /**
-     * Learner constructor
+     * Connection constructor
      * @param data Holds an id and at least a 'name' property by current definition
      */
     constructor(id:number, protected entitySrc:BasicEntity, protected entityDst:BasicEntity, data:Object) {
@@ -25,6 +28,15 @@ export class BasicConnection extends DataAbstract {
     public setEntitites(entitySrc:BasicEntity, entityDst:BasicEntity) {
         this.entitySrc = entitySrc;
         this.entityDst = entityDst;
+    }
+
+
+    public setAlreadyPaintedFlag(planeId:number) {
+        this.paintingFlags[planeId] = true;
+    }
+
+    public getAlreadyPaintedFlag(planeId:number) {
+        return typeof this.paintingFlags[planeId] === "undefined" ? false : this.paintingFlags[planeId];
     }
 
     /**
