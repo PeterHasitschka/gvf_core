@@ -7,10 +7,13 @@ import {BasicEntity} from "../data/databasicentity";
 
 export enum AUTOGRAPH_EDGETYPES {
     BY_DATA,
-    BY_FUNCTION
+    BY_FUNCTION,
+    BY_ONE_HOP
 }
 
 export class AutoGraph extends GraphAbstract {
+
+    protected edgesCreatedForSameNodeTypePairs = {};
 
     protected mappingStructure = {
         nodes: [
@@ -87,14 +90,17 @@ export class AutoGraph extends GraphAbstract {
                             this.edges.push(edge);
                             this.plane.getGraphScene().addObject(edge);
                         }
-                    } else if (edgeMapping.type === AUTOGRAPH_EDGETYPES.BY_FUNCTION) {
+                    } else if (edgeMapping.type === AUTOGRAPH_EDGETYPES.BY_FUNCTION ||
+                        edgeMapping.type === AUTOGRAPH_EDGETYPES.BY_ONE_HOP) {
 
 
                         if (edgeMapping.sourceNodeType !== srcNode.constructor)
                             return;
-
-                        let nodesToConnect:NodeAbstract[] = edgeMapping.fct(srcNode);
-
+                        let nodesToConnect:NodeAbstract[];
+                        if (edgeMapping.type === AUTOGRAPH_EDGETYPES.BY_FUNCTION)
+                            nodesToConnect = edgeMapping.fct(srcNode);
+                        else if (edgeMapping.type === AUTOGRAPH_EDGETYPES.BY_ONE_HOP)
+                            nodesToConnect = this.getSameTypeNodesOverAHop(srcNode, edgeMapping.hopDataEntityType);
 
                         nodesToConnect.forEach((dstNode:NodeAbstract) => {
                             let edge = new edgeMapping.edge(srcNode, dstNode, this.plane);
@@ -124,6 +130,61 @@ export class AutoGraph extends GraphAbstract {
 
         return foundNode;
     }
+
+    protected getSameTypeNodesOverAHop(srcNode:NodeAbstract, hopNodeDataEntityType) {
+        let finalConnectedNodes:NodeAbstract[] = [];
+
+        srcNode.getDataEntity().getConnections().forEach((firstConnection:BasicConnection) => {
+
+            let connectedHopEntity:BasicEntity;
+            if (firstConnection.getEntities().src.constructor === srcNode.getDataEntity().constructor)
+                connectedHopEntity = firstConnection.getEntities().dst;
+            else if (firstConnection.getEntities().dst.constructor === srcNode.getDataEntity().constructor)
+                connectedHopEntity = firstConnection.getEntities().src;
+            else
+                return;
+
+            if (connectedHopEntity.constructor !== hopNodeDataEntityType)
+                return;
+
+
+            connectedHopEntity.getConnections().forEach((secondConnection:BasicConnection) => {
+
+                let connectedTwoStepSameTypeEntity:BasicEntity;
+                if (secondConnection.getEntities().src.constructor === srcNode.getDataEntity().constructor)
+                    connectedTwoStepSameTypeEntity = secondConnection.getEntities().src;
+                else if (secondConnection.getEntities().dst.constructor === srcNode.getDataEntity().constructor)
+                    connectedTwoStepSameTypeEntity = secondConnection.getEntities().dst;
+                else
+                    return;
+
+
+                if (connectedTwoStepSameTypeEntity.getId() === srcNode.getDataEntity().getId())
+                    return;
+
+                connectedTwoStepSameTypeEntity.getRegisteredGraphElements().forEach((n:NodeAbstract) => {
+                    if (n.getPlane().getId() !== this.plane.getId())
+                        return;
+
+                    let minId = Math.min(srcNode.getDataEntity().getId(), connectedTwoStepSameTypeEntity.getId());
+                    let maxId = Math.max(srcNode.getDataEntity().getId(), connectedTwoStepSameTypeEntity.getId());
+                    if (typeof this.edgesCreatedForSameNodeTypePairs[minId] === "undefined")
+                        this.edgesCreatedForSameNodeTypePairs[minId] = [];
+
+                    if (typeof this.edgesCreatedForSameNodeTypePairs[minId][maxId] !== "undefined") {
+                        this.edgesCreatedForSameNodeTypePairs[minId][maxId]++;
+                        return;
+                    }
+                    this.edgesCreatedForSameNodeTypePairs[minId][maxId] = 1;
+
+
+                    finalConnectedNodes.push(n);
+                });
+            })
+        });
+        return finalConnectedNodes;
+    }
+
 
     private setLayout() {
         this.layout = new this.layoutClass(this.plane, this.graphElements, this.edges);

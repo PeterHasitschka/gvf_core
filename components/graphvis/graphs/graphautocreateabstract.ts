@@ -1,16 +1,6 @@
-import {Plane} from '../../plane/plane';
 import {DataAbstract} from '../data/dataabstract';
-import {GraphLayoutAbstract} from './layouts/graphlayoutabstract';
-import {UiService} from "../../../services/ui.service";
-import {SideInfoPositions, SideInfoContentType, SideInfoModel} from "../../app/sideinfo/sideinfomodel";
 import {EdgeAbstract} from "./edges/edgeelementabstract";
-import {LayoutInterface} from "./layouts/layoutinterface";
-import {BasicGroup} from "../data/databasicgroup";
-import {NodeAbstract} from "./nodes/nodeelementabstract";
-import {ElementAbstract} from "./graphelementabstract";
-import {InterGraphEventService, INTERGRAPH_EVENTS} from "../../../services/intergraphevents.service";
-import {GroupedObservable} from "rxjs/operator/groupBy";
-import {GroupAbstract} from "./groups/groupelementabstract";
+
 import {GraphAbstract} from "./graphabstract";
 /**
  * Abstract Auto-Create Graph Class
