@@ -19,7 +19,7 @@ export class AutoGraph extends GraphAbstract {
      * Used for preventing creating the same edge multiple times and setting weights
      */
     protected connectionsWantedToCreateByNodePair = {};
-
+    protected applyWeights = false;
     protected mappingStructure = {
         nodes: [
             // {
@@ -123,7 +123,8 @@ export class AutoGraph extends GraphAbstract {
             });
         });
 
-        this.setEdgeAndNodeWeights();
+        if (this.applyWeights)
+            this.setEdgeAndNodeWeights();
         this.setLayout();
 
         this.connectionsWantedToCreateByNodePair = null;
