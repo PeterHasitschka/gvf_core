@@ -3,7 +3,6 @@ import {Plane} from "../../plane/plane";
 import {NodeAbstract} from "./nodes/nodeelementabstract";
 import {BasicConnection} from "../data/databasicconnection";
 import {BasicEntity} from "../data/databasicentity";
-import {EdgeResourceLearner} from "../../../../afel/graph/graphs/edges/resourcelearner";
 import {EdgeAbstract} from "./edges/edgeelementabstract";
 
 
