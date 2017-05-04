@@ -10,6 +10,7 @@ export abstract class NodeAbstract extends ElementAbstract {
     protected nodeMesh:THREE.Mesh;
     protected distancesToOtherNodes = {};
     protected isCurrentlyInMetaNode = false;
+    protected nodeWeight = 0;
 
     public static IDENTIFIER = "Node Abstract";
 
@@ -121,5 +122,15 @@ export abstract class NodeAbstract extends ElementAbstract {
 
     public getIsCurrentlyInMetaNode():boolean {
         return this.isCurrentlyInMetaNode;
+    }
+
+    public setWeight(weight:number) {
+        this.nodeWeight = weight;
+        let scale = 0.5 + weight;
+        this.nodeMesh.scale['set'](scale,scale,scale);
+    }
+
+    public getWeight():number {
+        return this.nodeWeight;
     }
 }

@@ -37,7 +37,7 @@ export abstract class ElementAbstract extends THREE.Group implements GraphObject
 
     protected options = {};
     protected edges = [];
-    protected uniqueId:string;
+    protected uniqueId:number;
 
     protected labelType:GRAPH_ELEMENT_LABEL_TYPE = GRAPH_ELEMENT_LABEL_TYPE.NONE;
     protected label:THREE.Object3D;
@@ -95,7 +95,7 @@ export abstract class ElementAbstract extends THREE.Group implements GraphObject
             this.dataEntity.registerGraphElement(this);
 
 
-        this.uniqueId = "e" + ElementAbstract.idCounter;
+        this.uniqueId = ElementAbstract.idCounter;
         ElementAbstract.idCounter++;
 
     }
@@ -154,7 +154,7 @@ export abstract class ElementAbstract extends THREE.Group implements GraphObject
     }
 
 
-    public getUniqueId() {
+    public getUniqueId():number {
         return this.uniqueId;
     }
 

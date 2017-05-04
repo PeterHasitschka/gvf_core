@@ -3,6 +3,7 @@ import {start} from "repl";
 import {GraphObject} from "../graphobjectinterface";
 import {Plane} from "../../../plane/plane";
 import {NodeAbstract} from "../nodes/nodeelementabstract";
+import LineCurve3 = THREE.LineCurve3;
 
 
 /**
@@ -26,6 +27,7 @@ export abstract class EdgeAbstract extends THREE.Line implements GraphObject {
     protected destNode:NodeAbstract;
     protected addRandom;
     protected isHighlighted;
+    protected weight;
 
     /**
      * Creating an edge by taking the graphelements and the plane
@@ -53,12 +55,17 @@ export abstract class EdgeAbstract extends THREE.Line implements GraphObject {
             opacity: 1.0,
             transparent: true
         });
+
         let geometry = new THREE.Geometry();
         geometry.vertices.push(new THREE.Vector3(startX, startY, config.abstractedge.z_pos));
         geometry.vertices.push(new THREE.Vector3(endX, endY, config.abstractedge.z_pos));
 
 
         super(geometry, material);
+
+        this.weight = 0;
+
+
         this.plane = plane;
 
         this.sourceNode = sourceNode;
@@ -94,6 +101,20 @@ export abstract class EdgeAbstract extends THREE.Line implements GraphObject {
         return color;
     }
 
+
+    public setWeight(weight:number) {
+        this.weight = weight;
+        this.updateWidth();
+    }
+
+    protected updateWidth() {
+        let config = GraphVisConfig.edges;
+        this.material['linewidth'] = config.abstractedge.thickness + this.weight * config.abstractedge.weight_factor;
+    }
+
+    public getWeight():number {
+        return this.weight;
+    }
 
     /**
      * Setting a (hexadecimal) color

@@ -56,7 +56,7 @@ export class GraphVisConfig {
         },
         metanode: {
             type: MetanodeSimple,
-            zoom : 0.7
+            zoom: 0.7
         }
 
 
@@ -66,7 +66,8 @@ export class GraphVisConfig {
         abstractedge: {
             color: 0xaaaaff,
             z_pos: -1.0,
-            thickness: 0.6
+            thickness: 0.3,
+            weight_factor: 10
         }
     };
 
