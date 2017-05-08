@@ -29,6 +29,8 @@ export abstract class GraphAbstract {
     protected groups:BasicGroup[];
     protected edges:EdgeAbstract[] = [];
 
+    protected maxNodeWeight = 0;
+
 
     constructor(protected plane:Plane) {
         this.graphElements = [];
@@ -120,5 +122,10 @@ export abstract class GraphAbstract {
      */
     public getEdges():EdgeAbstract[] {
         return this.edges;
+    }
+
+
+    public getMaxNodeWeight():number{
+        return this.maxNodeWeight;
     }
 }

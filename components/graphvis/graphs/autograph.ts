@@ -21,6 +21,8 @@ export class AutoGraph extends GraphAbstract {
     protected applyWeights = false;
     protected thinOut = true;
     protected thinOutThreshold = 0.0;
+    protected nodeWeightByUniqueEdges = true;
+
 
     protected mappingStructure = {
         nodes: [
@@ -257,8 +259,22 @@ export class AutoGraph extends GraphAbstract {
                     this.connectionsWantedToCreateByNodePair[i][j]['n2'],
                     this.connectionsWantedToCreateByNodePair[i][j]['edgeClass']);
                 edge.setWeight(weight);
-                edge.getSourceNode().setWeight(edge.getSourceNode().getWeight() + weight);
-                edge.getDestNode().setWeight(edge.getDestNode().getWeight() + weight);
+
+
+                let wSrc = edge.getSourceNode().getWeight() + weight;
+                let wDst = edge.getDestNode().getWeight() + weight;
+
+                if (!this.nodeWeightByUniqueEdges) {
+                    edge.getSourceNode().setWeight(wSrc);
+                    edge.getDestNode().setWeight(wDst);
+                }
+                else {
+                    edge.getSourceNode().setWeight(wSrc);
+                    edge.getDestNode().setWeight(wDst);
+                }
+
+                let maxNodeWeight = Math.max(wSrc, wDst);
+                this.maxNodeWeight = Math.max(this.maxNodeWeight, maxNodeWeight);
             }
         }
     }
