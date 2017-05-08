@@ -185,9 +185,9 @@ export class GraphScene {
 
     public fitAllNodesInView(callback) {
         UiService.consolelog("Fitting all nodes into view...", this, null, 1);
-        let minFactorOfNodesMustBeVisible = 0.8;
+        let minFactorOfNodesMustBeVisible = 1.0;
 
-        let maxStepsOut = 100;
+        let maxStepsOut = 200;
         let currSteps = 0;
         while (this.factorNodesVisible(minFactorOfNodesMustBeVisible) && currSteps < maxStepsOut) {
             this.plane.getGraphScene().getThreeCamera()['zoom'] *= 1.01;
@@ -197,7 +197,7 @@ export class GraphScene {
 
         currSteps = 0;
         while (!this.factorNodesVisible(minFactorOfNodesMustBeVisible) && currSteps < maxStepsOut) {
-            this.plane.getGraphScene().getThreeCamera()['zoom'] /= 1.1;
+            this.plane.getGraphScene().getThreeCamera()['zoom'] /= 1.05;
             this.plane.getGraphScene().getThreeCamera()['updateProjectionMatrix']();
             currSteps++;
         }

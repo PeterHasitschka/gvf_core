@@ -30,7 +30,7 @@ export class PlaneComponent {
         learners: null,
         resources: null,
         activities: null
-    }
+    };
 
     // The plane object
     @Input() plane:Plane;
