@@ -62,7 +62,8 @@ export class GraphVisConfig {
             linecolor1: 0xFF0000,
             linecolor2: 0x00FF00,
             linewidth: 3,
-            opacity: 1.0
+            opacity: 1.0,
+            startEndNodeSize : 10
         }
 
 

@@ -8,11 +8,13 @@ export abstract class NodepathAbstract extends ElementAbstract {
 
     protected nodesToConnect:NodeAbstract[];
     protected lines:THREE.Line[] = [];
+    protected nodes:THREE.Mesh[] = [];
 
     protected lineColor1;
     protected lineColor2;
     protected lineWidth;
     protected opacity;
+    protected startEndNodeSize;
 
     constructor(nodesToConnect:NodeAbstract[], plane:Plane, options:{}) {
 
@@ -26,9 +28,7 @@ export abstract class NodepathAbstract extends ElementAbstract {
         this.lineColor2 = typeof options['lineColor2'] !== "undefined" ? options['lineColor2'] : config.linecolor2;
         this.lineWidth = typeof options['lineWidth'] !== "undefined" ? options['lineWidth'] : config.linewidth;
         this.opacity = typeof options['opacity'] !== "undefined" ? options['opacity'] : config.opacity;
-
-
-
+        this.startEndNodeSize = typeof options['startEndNodeSize'] !== "undefined" ? options['startEndNodeSize'] : config.startEndNodeSize;
 
 
         let lastPos = null;
@@ -39,6 +39,18 @@ export abstract class NodepathAbstract extends ElementAbstract {
 
             if (!lastPos) {
                 lastPos = posToSet;
+
+                let startNode = new THREE.Mesh(new THREE.CircleGeometry(
+                    5,
+                    GraphVisConfig.graphelements.abstractnode.segments),
+                    new THREE.MeshBasicMaterial(
+                        {
+                            color: this.lineColor1,
+                            opacity: 1
+                        }));
+                startNode.position.set(lastPos.x, lastPos.y, 11);
+                this.nodes.push(startNode);
+                this.add(startNode);
                 return;
             }
 
@@ -60,6 +72,19 @@ export abstract class NodepathAbstract extends ElementAbstract {
 
             lastPos = posToSet;
         });
+
+        let endNode = new THREE.Mesh(new THREE.CircleGeometry(
+            7,
+            GraphVisConfig.graphelements.abstractnode.segments),
+            new THREE.MeshBasicMaterial(
+                {
+                    color: this.lineColor2,
+                    opacity: 1
+                }));
+
+        endNode.position.set(lastPos.x, lastPos.y, 10);
+        this.nodes.push(endNode);
+        this.add(endNode);
 
     }
 
