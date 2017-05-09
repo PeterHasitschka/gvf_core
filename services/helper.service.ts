@@ -83,4 +83,18 @@ export class HelperService {
         return true;
     }
 
+
+    public colorHexToRGB(color:number) {
+        let r = color >> 16;
+        let g = (color >> 8) - (r << 8);
+        let b = color - ((r << 16) + (g << 8));
+        return {r: r, g: g, b: b};
+    }
+
+    public rgbToHex(r, g, b) {
+        let r = r << 16;
+        let g = g << 8;
+        return parseInt(r + g + b);
+    }
+
 }

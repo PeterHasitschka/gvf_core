@@ -59,7 +59,8 @@ export class GraphVisConfig {
             zoom: 0.7
         },
         nodepath: {
-            color: 0xFF0000,
+            linecolor1: 0xFF0000,
+            linecolor2: 0x00FF00,
             linewidth: 3,
             opacity: 1.0
         }

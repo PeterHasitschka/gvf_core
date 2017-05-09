@@ -4,13 +4,15 @@ import {Plane} from "../../../plane/plane";
 import {NodepathAbstract} from "./nodepathabstract";
 export class NodepathSimple extends NodepathAbstract {
 
-    protected static lineColor = 0x00FF00;
+    protected static lineColor1 = 0xFF0000;
+    protected static lineColor2 = 0x0000FF;
     protected static lineWidth;
     protected static opacity;
 
     constructor(nodesToConnect:NodeAbstract[], plane:Plane) {
         super(nodesToConnect, plane, {
-            lineColor: NodepathSimple.lineColor,
+            lineColor1: NodepathSimple.lineColor1,
+            lineColor2: NodepathSimple.lineColor2,
             lineWidth: NodepathSimple.lineWidth,
             opacity: NodepathSimple.opacity
         });
