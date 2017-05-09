@@ -45,7 +45,7 @@ export class OnionVis extends MetanodeAbstract {
         let createOnionFct = function () {
             //console.log("Creating the new onion now! The centernode is ", centerNode);
             this.calculateDistances(centerNode);
-            this.zoomAndCenter();
+            // this.zoomAndCenter();
             this.collapseNodes(this.nodes, function () {
                 this.setPosition(this.centerNode.getPosition().x, this.centerNode.getPosition().y);
                 this.createOnions(null);
@@ -86,7 +86,8 @@ export class OnionVis extends MetanodeAbstract {
     }
 
     protected collapseNodes(nodes:NodeAbstract[], cb, saveOrigPos = true) {
-        AnimationService.getInstance().collapseNodes(this.nodes, this.plane, this.centerNode.getPosition(), cb, saveOrigPos);
+
+        AnimationService.getInstance().collapseNodes(nodes, this.plane, this.centerNode.getPosition(), cb, saveOrigPos);
     }
 
     protected expandOnionSegmentNodes(segment:OnionSegment, cb) {
@@ -160,7 +161,8 @@ export class OnionVis extends MetanodeAbstract {
             if (centerNode.getUniqueId() === n.getUniqueId())
                 return;
 
-            let path = route.path(centerNode.getUniqueId(), n.getUniqueId());
+            let path = route.path(centerNode.getUniqueId().toString(), n.getUniqueId().toString());
+
             if (path !== null) {
                 (<NodeAbstract>n).setADistance(centerNode, path.length - 1);
                 this.nodes.push((<NodeAbstract>n));
@@ -185,7 +187,6 @@ export class OnionVis extends MetanodeAbstract {
         let zStep = 2;
         let groupedNodes = [];
         OnionVis.onionSkins.forEach((onion) => {
-
             let matchingDistNodes = {};
             let nodesInThisRing = 0;
 

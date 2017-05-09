@@ -274,6 +274,7 @@ export class Plane {
         let pos = this.selectedElement.getPosition();
         // console.log("The selected element to get the onion's init pos: ",this.selectedElement);
         let onion = new OnionVis(pos.x, pos.y, <NodeAbstract>this.selectedElement, this);
+
         this.getGraphScene().addObject(onion);
         this.getGraphScene().render();
     }

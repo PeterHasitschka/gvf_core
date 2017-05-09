@@ -92,9 +92,9 @@ export class HelperService {
     }
 
     public rgbToHex(r, g, b) {
-        let r = r << 16;
-        let g = g << 8;
-        return parseInt(r + g + b);
+        let _r = r << 16;
+        let _g = g << 8;
+        return parseInt(_r + _g + b);
     }
 
 }

@@ -218,8 +218,6 @@ export class AnimationService {
     };
 
 
-
-
     public finishAllAnimations() {
         while (this.numAnimations > 0) {
             for (var id in this.animations) {
@@ -248,6 +246,7 @@ export class AnimationService {
             }
         }
     }
+
     /**
      * Finish a specific animation by object
      * @param {object} animation
@@ -286,6 +285,8 @@ export class AnimationService {
 
 
     public collapseNodes(nodes:NodeAbstract[], plane:Plane, pos, callback:Function, saveOrigPos = true):void {
+
+
         let movementsToFinish = nodes.length;
         nodes.forEach((n:NodeAbstract) => {
             n.hideLabel();
