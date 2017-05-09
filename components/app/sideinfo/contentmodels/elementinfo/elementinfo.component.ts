@@ -30,6 +30,10 @@ export class SideInfoContentElementInfoComponent implements OnDestroy {
 
             let element:ElementAbstract = e.detail;
             this.dynInfo.push("Element-Type: " + element.name);
+
+            if (!element.getDataEntity())
+                return;
+
             this.dynInfo.push("Data-ID: " + element.getDataEntity().getId());
 
             if (element instanceof GroupAbstract) {

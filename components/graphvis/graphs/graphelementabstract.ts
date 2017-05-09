@@ -386,7 +386,8 @@ export abstract class ElementAbstract extends THREE.Group implements GraphObject
     }
 
     public delete(cb = null) {
-        UiService.consolelog("Deleting Graph element", this);
+        UiService.consolelog("Deleting Graph element", this, null, 5);
+        this.plane.getGraphScene().getObjectGroup().remove(this);
         this.plane.getGraphScene().getThreeScene().remove(this);
         this.plane.getGraphScene().render();
     }

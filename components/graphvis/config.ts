@@ -57,6 +57,11 @@ export class GraphVisConfig {
         metanode: {
             type: MetanodeSimple,
             zoom: 0.7
+        },
+        nodepath: {
+            color: 0xFF0000,
+            linewidth: 3,
+            opacity: 1.0
         }
 
 

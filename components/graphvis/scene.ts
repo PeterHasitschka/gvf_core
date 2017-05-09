@@ -94,6 +94,14 @@ export class GraphScene {
         this.objectGroup.add(obj);
     }
 
+    public removeObject(obj:THREE.Object3D) {
+
+        if (typeof obj['delete'] !== "undefined")
+            obj['delete']();
+
+        this.objectGroup.remove(obj);
+    }
+
     /**
      * Call the 'render' method of the THREE Renderer
      */
