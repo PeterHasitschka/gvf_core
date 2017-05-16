@@ -2,7 +2,7 @@
     <h3 [innerHTML]="infomodel.getTitle()"></h3>
 
     <div *ngIf="infomodel.getContentType() === types.Text">
-        <span [innerHTML]="infomodel.getData()['text']">
+        <span [innerHTML]="infomodel.getData()['text'] | keepHtml">
         </span>
     </div>
     <div *ngIf="infomodel.getContentType() === types.DynamicInfo">

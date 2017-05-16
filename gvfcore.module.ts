@@ -10,10 +10,11 @@ import {HttpModule} from '@angular/http'
 import {SideInfoContentElementInfoComponent} from "./components/app/sideinfo/contentmodels/elementinfo/elementinfo.component";
 import {InterGraphConnectionDirective} from "./components/graphworkspace/intergraphconnections/intergraphconnection.directive";
 import {SideInfoContentAppDevToolsComponent} from "./components/app/sideinfo/contentmodels/devcontrol/appdevtools.component";
+import {EscapeHtmlPipe} from "./pipes/keep-html.pipe";
 @NgModule({
     imports: [BrowserModule, HttpModule],
     declarations: [AppComponent, GraphworkspaceComponent, PlaneComponent, SideInfoComponent,
-        SideInfoContentElementInfoComponent, SideInfoContentAppDevToolsComponent, InterGraphConnectionDirective],
+        SideInfoContentElementInfoComponent, SideInfoContentAppDevToolsComponent, InterGraphConnectionDirective, EscapeHtmlPipe],
     bootstrap: [AppComponent]
 })
 /**
