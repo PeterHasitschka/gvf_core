@@ -234,7 +234,7 @@ export class Plane {
 
     public deselectSelectedGraphElement() {
         if (this.selectedElement)
-            this.selectedElement.deSelect(false);
+            this.selectedElement.deSelect(true);
     }
 
     public getSelectedGraphElement():ElementAbstract {

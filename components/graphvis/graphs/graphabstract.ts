@@ -21,7 +21,6 @@ import {GroupAbstract} from "./groups/groupelementabstract";
 export abstract class GraphAbstract {
 
 
-
     protected nodetype;
     protected layoutClass:any;
     protected layout:LayoutInterface = null;
@@ -43,7 +42,7 @@ export abstract class GraphAbstract {
      */
     protected dataGetterMethod;
 
-    public setDataGetterMethod(fct:Function){
+    public setDataGetterMethod(fct:Function) {
         this.dataGetterMethod = fct;
     }
 
@@ -72,9 +71,16 @@ export abstract class GraphAbstract {
                 e.deHighlight();
             });
         }.bind(this));
+
+
+        InterGraphEventService.getInstance().addListener(INTERGRAPH_EVENTS.EMPTY_SPACE_IN_PLANE_CLICKED, function (e) {
+            let p = <Plane>e.detail.plane;
+            if (p.getId() !== this.plane.getId())
+                return;
+
+            this.plane.deselectSelectedGraphElement();
+        }.bind(this));
     }
-
-
 
 
     /**
@@ -125,7 +131,7 @@ export abstract class GraphAbstract {
     }
 
 
-    public getMaxNodeWeight():number{
+    public getMaxNodeWeight():number {
         return this.maxNodeWeight;
     }
 }

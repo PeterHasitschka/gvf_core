@@ -26,7 +26,7 @@ export class SceneMouseInteractions {
     }
 
 
-    private getParentFctStack(obj, fctName, debugStack=null) {
+    private getParentFctStack(obj, fctName, debugStack = null) {
         let stack = [];
         let levelCtn = 0;
         let stopTraversalUp = false;
@@ -69,6 +69,11 @@ export class SceneMouseInteractions {
             if (debugClick)
                 this.debug.numIntersected = intersects.length;
 
+            if (!intersects.length) {
+                InterGraphEventService.getInstance().send(INTERGRAPH_EVENTS.EMPTY_SPACE_IN_PLANE_CLICKED, this.scene);
+                return;
+            }
+
             let BreakException = {};
             try {
                 intersects.forEach((intersectedObj, i) => {
@@ -103,7 +108,7 @@ export class SceneMouseInteractions {
             try {
                 intersects.forEach((intersectedObj, i) => {
                     if (!intersectedObj) {
-                        InterGraphEventService.getInstance().send(INTERGRAPH_EVENTS.EMPTY_SPACE_IN_PLANE_CLICKED, this.scene);
+                        // InterGraphEventService.getInstance().send(INTERGRAPH_EVENTS.EMPTY_SPACE_IN_PLANE_CLICKED, this.scene);
                         return;
                     }
                     let stack = this.getParentFctStack(intersectedObj['object'], "onIntersectStart", this.debug.hover);
