@@ -103,6 +103,9 @@ export abstract class EdgeAbstract extends THREE.Line implements GraphObject {
 
 
     public setWeight(weight:number) {
+        if (isNaN(weight))
+            return false;
+
         this.weight = weight;
         this.updateWidth();
     }

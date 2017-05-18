@@ -125,6 +125,9 @@ export abstract class NodeAbstract extends ElementAbstract {
     }
 
     public setWeight(weight:number) {
+        if (isNaN(weight))
+            return false;
+
         this.nodeWeight = weight;
         let scale = 1 + (this.getPlane().getGraph().getMaxNodeWeight() !== 0 ? (weight / this.getPlane().getGraph().getMaxNodeWeight()) : weight);
         this.nodeMesh.scale['set'](scale, scale, scale);
