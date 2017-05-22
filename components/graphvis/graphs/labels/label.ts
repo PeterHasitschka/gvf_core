@@ -63,7 +63,7 @@ export class Label extends THREE.Points {
         let textElm = this.svgElement.getElementsByTagName("text")[0];
         textElm.setAttribute('fill', options.color);
         textElm.setAttribute('transform', 'rotate(' + this.getRotationDegree() + ',' + canvasPos['x'] + ',' + canvasPos['y'] + ')');
-        textElm.setAttribute('style', "stroke: " + options.strokeColor + "; stroke-width: " + options.strokeWidth + "");
+        textElm.setAttribute('style', "stroke: " + options.strokeColor + "; stroke-width: " + options.strokeWidth + "; " + "z-index:" + options.zval);
         textElm.setAttribute('font-size', options.fontSize);
         if (this.options.hidden)
             this.hide();

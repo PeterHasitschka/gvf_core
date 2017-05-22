@@ -8,6 +8,7 @@ import {UiService} from "../../../services/ui.service";
 import {InterGraphEventService, INTERGRAPH_EVENTS} from "../../../services/intergraphevents.service";
 import {HelperService} from "../../../services/helper.service";
 import {Label} from "./labels/label";
+import {ElementHoverBox} from "./labels/hoverbox";
 
 
 export enum GRAPH_ELEMENT_LABEL_TYPE {
@@ -42,12 +43,15 @@ export abstract class ElementAbstract extends THREE.Group implements GraphObject
     protected labelType:GRAPH_ELEMENT_LABEL_TYPE = GRAPH_ELEMENT_LABEL_TYPE.NONE;
     protected label:THREE.Object3D;
     protected labelText:string = "";
-    protected labelTextColor:string = "white";
+    protected labelTextColor:string = "black";
     protected labelTextSize:number = 10;
     protected labelIconPath:string = "/gvfcore/assets/icons/x.png";
     protected labelIconSize:number = 20;
     protected labelZoomLevelMin = 1.5;
     protected labelZoomAdjustmentBlocked = false;
+
+    protected hoverBox:Label = null;
+    protected hoverText = null;
 
     protected static idCounter = 0;
 
@@ -98,59 +102,78 @@ export abstract class ElementAbstract extends THREE.Group implements GraphObject
         this.uniqueId = ElementAbstract.idCounter;
         ElementAbstract.idCounter++;
 
+
     }
 
     protected createLabel() {
 
-        if (this.labelType === GRAPH_ELEMENT_LABEL_TYPE.NONE) {
-            this.label = null;
-            return;
-        }
+        switch (this.labelType) {
 
-        if (this.labelType === GRAPH_ELEMENT_LABEL_TYPE.ICON) {
-            this.label = null;
+            case GRAPH_ELEMENT_LABEL_TYPE.NONE :
+                this.label = null;
+                break;
 
-            if (!this.labelIconPath) {
-                console.warn("No Icon set for node", this);
-                return;
-            }
 
-            var textureLoader = new THREE.TextureLoader();
-            textureLoader.load(this.labelIconPath, function (texture) {
-                //texture.minFilter = THREE.LinearFilter;
-                let iconCircle = new THREE.Mesh(new THREE.CircleGeometry(
-                    this.labelIconSize,
-                    GraphVisConfig.graphelements.abstractnode.segments),
-                    new THREE.MeshBasicMaterial({
-                        map: texture,
-                        side: THREE.DoubleSide,
-                        transparent: true,
-                        color: 0xFFFFFF,
-                        visible: true,
-                    }));
+            case GRAPH_ELEMENT_LABEL_TYPE.ICON:
+                this.label = null;
 
-                //texture.flipY = true;
-                this.label = iconCircle;
-                this.label.position.set(0, 0, 0);
+                if (!this.labelIconPath) {
+                    console.warn("No Icon set for node", this);
+                    return;
+                }
+
+                var textureLoader = new THREE.TextureLoader();
+                textureLoader.load(this.labelIconPath, function (texture) {
+                    //texture.minFilter = THREE.LinearFilter;
+                    let iconCircle = new THREE.Mesh(new THREE.CircleGeometry(
+                        this.labelIconSize,
+                        GraphVisConfig.graphelements.abstractnode.segments),
+                        new THREE.MeshBasicMaterial({
+                            map: texture,
+                            side: THREE.DoubleSide,
+                            transparent: true,
+                            color: 0xFFFFFF,
+                            visible: true,
+                        }));
+
+                    //texture.flipY = true;
+                    this.label = iconCircle;
+                    this.label.position.set(0, 0, 0);
+                    this.add(this.label);
+                }.bind(this));
+                break;
+
+
+            case GRAPH_ELEMENT_LABEL_TYPE.TEXT :
+                this.label = null;
+
+                let label = new Label(this.plane, this.labelText, 0, 0, {
+                    color: this.labelTextColor,
+                    fontSize: this.labelTextSize,
+                    strokeColor: null
+                });
+
+
+                this.label = label;
                 this.add(this.label);
-            }.bind(this));
+                break;
         }
 
 
-        if (this.labelType === GRAPH_ELEMENT_LABEL_TYPE.TEXT) {
-            this.label = null;
+    }
 
-            let label = new Label(this.plane, this.labelText, 0, 0, {
-                color: this.labelTextColor,
-                fontSize: this.labelTextSize,
-                strokeColor: null
-            });
-
-
-            this.label = label;
-            this.add(this.label);
-        }
-
+    /**
+     * Create Hoverbox on the fly (on first hover)
+     */
+    protected createHoverBox() {
+        this.hoverBox = new Label(this.getPlane(), this.hoverText ? this.hoverText : "", 0, -12, {
+            color: "black",
+            fontSize: 14,
+            strokeColor: null,
+            hidden: true,
+            zval:20
+        });
+        this.add(this.hoverBox);
     }
 
 
@@ -310,6 +333,10 @@ export abstract class ElementAbstract extends THREE.Group implements GraphObject
      */
     public onIntersectStart():void {
         InterGraphEventService.getInstance().send(INTERGRAPH_EVENTS.ELEMENT_HOVERED, this);
+
+        if (!this.hoverBox)
+            this.createHoverBox();
+        this.hoverBox.show();
         this.highlight(true);
     }
 
@@ -319,7 +346,7 @@ export abstract class ElementAbstract extends THREE.Group implements GraphObject
      */
     public onIntersectLeave():void {
         InterGraphEventService.getInstance().send(INTERGRAPH_EVENTS.ELEMENT_LEFT, this);
-
+        this.hoverBox.hide();
         this.deHighlight(true);
     }
 
