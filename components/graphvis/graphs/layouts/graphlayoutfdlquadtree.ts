@@ -2,6 +2,7 @@ import {GraphLayoutAbstract} from './graphlayoutabstract';
 import {Plane} from '../../../plane/plane';
 import {EdgeAbstract} from "../edges/edgeelementabstract";
 import {NodeAbstract} from "../nodes/nodeelementabstract";
+import {AnimationService} from "../../../../services/animationservice";
 
 export enum WORKER_MSGS {
     STARTCALCULATING,
@@ -34,19 +35,23 @@ export class GraphLayoutFdlQuadtree extends GraphLayoutAbstract {
                 this.plane.setShowGreyOverlay(false);
                 onFinish();
             }.bind(this));
-        }.bind(this),0);
+        }.bind(this), 0);
 
         return;
     }
 
 
-    private calculate() {
+    private calculate(animation:boolean = false, cb = null) {
         var createGraph = require('ngraph.graph');
         var g = createGraph();
 
         let tmpNodeMapping = {};
 
         this.nodes.forEach((n:NodeAbstract) => {
+
+            if (!n.getIsVisible())
+                return;
+
             tmpNodeMapping[n.getUniqueId()] = n;
 
             n.getEdges().forEach((e:EdgeAbstract) => {
@@ -55,7 +60,9 @@ export class GraphLayoutFdlQuadtree extends GraphLayoutAbstract {
                     connectedNode = e.getDestNode();
                 else
                     connectedNode = e.getSourceNode();
-                g.addLink(n.getUniqueId(), connectedNode.getUniqueId());
+
+                if (connectedNode.getIsVisible())
+                    g.addLink(n.getUniqueId(), connectedNode.getUniqueId());
             });
         });
 
@@ -73,11 +80,43 @@ export class GraphLayoutFdlQuadtree extends GraphLayoutAbstract {
             layout.step();
         }
 
-        g.forEachNode(function (node) {
-            let pos = layout.getNodePosition(node.id);
-            (<NodeAbstract>tmpNodeMapping[node.id]).setPosition(pos.x, pos.y);
+        let nodesToFinishAnim = g.getNodesCount();
+        g.forEachNode(function (n) {
+            let pos = layout.getNodePosition(n.id);
+
+            let node = <NodeAbstract>tmpNodeMapping[n.id];
+            if (!animation) {
+                node.setPosition(pos.x, pos.y);
+            } else {
+
+                AnimationService.getInstance().register(
+                    "nodepos_" + node.getUniqueId(),
+                    {'x': pos.x, 'y': pos.y},
+                    null,
+                    node.getPosition2DForAnimation.bind(node),
+                    node.setPosition2DForAnimation.bind(node),
+                    0,
+                    1,
+                    0.00001,
+                    0.1,
+                    function () {
+                        nodesToFinishAnim--;
+                        if (!nodesToFinishAnim && cb)
+                            cb();
+                    }.bind(this),
+                    true,
+                    node.getPlane()
+                );
+            }
+
         });
 
     }
+
+
+    public reCalculateLayout(onFinish):void {
+        this.calculate(true, onFinish);
+    }
+
 }
 

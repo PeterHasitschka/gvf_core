@@ -134,4 +134,8 @@ export abstract class GraphAbstract {
     public getMaxNodeWeight():number {
         return this.maxNodeWeight;
     }
+
+    public getLayout():LayoutInterface {
+        return this.layout;
+    }
 }

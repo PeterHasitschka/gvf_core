@@ -136,4 +136,12 @@ export abstract class NodeAbstract extends ElementAbstract {
     public getWeight():number {
         return this.nodeWeight;
     }
+
+
+    public setIsVisible(vis:boolean) {
+        this.edges.forEach((e:EdgeAbstract) => {
+            e.setIsVisible(vis);
+        });
+        super.setIsVisible(vis);
+    }
 }

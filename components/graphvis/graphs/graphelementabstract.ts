@@ -434,8 +434,16 @@ export abstract class ElementAbstract extends THREE.Group implements GraphObject
                 this.showLabel();
             }
         }
+    }
 
 
+    public setIsVisible(vis:boolean) {
+        this.visible = vis;
+        // this.getPlane().getGraphScene().render();
+    }
+
+    public getIsVisible():boolean {
+        return this.visible;
     }
 
 

@@ -48,4 +48,12 @@ export abstract class GraphLayoutAbstract implements LayoutInterface {
     public calculateLayout(onFinish):void {
 
     }
+
+    /**
+     * Re-Calculate on demand during the usage of GVF
+     * @param onFinish Callback fct
+     */
+    reCalculateLayout(onFinish):void{
+
+    }
 }
