@@ -8,7 +8,6 @@ import {UiService} from "../../../services/ui.service";
 import {InterGraphEventService, INTERGRAPH_EVENTS} from "../../../services/intergraphevents.service";
 import {HelperService} from "../../../services/helper.service";
 import {Label} from "./labels/label";
-import {ElementHoverBox} from "./labels/hoverbox";
 
 
 export enum GRAPH_ELEMENT_LABEL_TYPE {
