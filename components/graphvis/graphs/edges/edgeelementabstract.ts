@@ -43,7 +43,6 @@ export abstract class EdgeAbstract extends THREE.Line implements GraphObject {
         let endX:number = destNode.getPosition()['x'];
         let endY:number = destNode.getPosition()['y'];
 
-
         let config = GraphVisConfig.edges;
         let color = config.abstractedge.color;
 

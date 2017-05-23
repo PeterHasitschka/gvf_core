@@ -8,10 +8,13 @@ import {GraphVisConfig} from "../../../config";
 import {Label} from "../../labels/label";
 import match = require("core-js/fn/symbol/match");
 import {OnionSegment} from "./onionsegment";
+import {EdgeBasic} from "../../edges/edgeelementbasic";
 export class OnionVis extends MetanodeAbstract {
 
     private centerNode:NodeAbstract;
     protected labels:Label[];
+
+    protected static connectingEdges:EdgeAbstract[] = [];
 
     protected currentActiveOnionSegments:OnionSegment[] = [];
 
@@ -46,6 +49,17 @@ export class OnionVis extends MetanodeAbstract {
 
         //console.log("Onion constructor");
 
+
+        if (OnionVis.activeOnions.length) {
+            let previousCenterNode = OnionVis.activeOnions[OnionVis.activeOnions.length - 1].getCenterNode();
+            console.log(previousCenterNode.getPosition(), this.centerNode.getPosition());
+            let connectingEdge = new EdgeBasic(previousCenterNode, this.centerNode, this.plane);
+            this.plane.getGraphScene().addObject(connectingEdge);
+            OnionVis.connectingEdges.push(connectingEdge);
+            console.log(connectingEdge);
+        }
+
+
         let createOnionFct = function () {
             //console.log("Creating the new onion now! The centernode is ", centerNode);
             this.calculateDistances(centerNode);
@@ -56,6 +70,7 @@ export class OnionVis extends MetanodeAbstract {
                 for (var meshKey in this.meshs) {
                     this.add(this.meshs[meshKey]);
                 }
+
                 OnionVis.activeOnions.push(this);
                 AnimationService.getInstance().finishAllAnimations();
                 this.plane.setSelectedGraphElement(this);
@@ -345,10 +360,12 @@ export class OnionVis extends MetanodeAbstract {
     }
 
     protected showHover(text) {
-
         this.hoverLabel.updateText(text);
         this.hoverLabel.show();
+    }
 
+    public getCenterNode():NodeAbstract {
+        return this.centerNode;
     }
 
     protected hideHover() {
