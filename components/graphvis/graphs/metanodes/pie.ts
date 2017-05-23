@@ -9,6 +9,9 @@ export class Pie extends THREE.Mesh {
     protected onClickFct;
     protected onClickParam;
 
+    protected onIntersectFct;
+    protected onIntersectLeaveFtc;
+
     /**
      *
      * @param startAngle Between 0 and PI*2 (Begin on to clockwise)
@@ -58,7 +61,8 @@ export class Pie extends THREE.Mesh {
     public onIntersectStart():void {
         InterGraphEventService.getInstance().send(INTERGRAPH_EVENTS.METANODE_PIE_HOVERED, this);
 
-
+        if (this.onIntersectFct)
+            this.onIntersectFct();
         //this.plane.getGraphScene().render();
     }
 
@@ -68,12 +72,21 @@ export class Pie extends THREE.Mesh {
      */
     public onIntersectLeave():void {
         InterGraphEventService.getInstance().send(INTERGRAPH_EVENTS.METANODE_PIE_LEFT, this);
+
+        if (this.onIntersectLeaveFtc)
+            this.onIntersectLeaveFtc();
+
         //this.plane.getGraphScene().render();
     }
 
     public setOnClickFct(fct:Function, param:any) {
         this.onClickFct = fct;
         this.onClickParam = param;
+    }
+
+    public setIntersectFunctions(onIntesectStartFct, onIntersectLeaveFct) {
+        this.onIntersectFct = onIntesectStartFct;
+        this.onIntersectLeaveFtc = onIntersectLeaveFct;
     }
 
     public onClick():boolean {

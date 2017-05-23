@@ -20,6 +20,8 @@ export class OnionVis extends MetanodeAbstract {
 
     protected useMinDist = false;
 
+    protected hoverLabel:Label;
+
     protected static onionSkins = [
         {
             max: 1
@@ -85,6 +87,16 @@ export class OnionVis extends MetanodeAbstract {
             });
         } else
             createOnionFct();
+
+
+        this.hoverLabel = new Label(this.plane, "", 0, -130, {
+            color: "#7B83B3",
+            fontSize: 15,
+            hidden: true,
+            strokeColor: null
+        });
+        this.add(this.hoverLabel);
+
     }
 
     protected collapseNodes(nodes:NodeAbstract[], cb, saveOrigPos = true) {
@@ -241,16 +253,6 @@ export class OnionVis extends MetanodeAbstract {
 
                 ringPieSegment.setAffectedNodes(matchingDistNodes[nodeClass]);
 
-                ringPieSegment.setOnClickFct(function (segment:OnionSegment) {
-                    this.currentActiveOnionSegments.forEach((pieToCollapse:OnionSegment) => {
-                        this.collapseNodes(pieToCollapse.getAffectedNodes(), null, false);
-                    });
-                    this.currentActiveOnionSegments = [];
-                    this.currentActiveOnionSegments.push(segment);
-                    AnimationService.getInstance().finishAllAnimations();
-                    this.expandOnionSegmentNodes(segment, null);
-                }.bind(this), ringPieSegment);
-
 
                 /*
                  Label
@@ -274,6 +276,26 @@ export class OnionVis extends MetanodeAbstract {
 
 
                 ringStart += ringLength;
+
+
+                ringPieSegment.setOnClickFct(function (segment:OnionSegment) {
+                    this.currentActiveOnionSegments.forEach((pieToCollapse:OnionSegment) => {
+                        this.collapseNodes(pieToCollapse.getAffectedNodes(), null, false);
+                    });
+                    this.currentActiveOnionSegments = [];
+                    this.currentActiveOnionSegments.push(segment);
+                    AnimationService.getInstance().finishAllAnimations();
+                    this.expandOnionSegmentNodes(segment, null);
+                }.bind(this), ringPieSegment);
+
+                let infoStr = "All " + nodeClass + " nodes" + (onion.max !== null ? " with a minimal distance up to " + onion.max + " from the center node" : "");
+                ringPieSegment.setIntersectFunctions(function () {
+                        this.showHover(infoStr);
+                    }.bind(this),
+                    function () {
+                        this.hideHover();
+                    }.bind(this));
+
 
             }
 
@@ -314,8 +336,22 @@ export class OnionVis extends MetanodeAbstract {
             if (this.uniqueId === o.uniqueId)
                 OnionVis.activeOnions.splice(i, 1);
         });
+
+        this.remove(this.hoverLabel);
+        this.hoverLabel.delete();
+        this.hoverLabel = null;
         AnimationService.getInstance().restoreNodeOriginalPositions([this.centerNode], this.plane, cb);
         super.delete(cb, restorePositions);
     }
 
+    protected showHover(text) {
+
+        this.hoverLabel.updateText(text);
+        this.hoverLabel.show();
+
+    }
+
+    protected hideHover() {
+        //this.hoverLabel.hide();
+    }
 }

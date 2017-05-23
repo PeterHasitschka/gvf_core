@@ -159,4 +159,10 @@ export class Label extends THREE.Points {
         let fontSize = this.options.fontSize;
         textElm.setAttribute("font-size", fontSize * globalZoom);
     }
+
+    public updateText(text:string) {
+        let textElm = this.svgElement.getElementsByTagName("text")[0];
+        textElm.innerHTML = text;
+        this.updateSvgPos();
+    }
 }
