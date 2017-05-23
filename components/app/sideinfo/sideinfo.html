@@ -1,4 +1,4 @@
-<div *ngIf="position === infomodel.getPosition()" class="sidebarinfo">
+<div *ngIf="position === infomodel.getPosition()" class="sidebarinfo" [ngClass]="{'sidebarDynHeight' : infomodel.getIsDynHeight()}">
     <h3 [innerHTML]="infomodel.getTitle()"></h3>
 
     <div *ngIf="infomodel.getContentType() === types.Text">

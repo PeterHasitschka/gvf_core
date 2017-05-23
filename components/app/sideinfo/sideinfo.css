@@ -10,6 +10,10 @@
     margin-bottom: 2px;
 }
 
+.sidebarinfo.sidebarDynHeight{
+    min-height:initial;
+}
+
 .sidebarinfo h3 {
     font-size: 18px;
     margin-top: 7px;
