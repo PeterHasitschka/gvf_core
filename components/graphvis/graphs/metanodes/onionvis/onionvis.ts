@@ -15,7 +15,7 @@ export class OnionVis extends MetanodeAbstract {
 
     protected currentActiveOnionSegments:OnionSegment[] = [];
 
-    protected static onlyOneOnionAllowed = true;
+    protected static onlyOneOnionAllowed = false;
     protected static activeOnions:OnionVis[] = [];
 
     protected useMinDist = false;
@@ -352,6 +352,6 @@ export class OnionVis extends MetanodeAbstract {
     }
 
     protected hideHover() {
-        //this.hoverLabel.hide();
+        this.hoverLabel.hide();
     }
 }
