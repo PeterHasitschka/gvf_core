@@ -72,12 +72,12 @@ export class AppComponent implements OnInit {
             }, 3
             )
         );
-
-        // this.uiService.addSideInfoElement(new SideInfoModel(
-        //     '<i class="fa fa-hand-spock-o" aria-hidden="true"></i> App-Dev Tools',
-        //     SideInfoPositions.Right,
-        //     SideInfoContentType.AppDevTools, {}, 2
-        // ));
+        if (GraphVisConfig.scene.debug.showDebugSideModel)
+            this.uiService.addSideInfoElement(new SideInfoModel(
+                '<i class="fa fa-hand-spock-o" aria-hidden="true"></i> App-Dev Tools',
+                SideInfoPositions.Right,
+                SideInfoContentType.AppDevTools, {}, 2
+            ));
 
 
         this.loadPlugins();

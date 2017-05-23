@@ -29,6 +29,7 @@ export class GraphVisConfig {
             z: -100
         },
         debug: {
+            showDebugSideModel: false,
             animationStatistics: true,
             intervalledRenderStatistics: false,
             clickDebug: false,
@@ -63,7 +64,7 @@ export class GraphVisConfig {
             linecolor2: 0x00FF00,
             linewidth: 3,
             opacity: 1.0,
-            startEndNodeSize : 10
+            startEndNodeSize: 10
         }
 
 

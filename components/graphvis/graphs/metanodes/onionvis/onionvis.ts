@@ -18,6 +18,8 @@ export class OnionVis extends MetanodeAbstract {
     protected static onlyOneOnionAllowed = true;
     protected static activeOnions:OnionVis[] = [];
 
+    protected useMinDist = false;
+
     protected static onionSkins = [
         {
             max: 1
@@ -211,7 +213,13 @@ export class OnionVis extends MetanodeAbstract {
             let labelRad = size - sizeStep / 2 - 5;
             let labelPosX = labelRad * Math.sin(Math.PI);
             let labelPosY = labelRad * Math.cos(Math.PI);
-            let label = minDist !== onion.max ? minDist + (onion.max !== null ? "-" + onion.max : "+") : minDist;
+
+            let label;
+            if (this.useMinDist)
+                label = minDist !== onion.max ? minDist + (onion.max !== null ? "-" + onion.max : "+") : minDist;
+            else
+                label = onion.max !== null ? "<" + (onion.max + 1) : "all";
+
             let ringLabel = new Label(this.plane, label, labelPosX, labelPosY, {
                 rotateDegree: rotDegree,
                 color: "#FFFFFF",
@@ -281,8 +289,8 @@ export class OnionVis extends MetanodeAbstract {
             sepRing.position.setZ(zVal - 1);
             oniongroup.add(sepRing);
 
-
-            minDist = onion.max !== null ? onion.max + 1 : null;
+            if (this.useMinDist)
+                minDist = onion.max !== null ? onion.max + 1 : null;
             size += sizeStep;
             zVal -= zStep;
         });
