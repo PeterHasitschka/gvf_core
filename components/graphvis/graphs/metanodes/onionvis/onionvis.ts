@@ -19,7 +19,7 @@ export class OnionVis extends MetanodeAbstract {
     protected static onionConnectingEdges:EdgeAbstract[] = [];
 
     protected onionToNodeEdges:EdgeAbstract[] = [];
-    protected hiddenOriginalEdges:EdgeAbstract[] = [];
+    protected hiddenOriginalEdges = {};
 
     protected currentActiveOnionSegments:OnionSegment[] = [];
 
@@ -45,6 +45,7 @@ export class OnionVis extends MetanodeAbstract {
         }
     ];
 
+
     constructor(x:number, y:number, centerNode:NodeAbstract, plane:Plane) {
 
         super(x, y, [], plane, {'size': 50});
@@ -52,21 +53,6 @@ export class OnionVis extends MetanodeAbstract {
         this.centerNode = centerNode;
         this.centerPos = centerNode.getPosition().clone();
         this.labels = [];
-
-        //console.log("Onion constructor");
-
-
-        if (OnionVis.activeOnions.length) {
-            let previousCenterNode = OnionVis.activeOnions[OnionVis.activeOnions.length - 1].getCenterNode();
-            let connectingEdge = new EdgeBasic(previousCenterNode, this.centerNode, this.plane);
-            this.plane.getGraphScene().addObject(connectingEdge);
-            OnionVis.onionConnectingEdges.push(connectingEdge);
-            console.log(connectingEdge);
-
-            OnionVis.activeOnions.forEach((o:OnionVis) => {
-                o.removeTmpEdgesAndRestoreOrigEdges();
-            });
-        }
 
 
         let createOnionFct = function () {
@@ -83,10 +69,25 @@ export class OnionVis extends MetanodeAbstract {
                 }
 
                 OnionVis.activeOnions.push(this);
+                this.reCreateOnionConnections();
                 AnimationService.getInstance().finishAllAnimations();
                 this.plane.setSelectedGraphElement(this);
+
+
+
+                this.nodes.forEach((n:NodeAbstract) =>{
+                    n.getEdges().forEach((e:EdgeAbstract) => {
+                            this.hiddenOriginalEdges[e.uuid] = e;
+                            e.setIsVisible(false);
+                    });
+                });
                 this.plane.getGraphScene().render();
+
             }.bind(this));
+
+
+
+
         }.bind(this);
 
         /*
@@ -125,10 +126,41 @@ export class OnionVis extends MetanodeAbstract {
 
     }
 
+    protected reCreateOnionConnections() {
+
+
+
+        OnionVis.onionConnectingEdges.forEach((e:EdgeAbstract) => {
+            this.plane.getGraphScene().removeObject(e);
+        });
+        OnionVis.onionConnectingEdges = [];
+
+
+        if (OnionVis.activeOnions.length > 1) {
+
+            OnionVis.activeOnions.forEach((o:OnionVis, oIdx) => {
+                if (oIdx === 0)
+                    return;
+
+                let lastO:OnionVis = OnionVis.activeOnions[oIdx - 1];
+                o.resetCenterNodePosition();
+                lastO.resetCenterNodePosition();
+                let connectingEdge = new EdgeBasic(lastO.getCenterNode(), o.centerNode, this.plane);
+                this.plane.getGraphScene().addObject(connectingEdge);
+                OnionVis.onionConnectingEdges.push(connectingEdge);
+            });
+
+        }
+
+        OnionVis.activeOnions.forEach((o:OnionVis) => {
+            o.removeTmpEdges();
+            o.resetAllPositions();
+        });
+    }
 
     protected collapseNodes(nodes:NodeAbstract[], cb, saveOrigPos = true) {
 
-        this.removeTmpEdgesAndRestoreOrigEdges();
+        this.removeTmpEdges();
 
         let afterCollapse = function () {
             if (cb)
@@ -164,12 +196,7 @@ export class OnionVis extends MetanodeAbstract {
             currAng += angleStep;
 
 
-            n.getEdges().forEach((e:EdgeAbstract) => {
-                if (e.getIsVisible()) {
-                    this.hiddenOriginalEdges.push(e);
-                    e.setIsVisible(false);
-                }
-            });
+
 
             let tmpEdge:EdgeBasic = new EdgeBasic(n, this.centerNode, this.plane);
             this.onionToNodeEdges.push(tmpEdge);
@@ -332,7 +359,7 @@ export class OnionVis extends MetanodeAbstract {
                 ringPieSegment.setOnClickFct(function (segment:OnionSegment) {
 
                     OnionVis.activeOnions.forEach((o:OnionVis) => {
-                        o.collapseCurrentSegments();
+                        o.resetAllPositions();
                     });
 
                     this.currentActiveOnionSegments = [];
@@ -384,19 +411,19 @@ export class OnionVis extends MetanodeAbstract {
         this.meshs['oniongroup'] = oniongroup;
     }
 
-    public collapseCurrentSegments() {
+    public resetAllPositions() {
         this.currentActiveOnionSegments.forEach((pieToCollapse:OnionSegment) => {
             this.collapseNodes(pieToCollapse.getAffectedNodes(), null, false);
         });
+        this.centerNode.setPosition(this.centerPos['x'], this.centerPos['y']);
+    }
+
+    public resetCenterNodePosition() {
+        this.centerNode.setPosition(this.centerPos['x'], this.centerPos['y']);
     }
 
 
-    public removeTmpEdgesAndRestoreOrigEdges() {
-
-        this.hiddenOriginalEdges.forEach((e:EdgeAbstract) => {
-            e.setIsVisible(true);
-        });
-        this.hiddenOriginalEdges = [];
+    public removeTmpEdges() {
 
         this.onionToNodeEdges.forEach((e:EdgeAbstract) => {
             this.plane.getGraphScene().removeObject(e);
@@ -406,14 +433,14 @@ export class OnionVis extends MetanodeAbstract {
 
     public delete(cb, restorePositions = true) {
 
-        this.collapseCurrentSegments();
+        this.resetAllPositions();
 
         OnionVis.activeOnions.forEach((o:OnionVis, i) => {
             if (this.uniqueId === o.uniqueId)
                 OnionVis.activeOnions.splice(i, 1);
         });
 
-        this.removeTmpEdgesAndRestoreOrigEdges();
+        this.removeTmpEdges();
 
 
         /**
@@ -434,9 +461,9 @@ export class OnionVis extends MetanodeAbstract {
             });
             if (typeof allNodeMapping[o.getCenterNode().getUniqueId()] === "undefined")
                 allNodeMapping[o.getCenterNode().getUniqueId()] = o.getCenterNode();
-            
 
-            o.collapseCurrentSegments();
+
+            o.resetAllPositions();
         });
 
         this.nodes.forEach((n:NodeAbstract, nodeIdx) => {
@@ -444,25 +471,50 @@ export class OnionVis extends MetanodeAbstract {
                 this.nodes[nodeIdx] = null;
             }
         });
+        if (typeof allNodeMapping[this.centerNode.getUniqueId()] !== "undefined") {
+            this.centerNode = null;
+        }
+
 
 
         this.remove(this.hoverLabel);
         this.hoverLabel.delete();
         this.hoverLabel = null;
-        // AnimationService.getInstance().restoreNodeOriginalPositions([this.centerNode], this.plane, cb);
+        AnimationService.getInstance().restoreNodeOriginalPositions([this.centerNode], this.plane, cb);
 
         let callbackFct = function () {
 
             OnionVis.activeOnions.forEach((o:OnionVis) => {
                 if (o.uniqueId === this.uniqueId)
                     return;
-                o.collapseCurrentSegments();
+                o.resetAllPositions();
             });
             if (cb)
                 cb();
         }.bind(this);
 
+
+        /**
+         * Make all edges visible again which
+         * a.) do not match other onions
+         * b.) were visible before
+         */
+        this.nodes.forEach((n:NodeAbstract) => {
+           if (n === null)
+               return;
+
+            n.getEdges().forEach((eToRestore:EdgeAbstract) =>{
+                if (!eToRestore.getIsVisible() && typeof this.hiddenOriginalEdges[eToRestore.uuid] !== "undefined")
+                    eToRestore.setIsVisible(true);
+            });
+        });
+
+
         super.delete(callbackFct, restorePositions);
+
+
+
+        this.reCreateOnionConnections();
     }
 
     protected showHover(text) {
