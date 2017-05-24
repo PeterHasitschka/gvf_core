@@ -141,7 +141,7 @@ export class OnionVis extends MetanodeAbstract {
     protected expandOnionSegmentNodes(segment:OnionSegment, cb) {
 
         this.centerNode.setPosition(this.centerPos['x'], this.centerPos['y']);
-        
+
         let nodes = this.getBestOfNodes(segment.getAffectedNodes());
 
         let angles = segment.getAngles();
@@ -413,6 +413,29 @@ export class OnionVis extends MetanodeAbstract {
         this.removeTmpEdgesAndRestoreOrigEdges();
 
 
+        /**
+         * Check if nodes of the onion to delete are in other instances.
+         * If so, DO NOT restore them.
+         */
+
+        let allNodeMapping = {};
+        OnionVis.activeOnions.forEach((o:OnionVis) => {
+            if (o.uniqueId === this.uniqueId)
+                return;
+            o.getNodes().forEach((n:NodeAbstract) => {
+                if (typeof allNodeMapping[n.getUniqueId()] === "undefined")
+                    allNodeMapping[n.getUniqueId()] = n;
+            });
+        });
+
+        this.nodes.forEach((n:NodeAbstract, nodeIdx) => {
+
+            if (typeof allNodeMapping[n.getUniqueId()] !== "undefined"){
+                this.nodes[nodeIdx] = null;
+            }
+        });
+
+
         this.remove(this.hoverLabel);
         this.hoverLabel.delete();
         this.hoverLabel = null;
@@ -432,4 +455,8 @@ export class OnionVis extends MetanodeAbstract {
     protected hideHover() {
         this.hoverLabel.hide();
     }
+
+    public getNodes():NodeAbstract[] {
+        return this.nodes;
+    };
 }
