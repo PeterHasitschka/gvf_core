@@ -405,6 +405,9 @@ export class OnionVis extends MetanodeAbstract {
     }
 
     public delete(cb, restorePositions = true) {
+
+        this.collapseCurrentSegments();
+
         OnionVis.activeOnions.forEach((o:OnionVis, i) => {
             if (this.uniqueId === o.uniqueId)
                 OnionVis.activeOnions.splice(i, 1);
@@ -418,6 +421,9 @@ export class OnionVis extends MetanodeAbstract {
          * If so, DO NOT restore them.
          */
 
+        /**
+         * TODO: Handle OWN and FOREIGN Center NOdes
+         */
         let allNodeMapping = {};
         OnionVis.activeOnions.forEach((o:OnionVis) => {
             if (o.uniqueId === this.uniqueId)
@@ -426,11 +432,15 @@ export class OnionVis extends MetanodeAbstract {
                 if (typeof allNodeMapping[n.getUniqueId()] === "undefined")
                     allNodeMapping[n.getUniqueId()] = n;
             });
+            if (typeof allNodeMapping[o.getCenterNode().getUniqueId()] === "undefined")
+                allNodeMapping[o.getCenterNode().getUniqueId()] = o.getCenterNode();
+            
+
+            o.collapseCurrentSegments();
         });
 
         this.nodes.forEach((n:NodeAbstract, nodeIdx) => {
-
-            if (typeof allNodeMapping[n.getUniqueId()] !== "undefined"){
+            if (typeof allNodeMapping[n.getUniqueId()] !== "undefined") {
                 this.nodes[nodeIdx] = null;
             }
         });
@@ -439,8 +449,20 @@ export class OnionVis extends MetanodeAbstract {
         this.remove(this.hoverLabel);
         this.hoverLabel.delete();
         this.hoverLabel = null;
-        AnimationService.getInstance().restoreNodeOriginalPositions([this.centerNode], this.plane, cb);
-        super.delete(cb, restorePositions);
+        // AnimationService.getInstance().restoreNodeOriginalPositions([this.centerNode], this.plane, cb);
+
+        let callbackFct = function () {
+
+            OnionVis.activeOnions.forEach((o:OnionVis) => {
+                if (o.uniqueId === this.uniqueId)
+                    return;
+                o.collapseCurrentSegments();
+            });
+            if (cb)
+                cb();
+        }.bind(this);
+
+        super.delete(callbackFct, restorePositions);
     }
 
     protected showHover(text) {
