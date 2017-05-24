@@ -9,12 +9,17 @@ import {Label} from "../../labels/label";
 import match = require("core-js/fn/symbol/match");
 import {OnionSegment} from "./onionsegment";
 import {EdgeBasic} from "../../edges/edgeelementbasic";
+import {NoAnnotationError} from "@angular/core";
 export class OnionVis extends MetanodeAbstract {
 
     private centerNode:NodeAbstract;
+    private centerPos:{} = null;
     protected labels:Label[];
 
-    protected static connectingEdges:EdgeAbstract[] = [];
+    protected static onionConnectingEdges:EdgeAbstract[] = [];
+
+    protected onionToNodeEdges:EdgeAbstract[] = [];
+    protected hiddenOriginalEdges:EdgeAbstract[] = [];
 
     protected currentActiveOnionSegments:OnionSegment[] = [];
 
@@ -45,6 +50,7 @@ export class OnionVis extends MetanodeAbstract {
         super(x, y, [], plane, {'size': 50});
         this.name = "Onion-Vis Meta-Node";
         this.centerNode = centerNode;
+        this.centerPos = centerNode.getPosition().clone();
         this.labels = [];
 
         //console.log("Onion constructor");
@@ -52,20 +58,25 @@ export class OnionVis extends MetanodeAbstract {
 
         if (OnionVis.activeOnions.length) {
             let previousCenterNode = OnionVis.activeOnions[OnionVis.activeOnions.length - 1].getCenterNode();
-            console.log(previousCenterNode.getPosition(), this.centerNode.getPosition());
             let connectingEdge = new EdgeBasic(previousCenterNode, this.centerNode, this.plane);
             this.plane.getGraphScene().addObject(connectingEdge);
-            OnionVis.connectingEdges.push(connectingEdge);
+            OnionVis.onionConnectingEdges.push(connectingEdge);
             console.log(connectingEdge);
+
+            OnionVis.activeOnions.forEach((o:OnionVis) => {
+                o.removeTmpEdgesAndRestoreOrigEdges();
+            });
         }
 
 
         let createOnionFct = function () {
+            centerNode.setPosition(this.centerPos.x, this.centerPos.y);
             //console.log("Creating the new onion now! The centernode is ", centerNode);
             this.calculateDistances(centerNode);
             // this.zoomAndCenter();
             this.collapseNodes(this.nodes, function () {
                 this.setPosition(this.centerNode.getPosition().x, this.centerNode.getPosition().y);
+
                 this.createOnions(null);
                 for (var meshKey in this.meshs) {
                     this.add(this.meshs[meshKey]);
@@ -114,12 +125,23 @@ export class OnionVis extends MetanodeAbstract {
 
     }
 
+
     protected collapseNodes(nodes:NodeAbstract[], cb, saveOrigPos = true) {
 
-        AnimationService.getInstance().collapseNodes(nodes, this.plane, this.centerNode.getPosition(), cb, saveOrigPos);
+        this.removeTmpEdgesAndRestoreOrigEdges();
+
+        let afterCollapse = function () {
+            if (cb)
+                cb();
+        }.bind(this);
+
+        AnimationService.getInstance().collapseNodes(nodes, this.plane, this.centerNode.getPosition(), afterCollapse, saveOrigPos);
     }
 
     protected expandOnionSegmentNodes(segment:OnionSegment, cb) {
+
+        this.centerNode.setPosition(this.centerPos['x'], this.centerPos['y']);
+        
         let nodes = this.getBestOfNodes(segment.getAffectedNodes());
 
         let angles = segment.getAngles();
@@ -132,12 +154,27 @@ export class OnionVis extends MetanodeAbstract {
         let currAng = angles.start;
         // console.log("expand around centernode", this.centerNode);
         nodes.forEach((n:NodeAbstract) => {
+
+
             let randVal = 1; //Math.random() + 0.5;
             let tmpRad = radius * randVal;
             let relPosX = tmpRad * Math.sin(currAng);
             let relPosY = tmpRad * Math.cos(currAng);
             n.setPosition(relPosX + this.centerNode.getPosition().x, relPosY + this.centerNode.getPosition().y);
             currAng += angleStep;
+
+
+            n.getEdges().forEach((e:EdgeAbstract) => {
+                if (e.getIsVisible()) {
+                    this.hiddenOriginalEdges.push(e);
+                    e.setIsVisible(false);
+                }
+            });
+
+            let tmpEdge:EdgeBasic = new EdgeBasic(n, this.centerNode, this.plane);
+            this.onionToNodeEdges.push(tmpEdge);
+            this.plane.getGraphScene().addObject(tmpEdge);
+
         });
 
         this.plane.getGraphScene().render();
@@ -292,11 +329,12 @@ export class OnionVis extends MetanodeAbstract {
 
                 ringStart += ringLength;
 
-
                 ringPieSegment.setOnClickFct(function (segment:OnionSegment) {
-                    this.currentActiveOnionSegments.forEach((pieToCollapse:OnionSegment) => {
-                        this.collapseNodes(pieToCollapse.getAffectedNodes(), null, false);
+
+                    OnionVis.activeOnions.forEach((o:OnionVis) => {
+                        o.collapseCurrentSegments();
                     });
+
                     this.currentActiveOnionSegments = [];
                     this.currentActiveOnionSegments.push(segment);
                     AnimationService.getInstance().finishAllAnimations();
@@ -346,11 +384,34 @@ export class OnionVis extends MetanodeAbstract {
         this.meshs['oniongroup'] = oniongroup;
     }
 
+    public collapseCurrentSegments() {
+        this.currentActiveOnionSegments.forEach((pieToCollapse:OnionSegment) => {
+            this.collapseNodes(pieToCollapse.getAffectedNodes(), null, false);
+        });
+    }
+
+
+    public removeTmpEdgesAndRestoreOrigEdges() {
+
+        this.hiddenOriginalEdges.forEach((e:EdgeAbstract) => {
+            e.setIsVisible(true);
+        });
+        this.hiddenOriginalEdges = [];
+
+        this.onionToNodeEdges.forEach((e:EdgeAbstract) => {
+            this.plane.getGraphScene().removeObject(e);
+        });
+        this.onionToNodeEdges = [];
+    }
+
     public delete(cb, restorePositions = true) {
         OnionVis.activeOnions.forEach((o:OnionVis, i) => {
             if (this.uniqueId === o.uniqueId)
                 OnionVis.activeOnions.splice(i, 1);
         });
+
+        this.removeTmpEdgesAndRestoreOrigEdges();
+
 
         this.remove(this.hoverLabel);
         this.hoverLabel.delete();

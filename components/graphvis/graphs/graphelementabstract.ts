@@ -170,7 +170,7 @@ export abstract class ElementAbstract extends THREE.Group implements GraphObject
             fontSize: 14,
             strokeColor: null,
             hidden: true,
-            zval:20
+            zval: 20
         });
         this.add(this.hoverBox);
     }
@@ -241,6 +241,14 @@ export abstract class ElementAbstract extends THREE.Group implements GraphObject
      */
     public addEdge(edge:EdgeAbstract) {
         this.edges.push(edge);
+    }
+
+    public removeEdge(edge:EdgeAbstract) {
+        this.edges.forEach((e:EdgeAbstract, idx) => {
+            if (e.uuid === edge.uuid) {
+                this.edges.splice(idx, 1);
+            }
+        })
     }
 
     /**

@@ -215,6 +215,10 @@ export abstract class EdgeAbstract extends THREE.Line implements GraphObject {
         this.visible = vis;
         // this.plane.getGraphScene().render();
     }
+
+    public getIsVisible():boolean {
+        return this.visible;
+    }
 }
 
 
