@@ -74,18 +74,15 @@ export class OnionVis extends MetanodeAbstract {
                 this.plane.setSelectedGraphElement(this);
 
 
-
-                this.nodes.forEach((n:NodeAbstract) =>{
+                this.nodes.forEach((n:NodeAbstract) => {
                     n.getEdges().forEach((e:EdgeAbstract) => {
-                            this.hiddenOriginalEdges[e.uuid] = e;
-                            e.setIsVisible(false);
+                        this.hiddenOriginalEdges[e.uuid] = e;
+                        e.setIsVisible(false);
                     });
                 });
                 this.plane.getGraphScene().render();
 
             }.bind(this));
-
-
 
 
         }.bind(this);
@@ -126,22 +123,21 @@ export class OnionVis extends MetanodeAbstract {
 
     }
 
+    /**
+     * Delete all existing connections between all onions.
+     * Re-Create them then
+     */
     protected reCreateOnionConnections() {
-
-
-
         OnionVis.onionConnectingEdges.forEach((e:EdgeAbstract) => {
             this.plane.getGraphScene().removeObject(e);
         });
         OnionVis.onionConnectingEdges = [];
-
 
         if (OnionVis.activeOnions.length > 1) {
 
             OnionVis.activeOnions.forEach((o:OnionVis, oIdx) => {
                 if (oIdx === 0)
                     return;
-
                 let lastO:OnionVis = OnionVis.activeOnions[oIdx - 1];
                 o.resetCenterNodePosition();
                 lastO.resetCenterNodePosition();
@@ -151,7 +147,6 @@ export class OnionVis extends MetanodeAbstract {
             });
 
         }
-
         OnionVis.activeOnions.forEach((o:OnionVis) => {
             o.removeTmpEdges();
             o.resetAllPositions();
@@ -159,9 +154,7 @@ export class OnionVis extends MetanodeAbstract {
     }
 
     protected collapseNodes(nodes:NodeAbstract[], cb, saveOrigPos = true) {
-
         this.removeTmpEdges();
-
         let afterCollapse = function () {
             if (cb)
                 cb();
@@ -169,6 +162,7 @@ export class OnionVis extends MetanodeAbstract {
 
         AnimationService.getInstance().collapseNodes(nodes, this.plane, this.centerNode.getPosition(), afterCollapse, saveOrigPos);
     }
+
 
     protected expandOnionSegmentNodes(segment:OnionSegment, cb) {
 
@@ -194,8 +188,6 @@ export class OnionVis extends MetanodeAbstract {
             let relPosY = tmpRad * Math.cos(currAng);
             n.setPosition(relPosX + this.centerNode.getPosition().x, relPosY + this.centerNode.getPosition().y);
             currAng += angleStep;
-
-
 
 
             let tmpEdge:EdgeBasic = new EdgeBasic(n, this.centerNode, this.plane);
@@ -411,18 +403,27 @@ export class OnionVis extends MetanodeAbstract {
         this.meshs['oniongroup'] = oniongroup;
     }
 
+    /**
+     * Collapse all open segments.
+     * Reset center node position
+     */
     public resetAllPositions() {
-        this.currentActiveOnionSegments.forEach((pieToCollapse:OnionSegment) => {
-            this.collapseNodes(pieToCollapse.getAffectedNodes(), null, false);
-        });
-        this.centerNode.setPosition(this.centerPos['x'], this.centerPos['y']);
+        console.log("RESETTING POSITIONS OF NODES IN ONION", this.nodes, this.dataEntity.getId());
+        this.collapseNodes(this.nodes, null, false);
+        this.resetCenterNodePosition();
     }
 
+    /**
+     * Resetting of position of centernode to the onion-center.
+     * Might change, since other onions could take it and collapse it to their center.
+     */
     public resetCenterNodePosition() {
         this.centerNode.setPosition(this.centerPos['x'], this.centerPos['y']);
     }
 
-
+    /**
+     * Remove all connections between the onion-center and the expanded nodes.
+     */
     public removeTmpEdges() {
 
         this.onionToNodeEdges.forEach((e:EdgeAbstract) => {
@@ -431,27 +432,30 @@ export class OnionVis extends MetanodeAbstract {
         this.onionToNodeEdges = [];
     }
 
+    /**
+     * Delete everything
+     * @param cb
+     * @param restorePositions Restore the original positions of the nodes
+     */
     public delete(cb, restorePositions = true) {
 
         this.resetAllPositions();
 
+        /*
+         Remove this onion from the static list
+         */
         OnionVis.activeOnions.forEach((o:OnionVis, i) => {
             if (this.uniqueId === o.uniqueId)
                 OnionVis.activeOnions.splice(i, 1);
         });
-
-        this.removeTmpEdges();
 
 
         /**
          * Check if nodes of the onion to delete are in other instances.
          * If so, DO NOT restore them.
          */
-
-        /**
-         * TODO: Handle OWN and FOREIGN Center NOdes
-         */
         let allNodeMapping = {};
+        // Make a mapped list of all nodes currently inside an onion
         OnionVis.activeOnions.forEach((o:OnionVis) => {
             if (o.uniqueId === this.uniqueId)
                 return;
@@ -461,11 +465,11 @@ export class OnionVis extends MetanodeAbstract {
             });
             if (typeof allNodeMapping[o.getCenterNode().getUniqueId()] === "undefined")
                 allNodeMapping[o.getCenterNode().getUniqueId()] = o.getCenterNode();
-
-
-            o.resetAllPositions();
+            // o.resetAllPositions();
         });
 
+        // Check if own nodes are affected by other onions (=inside that list)
+        // If so, delete them from the own node list, to prevent restoration
         this.nodes.forEach((n:NodeAbstract, nodeIdx) => {
             if (typeof allNodeMapping[n.getUniqueId()] !== "undefined") {
                 this.nodes[nodeIdx] = null;
@@ -476,14 +480,29 @@ export class OnionVis extends MetanodeAbstract {
         }
 
 
-
         this.remove(this.hoverLabel);
         this.hoverLabel.delete();
         this.hoverLabel = null;
-        AnimationService.getInstance().restoreNodeOriginalPositions([this.centerNode], this.plane, cb);
+
+        // Restore the center node (if not already set to null due to another onion holding it)
+        AnimationService.getInstance().restoreNodeOriginalPositions([this.centerNode], this.plane, null);
+
+
+        /*
+         * Make all edges visible again which do not match other onions
+         */
+        this.nodes.forEach((n:NodeAbstract) => {
+            if (n === null)
+                return;
+
+            n.getEdges().forEach((eToRestore:EdgeAbstract) => {
+                if (!eToRestore.getIsVisible() && typeof this.hiddenOriginalEdges[eToRestore.uuid] !== "undefined")
+                    eToRestore.setIsVisible(true);
+            });
+        });
+
 
         let callbackFct = function () {
-
             OnionVis.activeOnions.forEach((o:OnionVis) => {
                 if (o.uniqueId === this.uniqueId)
                     return;
@@ -493,29 +512,12 @@ export class OnionVis extends MetanodeAbstract {
                 cb();
         }.bind(this);
 
-
-        /**
-         * Make all edges visible again which
-         * a.) do not match other onions
-         * b.) were visible before
-         */
-        this.nodes.forEach((n:NodeAbstract) => {
-           if (n === null)
-               return;
-
-            n.getEdges().forEach((eToRestore:EdgeAbstract) =>{
-                if (!eToRestore.getIsVisible() && typeof this.hiddenOriginalEdges[eToRestore.uuid] !== "undefined")
-                    eToRestore.setIsVisible(true);
-            });
-        });
-
-
         super.delete(callbackFct, restorePositions);
-
-
-
         this.reCreateOnionConnections();
     }
+
+
+
 
     protected showHover(text) {
         this.hoverLabel.updateText(text);
