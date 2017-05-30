@@ -380,6 +380,7 @@ export abstract class ElementAbstract extends THREE.Group implements GraphObject
 
         let parentPos = this.parent.position;
         pos = pos.add(parentPos);
+        pos.sub(this.plane.getGraphScene().getThreeCamera().position);
 
         let canvas = this.plane.getGraphScene().getThreeRenderer().domElement;
         let canvasBounding = canvas.getBoundingClientRect();
