@@ -114,7 +114,6 @@ export class AutoGraph extends GraphAbstract {
 
         this.setLayout();
 
-        console.log(this.connectionsWantedToCreateByNodePair);
         this.connectionsWantedToCreateByNodePair = null;
     }
 
@@ -260,7 +259,7 @@ export class AutoGraph extends GraphAbstract {
             for (var i in this.connectionsWantedToCreateByNodePair[edgeType]) {
                 for (var j in this.connectionsWantedToCreateByNodePair[edgeType][i]) {
                     let amount = this.connectionsWantedToCreateByNodePair[edgeType][i][j]['val'];
-                    let weight = (amount - min) / (max - min);
+                    let weight = (max - min) !== 0 ? (amount - min) / (max - min) : 0;
 
                     if (this.thinOut && weight <= this.thinOutThreshold)
                         continue;
@@ -284,7 +283,15 @@ export class AutoGraph extends GraphAbstract {
                     }
 
                     let maxNodeWeight = Math.max(wSrc, wDst);
-                    this.maxNodeWeight = Math.max(this.maxNodeWeight, maxNodeWeight);
+
+
+                    if (typeof this.maxNodeWeight[edge.getSourceNode().constructor.name] === "undefined")
+                        this.maxNodeWeight[edge.getSourceNode().constructor.name] = 0;
+                    if (typeof this.maxNodeWeight[edge.getDestNode().constructor.name] === "undefined")
+                        this.maxNodeWeight[edge.getDestNode().constructor.name] = 0;
+
+                    this.maxNodeWeight[edge.getSourceNode().constructor.name] = Math.max(this.maxNodeWeight[edge.getSourceNode().constructor.name], maxNodeWeight);
+                    this.maxNodeWeight[edge.getDestNode().constructor.name] = Math.max(this.maxNodeWeight[edge.getDestNode().constructor.name], maxNodeWeight);
                 }
             }
         }
