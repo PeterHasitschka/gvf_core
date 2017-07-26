@@ -3,6 +3,8 @@ import {Plane} from "../../plane/plane";
 import {NodeAbstract} from "./nodes/nodeelementabstract";
 import {BasicConnection} from "../data/databasicconnection";
 import {BasicEntity} from "../data/databasicentity";
+import {ElementAbstract} from "./graphelementabstract";
+import {EdgeAbstract} from "./edges/edgeelementabstract";
 
 
 export enum AUTOGRAPH_EDGETYPES {
@@ -87,7 +89,8 @@ export class AutoGraph extends GraphAbstract {
                     if (edgeMapping.type === AUTOGRAPH_EDGETYPES.BY_DATA) {
                         let dstNode = this.getNodeByDataObject(connectedEntity);
                         if (connection.constructor === edgeMapping.dataConnection) {
-                            this.registerAndCheckExistingRequestedEdge(srcNode, dstNode, edgeMapping.edge)
+                            this.registerAndCheckExistingRequestedEdge(srcNode, dstNode, edgeMapping.edge,
+                                connection.getData("weight") !== null ? connection.getData("weight") : false)
                         }
                     } else if (edgeMapping.type === AUTOGRAPH_EDGETYPES.BY_FUNCTION ||
                         edgeMapping.type === AUTOGRAPH_EDGETYPES.BY_ONE_HOP) {
@@ -182,7 +185,7 @@ export class AutoGraph extends GraphAbstract {
      * @param node1 {NodeAbstract}
      * @param node2 {NodeAbstract}
      */
-    registerAndCheckExistingRequestedEdge(node1:NodeAbstract, node2:NodeAbstract, edgeClass) {
+    registerAndCheckExistingRequestedEdge(node1:NodeAbstract, node2:NodeAbstract, edgeClass, weight = false) {
         let id1 = node1.getUniqueId();
         let id2 = node2.getUniqueId();
         let minId = Math.min(id1, id2);
@@ -206,6 +209,7 @@ export class AutoGraph extends GraphAbstract {
         this.connectionsWantedToCreateByNodePair[edgeClass.name][minId][maxId]['edgeClass'] = edgeClass;
         this.connectionsWantedToCreateByNodePair[edgeClass.name][minId][maxId]['n1'] = node1;
         this.connectionsWantedToCreateByNodePair[edgeClass.name][minId][maxId]['n2'] = node2;
+        this.connectionsWantedToCreateByNodePair[edgeClass.name][minId][maxId]['weight_by_connectiondata'] = weight;
 
 
     }
@@ -218,15 +222,18 @@ export class AutoGraph extends GraphAbstract {
                     let node1 = this.connectionsWantedToCreateByNodePair[edgeType][i1][i2]['n1'];
                     let node2 = this.connectionsWantedToCreateByNodePair[edgeType][i1][i2]['n2'];
                     let edgeClass = this.connectionsWantedToCreateByNodePair[edgeType][i1][i2]['edgeClass'];
-                    this.createEdge(node1, node2, edgeClass);
+                    let weight = this.connectionsWantedToCreateByNodePair[edgeType][i1][i2]['weight_by_connectiondata'];
+                    this.createEdge(node1, node2, edgeClass, weight);
                 }
             }
         }
 
     }
 
-    protected createEdge(n1:NodeAbstract, n2:NodeAbstract, edgeClass) {
+    protected createEdge(n1:NodeAbstract, n2:NodeAbstract, edgeClass, weight = false) {
         let edge = new edgeClass(n1, n2, this.plane);
+        if (weight !== false)
+            edge.setWeight(weight);
         n1.addEdge(edge);
         n2.addEdge(edge);
         this.edges.push(edge);
@@ -307,5 +314,20 @@ export class AutoGraph extends GraphAbstract {
                 this.addEventListeners();
             }.bind(this));
         });
+    }
+
+
+    protected applyWeightsFromDataEntities() {
+
+        this.graphElements.forEach((e:ElementAbstract) => {
+            let w = e.getDataEntity().getData("weight");
+            if (w !== null)
+                (<NodeAbstract>e).setWeight(Number(w));
+        });
+
+        this.edges.forEach((e:EdgeAbstract) => {
+
+        });
+
     }
 }
