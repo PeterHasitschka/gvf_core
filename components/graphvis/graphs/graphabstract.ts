@@ -28,7 +28,7 @@ export abstract class GraphAbstract {
     protected groups:BasicGroup[];
     protected edges:EdgeAbstract[] = [];
 
-    protected maxNodeWeight = 0;
+    protected maxNodeWeight = {};
 
 
     constructor(protected plane:Plane) {
@@ -56,6 +56,10 @@ export abstract class GraphAbstract {
      */
     protected createEdges():EdgeAbstract[] {
         return []
+    }
+
+
+    public addGraphElements() {
     }
 
     protected addEventListeners() {
@@ -131,8 +135,8 @@ export abstract class GraphAbstract {
     }
 
 
-    public getMaxNodeWeight():number {
-        return this.maxNodeWeight;
+    public getMaxNodeWeight(nodeClassName:string):number {
+        return typeof this.maxNodeWeight[nodeClassName] === "undefined" ? 0 : this.maxNodeWeight[nodeClassName];
     }
 
     public getLayout():LayoutInterface {

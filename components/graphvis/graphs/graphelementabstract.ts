@@ -51,6 +51,8 @@ export abstract class ElementAbstract extends THREE.Group implements GraphObject
 
     protected hoverBox:Label = null;
     protected hoverText = null;
+    protected hoverTextFontSize = 14;
+    protected hoverTextColor = "black";
 
     protected static idCounter = 0;
 
@@ -166,8 +168,8 @@ export abstract class ElementAbstract extends THREE.Group implements GraphObject
      */
     protected createHoverBox() {
         this.hoverBox = new Label(this.getPlane(), this.hoverText ? this.hoverText : "", 0, -12, {
-            color: "black",
-            fontSize: 14,
+            color: this.hoverTextColor,
+            fontSize: this.hoverTextFontSize,
             strokeColor: null,
             hidden: true,
             zval: 20
@@ -386,6 +388,7 @@ export abstract class ElementAbstract extends THREE.Group implements GraphObject
 
         let parentPos = this.parent.position;
         pos = pos.add(parentPos);
+        pos.sub(this.plane.getGraphScene().getThreeCamera().position);
 
         let canvas = this.plane.getGraphScene().getThreeRenderer().domElement;
         let canvasBounding = canvas.getBoundingClientRect();

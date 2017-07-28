@@ -3,6 +3,8 @@ import {Plane} from "../../plane/plane";
 import {NodeAbstract} from "./nodes/nodeelementabstract";
 import {BasicConnection} from "../data/databasicconnection";
 import {BasicEntity} from "../data/databasicentity";
+import {ElementAbstract} from "./graphelementabstract";
+import {EdgeAbstract} from "./edges/edgeelementabstract";
 
 
 export enum AUTOGRAPH_EDGETYPES {
@@ -54,9 +56,27 @@ export class AutoGraph extends GraphAbstract {
 
     public init() {
         super.init();
+        this.addGraphElements(null, true);
+
+    }
+
+    public addGraphElements(explicitList = null, setLayout = false) {
+
 
         this.mappingStructure.nodes.forEach((nodeMapping) => {
-            let dataList = nodeMapping.data.getDataList();
+            let dataList;
+            if (!explicitList)
+                dataList = nodeMapping.data.getDataList();
+            else {
+                dataList = [];
+                for (let explKey in explicitList) {
+                    let e = explicitList[explKey];
+                    if (e instanceof nodeMapping.data)
+                        dataList.push(e);
+                }
+            }
+
+
             dataList.forEach((dataEntity) => {
                 /*
                  Be sure that a node is only created once!
@@ -87,7 +107,8 @@ export class AutoGraph extends GraphAbstract {
                     if (edgeMapping.type === AUTOGRAPH_EDGETYPES.BY_DATA) {
                         let dstNode = this.getNodeByDataObject(connectedEntity);
                         if (connection.constructor === edgeMapping.dataConnection) {
-                            this.registerAndCheckExistingRequestedEdge(srcNode, dstNode, edgeMapping.edge)
+                            this.registerAndCheckExistingRequestedEdge(srcNode, dstNode, edgeMapping.edge,
+                                connection.getData("weight") !== null ? connection.getData("weight") : false)
                         }
                     } else if (edgeMapping.type === AUTOGRAPH_EDGETYPES.BY_FUNCTION ||
                         edgeMapping.type === AUTOGRAPH_EDGETYPES.BY_ONE_HOP) {
@@ -112,12 +133,11 @@ export class AutoGraph extends GraphAbstract {
         else
             this.createRegisteredEdges();
 
-        this.setLayout();
+        if (setLayout)
+            this.setLayout();
 
-        console.log(this.connectionsWantedToCreateByNodePair);
-        this.connectionsWantedToCreateByNodePair = null;
+        this.connectionsWantedToCreateByNodePair = {};
     }
-
 
     protected getNodeByDataObject(data:BasicEntity):NodeAbstract {
         let foundNode:NodeAbstract = null;
@@ -183,44 +203,84 @@ export class AutoGraph extends GraphAbstract {
      * @param node1 {NodeAbstract}
      * @param node2 {NodeAbstract}
      */
-    registerAndCheckExistingRequestedEdge(node1:NodeAbstract, node2:NodeAbstract, edgeClass) {
+    registerAndCheckExistingRequestedEdge(node1:NodeAbstract, node2:NodeAbstract, edgeClass, weight = false) {
         let id1 = node1.getUniqueId();
         let id2 = node2.getUniqueId();
         let minId = Math.min(id1, id2);
         let maxId = Math.max(id1, id2);
-        if (typeof this.connectionsWantedToCreateByNodePair[minId] === "undefined")
-            this.connectionsWantedToCreateByNodePair[minId] = [];
 
-        if (typeof this.connectionsWantedToCreateByNodePair[minId][maxId] !== "undefined") {
-            this.connectionsWantedToCreateByNodePair[minId][maxId]['val']++;
+        if (typeof this.connectionsWantedToCreateByNodePair[edgeClass.name] === "undefined")
+            this.connectionsWantedToCreateByNodePair[edgeClass.name] = {};
+
+        if (typeof this.connectionsWantedToCreateByNodePair[edgeClass.name][minId] === "undefined")
+            this.connectionsWantedToCreateByNodePair[edgeClass.name][minId] = [];
+
+        if (typeof this.connectionsWantedToCreateByNodePair[edgeClass.name][minId][maxId] !== "undefined") {
+            this.connectionsWantedToCreateByNodePair[edgeClass.name][minId][maxId]['val']++;
             return;
         }
-        this.connectionsWantedToCreateByNodePair[minId][maxId] = {
+        this.connectionsWantedToCreateByNodePair[edgeClass.name][minId][maxId] = {
             val: 1,
             edge: null
         };
-        this.connectionsWantedToCreateByNodePair[minId][maxId]['val'] = 1;
-        this.connectionsWantedToCreateByNodePair[minId][maxId]['edgeClass'] = edgeClass;
-        this.connectionsWantedToCreateByNodePair[minId][maxId]['n1'] = node1;
-        this.connectionsWantedToCreateByNodePair[minId][maxId]['n2'] = node2;
+        this.connectionsWantedToCreateByNodePair[edgeClass.name][minId][maxId]['val'] = 1;
+        this.connectionsWantedToCreateByNodePair[edgeClass.name][minId][maxId]['edgeClass'] = edgeClass;
+        this.connectionsWantedToCreateByNodePair[edgeClass.name][minId][maxId]['n1'] = node1;
+        this.connectionsWantedToCreateByNodePair[edgeClass.name][minId][maxId]['n2'] = node2;
+        this.connectionsWantedToCreateByNodePair[edgeClass.name][minId][maxId]['weight_by_connectiondata'] = weight;
 
 
     }
 
     protected createRegisteredEdges() {
 
-        for (var i1 in this.connectionsWantedToCreateByNodePair) {
-            for (var i2 in this.connectionsWantedToCreateByNodePair[i1]) {
-                let node1 = this.connectionsWantedToCreateByNodePair[i1][i2]['n1'];
-                let node2 = this.connectionsWantedToCreateByNodePair[i1][i2]['n2'];
-                let edgeClass = this.connectionsWantedToCreateByNodePair[i1][i2]['edgeClass'];
-                this.createEdge(node1, node2, edgeClass);
+        for (var edgeType in this.connectionsWantedToCreateByNodePair) {
+            for (var i1 in this.connectionsWantedToCreateByNodePair[edgeType]) {
+                for (var i2 in this.connectionsWantedToCreateByNodePair[edgeType][i1]) {
+                    let node1 = this.connectionsWantedToCreateByNodePair[edgeType][i1][i2]['n1'];
+                    let node2 = this.connectionsWantedToCreateByNodePair[edgeType][i1][i2]['n2'];
+                    let edgeClass = this.connectionsWantedToCreateByNodePair[edgeType][i1][i2]['edgeClass'];
+                    let weight = this.connectionsWantedToCreateByNodePair[edgeType][i1][i2]['weight_by_connectiondata'];
+                    this.createEdge(node1, node2, edgeClass, weight);
+                }
             }
         }
+
     }
 
-    protected createEdge(n1:NodeAbstract, n2:NodeAbstract, edgeClass) {
+    protected createEdge(n1:NodeAbstract, n2:NodeAbstract, edgeClass, weight = false) {
+
+
+        /*
+         Search for existing edge between the two nodes with same class
+         */
+        let BreakException = {};
+        let existingEdgeToReturn:EdgeAbstract = null;
+        try {
+            n1.getEdges().forEach((existingEdge:EdgeAbstract) => {
+                if (
+                    existingEdge.constructor === edgeClass && (
+                    existingEdge.getSourceNode().getUniqueId() === n1.getUniqueId() &&
+                    existingEdge.getDestNode().getUniqueId() === n2.getUniqueId() ||
+                    existingEdge.getSourceNode().getUniqueId() === n2.getUniqueId() &&
+                    existingEdge.getDestNode().getUniqueId() === n1.getUniqueId() )) {
+                    existingEdgeToReturn = existingEdge;
+                    throw BreakException;
+                }
+            });
+        } catch (e) {
+            if (e !== BreakException)
+                throw e;
+
+            if (weight !== false)
+                existingEdgeToReturn.setWeight(Number(weight));
+            return existingEdgeToReturn;
+        }
+
+
         let edge = new edgeClass(n1, n2, this.plane);
+        if (weight !== false)
+            edge.setWeight(weight);
         n1.addEdge(edge);
         n2.addEdge(edge);
         this.edges.push(edge);
@@ -232,49 +292,61 @@ export class AutoGraph extends GraphAbstract {
     protected setEdgeAndNodeWeightsAndCreateEdges() {
         // console.log(this.connectionsWantedToCreateByNodePair);
 
-        let min = null;
-        let max = null;
 
         // Normalize
-        for (var i in this.connectionsWantedToCreateByNodePair) {
-            for (var j in this.connectionsWantedToCreateByNodePair[i]) {
-                let amount = this.connectionsWantedToCreateByNodePair[i][j]['val'];
-                if (min === null)
-                    min = amount;
-                if (max === null)
-                    max = amount;
-                min = Math.min(min, amount);
-                max = Math.max(max, amount);
+        for (var edgeType in this.connectionsWantedToCreateByNodePair) {
+
+            let min = null;
+            let max = null;
+
+            for (var i in this.connectionsWantedToCreateByNodePair[edgeType]) {
+                for (var j in this.connectionsWantedToCreateByNodePair[edgeType][i]) {
+                    let amount = this.connectionsWantedToCreateByNodePair[edgeType][i][j]['val'];
+                    if (min === null)
+                        min = amount;
+                    if (max === null)
+                        max = amount;
+                    min = Math.min(min, amount);
+                    max = Math.max(max, amount);
+                }
             }
-        }
-        for (var i in this.connectionsWantedToCreateByNodePair) {
-            for (var j in this.connectionsWantedToCreateByNodePair[i]) {
-                let amount = this.connectionsWantedToCreateByNodePair[i][j]['val'];
-                let weight = (amount - min) / (max - min);
+            for (var i in this.connectionsWantedToCreateByNodePair[edgeType]) {
+                for (var j in this.connectionsWantedToCreateByNodePair[edgeType][i]) {
+                    let amount = this.connectionsWantedToCreateByNodePair[edgeType][i][j]['val'];
+                    let weight = (max - min) !== 0 ? (amount - min) / (max - min) : 0;
 
-                if (this.thinOut && weight <= this.thinOutThreshold)
-                    continue;
+                    if (this.thinOut && weight <= this.thinOutThreshold)
+                        continue;
 
-                let edge = this.createEdge(this.connectionsWantedToCreateByNodePair[i][j]['n1'],
-                    this.connectionsWantedToCreateByNodePair[i][j]['n2'],
-                    this.connectionsWantedToCreateByNodePair[i][j]['edgeClass']);
-                edge.setWeight(weight);
+                    let edge = this.createEdge(this.connectionsWantedToCreateByNodePair[edgeType][i][j]['n1'],
+                        this.connectionsWantedToCreateByNodePair[edgeType][i][j]['n2'],
+                        this.connectionsWantedToCreateByNodePair[edgeType][i][j]['edgeClass']);
+                    edge.setWeight(weight);
 
 
-                let wSrc = edge.getSourceNode().getWeight() + weight;
-                let wDst = edge.getDestNode().getWeight() + weight;
+                    let wSrc = edge.getSourceNode().getWeight() + weight;
+                    let wDst = edge.getDestNode().getWeight() + weight;
 
-                if (!this.nodeWeightByUniqueEdges) {
-                    edge.getSourceNode().setWeight(wSrc);
-                    edge.getDestNode().setWeight(wDst);
+                    if (!this.nodeWeightByUniqueEdges) {
+                        edge.getSourceNode().setWeight(wSrc);
+                        edge.getDestNode().setWeight(wDst);
+                    }
+                    else {
+                        edge.getSourceNode().setWeight(wSrc);
+                        edge.getDestNode().setWeight(wDst);
+                    }
+
+                    let maxNodeWeight = Math.max(wSrc, wDst);
+
+
+                    if (typeof this.maxNodeWeight[edge.getSourceNode().constructor.name] === "undefined")
+                        this.maxNodeWeight[edge.getSourceNode().constructor.name] = 0;
+                    if (typeof this.maxNodeWeight[edge.getDestNode().constructor.name] === "undefined")
+                        this.maxNodeWeight[edge.getDestNode().constructor.name] = 0;
+
+                    this.maxNodeWeight[edge.getSourceNode().constructor.name] = Math.max(this.maxNodeWeight[edge.getSourceNode().constructor.name], maxNodeWeight);
+                    this.maxNodeWeight[edge.getDestNode().constructor.name] = Math.max(this.maxNodeWeight[edge.getDestNode().constructor.name], maxNodeWeight);
                 }
-                else {
-                    edge.getSourceNode().setWeight(wSrc);
-                    edge.getDestNode().setWeight(wDst);
-                }
-
-                let maxNodeWeight = Math.max(wSrc, wDst);
-                this.maxNodeWeight = Math.max(this.maxNodeWeight, maxNodeWeight);
             }
         }
     }
@@ -287,7 +359,22 @@ export class AutoGraph extends GraphAbstract {
                 console.log("Finished calculating layout " + this.graphElements.length + " nodes, " + this.edges.length + " edges");
                 this.plane.getGraphScene().render();
                 this.addEventListeners();
-            }.bind(this));
+            }.bind(this), null);
         });
+    }
+
+
+    protected applyWeightsFromDataEntities() {
+
+        this.graphElements.forEach((e:ElementAbstract) => {
+            let w = e.getDataEntity().getData("weight");
+            if (w !== null)
+                (<NodeAbstract>e).setWeight(Number(w));
+        });
+
+        this.edges.forEach((e:EdgeAbstract) => {
+
+        });
+
     }
 }

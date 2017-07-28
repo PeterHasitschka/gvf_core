@@ -103,7 +103,15 @@ export class UiService {
             return;
 
         if (this.getGraphWorkSpaceSvgElementVisible()) {
-            this.intergraphConnections.push({nodes: [node1, node2], color: color});
+
+            let exists = false;
+            this.intergraphConnections.forEach((c) => {
+                if (c.nodes[0].uuid === node1.uuid && c.nodes[1].uuid === node2.uuid ||
+                    c.nodes[1].uuid === node1.uuid && c.nodes[0].uuid === node2.uuid)
+                    exists = true;
+            });
+            if (!exists)
+                this.intergraphConnections.push({nodes: [node1, node2], color: color});
         }
     }
 
@@ -160,7 +168,6 @@ export class UiService {
         else
             console.log("GVFLOG-LEVEL" + level + ": " + "%c" + srcObj.constructor.name + ": ", "color:" + classColor, text);
     }
-
 
 
 }

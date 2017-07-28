@@ -69,7 +69,7 @@ export abstract class GraphBipartiteProjectionAbstract extends GraphAbstract {
         });
         console.log("DONE Adding Edges...");
 
-        console.log("Bipartite graph:",this.edges.length, this.graphElements.length);
+        console.log("Bipartite graph:", this.edges.length, this.graphElements.length);
 
         this.layout.setInitPositions(() => {
             //this.plane.getGraphScene().render();
@@ -77,7 +77,7 @@ export abstract class GraphBipartiteProjectionAbstract extends GraphAbstract {
                 console.log("Finished calculating layout");
                 this.plane.getGraphScene().render();
                 this.addEventListeners();
-            }.bind(this));
+            }.bind(this), null);
         });
     }
 
