@@ -28,7 +28,7 @@ export abstract class GraphAutoCreateAbstract  extends GraphAbstract{
                 console.log("Finished calculating layout");
                 this.plane.getGraphScene().render();
                 this.addEventListeners();
-            }.bind(this));
+            }.bind(this), null);
         });
     }
 

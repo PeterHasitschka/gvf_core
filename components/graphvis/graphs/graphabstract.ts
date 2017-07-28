@@ -58,6 +58,10 @@ export abstract class GraphAbstract {
         return []
     }
 
+
+    public addGraphElements() {
+    }
+
     protected addEventListeners() {
         InterGraphEventService.getInstance().addListener(INTERGRAPH_EVENTS.NODE_HOVERED, function (e) {
         }.bind(this));

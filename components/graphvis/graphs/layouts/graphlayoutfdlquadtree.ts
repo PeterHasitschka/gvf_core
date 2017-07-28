@@ -27,21 +27,22 @@ export class GraphLayoutFdlQuadtree extends GraphLayoutAbstract {
     }
 
 
-    public calculateLayout(onFinish):void {
-        this.plane.setShowGreyOverlay(true);
+    public calculateLayout(onFinish, newNodes = null):void {
+        // this.plane.setShowGreyOverlay(true);
         window.setTimeout(function () {
-            this.calculate();
-            this.plane.getGraphScene().fitAllNodesInView(function () {
-                this.plane.setShowGreyOverlay(false);
-                onFinish();
-            }.bind(this));
+            this.calculate(false, null, newNodes);
+            if (!newNodes)
+                this.plane.getGraphScene().fitAllNodesInView(function () {
+                    // this.plane.setShowGreyOverlay(false);
+                    onFinish();
+                }.bind(this));
         }.bind(this), 0);
 
         return;
     }
 
 
-    private calculate(animation:boolean = false, cb = null) {
+    private calculate(animation:boolean = false, cb = null, newNodes = null) {
         var createGraph = require('ngraph.graph');
         var g = createGraph();
 
@@ -61,6 +62,7 @@ export class GraphLayoutFdlQuadtree extends GraphLayoutAbstract {
                 else
                     connectedNode = e.getSourceNode();
 
+
                 if (connectedNode.getIsVisible())
                     g.addLink(n.getUniqueId(), connectedNode.getUniqueId());
             });
@@ -76,6 +78,21 @@ export class GraphLayoutFdlQuadtree extends GraphLayoutAbstract {
         };
 
         var layout = require('ngraph.forcelayout')(g, physicsSettings);
+
+        if (newNodes) {
+            this.nodes.forEach((n:NodeAbstract) => {
+                if (!n.getIsVisible())
+                    return;
+                if (!(n.getDataEntity().getId() in newNodes)) {
+                    layout.setNodePosition(n.getUniqueId(), n.getPosition()['x'], n.getPosition()['y']);
+                    let nodeToPin = g.getNode(n.getUniqueId());
+                    layout.pinNode(nodeToPin, true);
+                    console.log("IS NODE PINNED? ", layout.isNodePinned(nodeToPin));
+                } else;
+
+            });
+        }
+
         for (var i = 0; i < 1000; ++i) {
             layout.step();
         }
@@ -84,7 +101,13 @@ export class GraphLayoutFdlQuadtree extends GraphLayoutAbstract {
         g.forEachNode(function (n) {
             let pos = layout.getNodePosition(n.id);
 
+            // if (layout.isNodePinned(n))
+            //     return;
+            console.log("SETTING NODE POS!", layout.isNodePinned(n));
+
             let node = <NodeAbstract>tmpNodeMapping[n.id];
+
+
             if (!animation) {
                 node.setPosition(pos.x, pos.y);
             } else {
@@ -108,13 +131,13 @@ export class GraphLayoutFdlQuadtree extends GraphLayoutAbstract {
                     node.getPlane()
                 );
             }
-
         });
 
     }
 
 
-    public reCalculateLayout(onFinish):void {
+    public
+    reCalculateLayout(onFinish):void {
         this.calculate(true, onFinish);
     }
 

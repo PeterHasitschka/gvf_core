@@ -56,9 +56,27 @@ export class AutoGraph extends GraphAbstract {
 
     public init() {
         super.init();
+        this.addGraphElements(null, true);
+
+    }
+
+    public addGraphElements(explicitList = null, setLayout = false) {
+
 
         this.mappingStructure.nodes.forEach((nodeMapping) => {
-            let dataList = nodeMapping.data.getDataList();
+            let dataList;
+            if (!explicitList)
+                dataList = nodeMapping.data.getDataList();
+            else {
+                dataList = [];
+                for (let explKey in explicitList) {
+                    let e = explicitList[explKey];
+                    if (e instanceof nodeMapping.data)
+                        dataList.push(e);
+                }
+            }
+
+
             dataList.forEach((dataEntity) => {
                 /*
                  Be sure that a node is only created once!
@@ -115,11 +133,11 @@ export class AutoGraph extends GraphAbstract {
         else
             this.createRegisteredEdges();
 
-        this.setLayout();
+        if (setLayout)
+            this.setLayout();
 
-        this.connectionsWantedToCreateByNodePair = null;
+        this.connectionsWantedToCreateByNodePair = {};
     }
-
 
     protected getNodeByDataObject(data:BasicEntity):NodeAbstract {
         let foundNode:NodeAbstract = null;
@@ -231,6 +249,35 @@ export class AutoGraph extends GraphAbstract {
     }
 
     protected createEdge(n1:NodeAbstract, n2:NodeAbstract, edgeClass, weight = false) {
+
+
+        /*
+         Search for existing edge between the two nodes with same class
+         */
+        let BreakException = {};
+        let existingEdgeToReturn:EdgeAbstract = null;
+        try {
+            n1.getEdges().forEach((existingEdge:EdgeAbstract) => {
+                if (
+                    existingEdge.constructor === edgeClass && (
+                    existingEdge.getSourceNode().getUniqueId() === n1.getUniqueId() &&
+                    existingEdge.getDestNode().getUniqueId() === n2.getUniqueId() ||
+                    existingEdge.getSourceNode().getUniqueId() === n2.getUniqueId() &&
+                    existingEdge.getDestNode().getUniqueId() === n1.getUniqueId() )) {
+                    existingEdgeToReturn = existingEdge;
+                    throw BreakException;
+                }
+            });
+        } catch (e) {
+            if (e !== BreakException)
+                throw e;
+
+            if (weight !== false)
+                existingEdgeToReturn.setWeight(Number(weight));
+            return existingEdgeToReturn;
+        }
+
+
         let edge = new edgeClass(n1, n2, this.plane);
         if (weight !== false)
             edge.setWeight(weight);
@@ -312,7 +359,7 @@ export class AutoGraph extends GraphAbstract {
                 console.log("Finished calculating layout " + this.graphElements.length + " nodes, " + this.edges.length + " edges");
                 this.plane.getGraphScene().render();
                 this.addEventListeners();
-            }.bind(this));
+            }.bind(this), null);
         });
     }
 
