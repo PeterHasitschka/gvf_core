@@ -17,6 +17,18 @@ export class UiService {
 
     public sideInfoElements:SideInfoModel[];
 
+    public topButtons = [
+        // {
+        //     id: "somethingid",
+        //     title: "ButtonX",
+        //     fct: function (onFinish) {
+        //         alert("My Button!");
+        //
+        //         onFinish();
+        //     }
+        // }
+    ];
+
     static instance:UiService;
     static isCreating:Boolean = false;
 
@@ -48,6 +60,26 @@ export class UiService {
             UiService.isCreating = false;
         }
         return UiService.instance;
+    }
+
+    public doButtonCall(button) {
+        button.fct(function () {
+            this.removeTopButton(button);
+        }.bind(this));
+    }
+
+    public removeTopButton(button) {
+        let BreakException = {};
+
+        try {
+            this.topButtons.forEach((b, k) => {
+                if (b["id"] == button["id"])
+                    this.topButtons.splice(k, 1);
+            });
+        } catch (e) {
+            if (e !== BreakException)
+                throw e;
+        }
     }
 
 
@@ -158,7 +190,8 @@ export class UiService {
      */
     public static consolelog(text:any, srcObj:Object, color:string = "black", level:number = 1):void {
 
-        if (level > UiService.logLevelLimit)
+        if (level > UiService.logLevelLimit
+        )
             return;
 
         let classColor = "#008800";

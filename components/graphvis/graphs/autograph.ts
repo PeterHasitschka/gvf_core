@@ -209,6 +209,7 @@ export class AutoGraph extends GraphAbstract {
         let minId = Math.min(id1, id2);
         let maxId = Math.max(id1, id2);
 
+
         if (typeof this.connectionsWantedToCreateByNodePair[edgeClass.name] === "undefined")
             this.connectionsWantedToCreateByNodePair[edgeClass.name] = {};
 

@@ -231,6 +231,12 @@ export class Plane {
         return Plane.planes;
     }
 
+    public reLayout() {
+        this.graph.getLayout().reCalculateLayout(function () {
+            console.log("Finished relayouting");
+        });
+    }
+
 
     public deselectSelectedGraphElement() {
         if (this.selectedElement)

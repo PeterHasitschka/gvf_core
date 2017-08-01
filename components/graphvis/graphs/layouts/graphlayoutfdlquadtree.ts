@@ -36,6 +36,8 @@ export class GraphLayoutFdlQuadtree extends GraphLayoutAbstract {
                     // this.plane.setShowGreyOverlay(false);
                     onFinish();
                 }.bind(this));
+            else
+                this.plane.getGraphScene().render();
         }.bind(this), 0);
 
         return;
@@ -87,8 +89,7 @@ export class GraphLayoutFdlQuadtree extends GraphLayoutAbstract {
                     layout.setNodePosition(n.getUniqueId(), n.getPosition()['x'], n.getPosition()['y']);
                     let nodeToPin = g.getNode(n.getUniqueId());
                     layout.pinNode(nodeToPin, true);
-                    console.log("IS NODE PINNED? ", layout.isNodePinned(nodeToPin));
-                } else;
+                }
 
             });
         }
@@ -100,10 +101,6 @@ export class GraphLayoutFdlQuadtree extends GraphLayoutAbstract {
         let nodesToFinishAnim = g.getNodesCount();
         g.forEachNode(function (n) {
             let pos = layout.getNodePosition(n.id);
-
-            // if (layout.isNodePinned(n))
-            //     return;
-            console.log("SETTING NODE POS!", layout.isNodePinned(n));
 
             let node = <NodeAbstract>tmpNodeMapping[n.id];
 
@@ -119,7 +116,7 @@ export class GraphLayoutFdlQuadtree extends GraphLayoutAbstract {
                     node.getPosition2DForAnimation.bind(node),
                     node.setPosition2DForAnimation.bind(node),
                     0,
-                    1,
+                    0.1,
                     0.00001,
                     0.1,
                     function () {
@@ -136,8 +133,7 @@ export class GraphLayoutFdlQuadtree extends GraphLayoutAbstract {
     }
 
 
-    public
-    reCalculateLayout(onFinish):void {
+    public reCalculateLayout(onFinish):void {
         this.calculate(true, onFinish);
     }
 

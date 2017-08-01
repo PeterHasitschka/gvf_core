@@ -16,6 +16,8 @@
                                                                         aria-hidden="true"></i></div>
             <div class="graphvisplanebtn" (click)="plane.maximize()"><i class="fa fa-window-maximize"
                                                                         aria-hidden="true"></i></div>
+            <div class="graphvisplanebtn" (click)="plane.reLayout()"><i class="fa fa-refresh"
+                                                                        aria-hidden="true"></i></div>
         </div>
     </div>
     <div class="graphvisplanecontainercontent" id="{{plane.getContainerPrefix()}}{{getId()}}">

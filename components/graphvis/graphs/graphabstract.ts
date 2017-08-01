@@ -59,7 +59,7 @@ export abstract class GraphAbstract {
     }
 
 
-    public addGraphElements() {
+    public addGraphElements(explicitList = null, setLayout = false)  {
     }
 
     protected addEventListeners() {

@@ -1,10 +1,13 @@
 <div class="container-fluid">
     <div class="row headerrow">
-        <div class="col-md-10">
+        <div class="col-md-3">
             <h1 [innerHTML]="config.environment.title"></h1>
         </div>
-        <div class="col-md-2">
-            <p style="margin-top:10px">Prototype</p>
+        <div class="col-md-9">
+            <button *ngFor="let topbutton of (uiService.topButtons)" (click)="uiService.doButtonCall(topbutton)">
+                <span>{{topbutton.title}}</span>
+            </button>
+
         </div>
     </div>
     <div class="row mainrow">
