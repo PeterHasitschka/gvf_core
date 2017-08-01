@@ -218,8 +218,6 @@ export class AnimationService {
     };
 
 
-
-
     public finishAllAnimations() {
         while (this.numAnimations > 0) {
             for (var id in this.animations) {
@@ -248,6 +246,7 @@ export class AnimationService {
             }
         }
     }
+
     /**
      * Finish a specific animation by object
      * @param {object} animation
@@ -319,6 +318,11 @@ export class AnimationService {
     public restoreNodeOriginalPositions(nodes:NodeAbstract[], plane:Plane, callback:Function):void {
         let movementsToFinish = nodes.length;
         nodes.forEach((n:NodeAbstract) => {
+
+            // May be deleted due to existance in other metanode
+            if (n === null)
+                return;
+
             n.setLabelZoomAdjustmentBlocked(false);
 
             this.register(

@@ -245,6 +245,14 @@ export abstract class ElementAbstract extends THREE.Group implements GraphObject
         this.edges.push(edge);
     }
 
+    public removeEdge(edge:EdgeAbstract) {
+        this.edges.forEach((e:EdgeAbstract, idx) => {
+            if (e.uuid === edge.uuid) {
+                this.edges.splice(idx, 1);
+            }
+        })
+    }
+
     /**
      * Get All Edges
      * @returns {Array}

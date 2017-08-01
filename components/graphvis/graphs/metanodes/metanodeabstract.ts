@@ -130,6 +130,9 @@ export abstract class MetanodeAbstract extends ElementAbstract {
             cb();
 
         this.nodes.forEach((n:NodeAbstract) => {
+            if (n === null)
+                return;
+
             n.setIsCurrentlyInMetaNode(false);
             n.deHighlight(false);
         });
