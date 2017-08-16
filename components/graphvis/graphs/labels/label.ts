@@ -37,7 +37,8 @@ export class Label extends THREE.Points {
             fontSize: 13,
             hidden: false,
             turnAroundWhenUpsidedown: true,
-            turnAroundLimitDegree: 90
+            turnAroundLimitDegree: 90,
+            blockedSize: false
         };
 
         for (var key in preOptions) {
@@ -154,6 +155,10 @@ export class Label extends THREE.Points {
     }
 
     public adjustZoom() {
+
+        if (this.options.blockedSize)
+            return;
+        console.log(this.options.blockedSize);
         let globalZoom = this.plane.getGraphScene().getThreeCamera()['zoom'];
         let textElm = this.svgElement.getElementsByTagName("text")[0];
         let fontSize = this.options.fontSize;

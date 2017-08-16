@@ -151,7 +151,8 @@ export abstract class ElementAbstract extends THREE.Group implements GraphObject
                 let label = new Label(this.plane, this.labelText, 0, 0, {
                     color: this.labelTextColor,
                     fontSize: this.labelTextSize,
-                    strokeColor: null
+                    strokeColor: null,
+                    blockedSize: this.labelZoomAdjustmentBlocked
                 });
 
 
@@ -172,8 +173,10 @@ export abstract class ElementAbstract extends THREE.Group implements GraphObject
             fontSize: this.hoverTextFontSize,
             strokeColor: null,
             hidden: true,
-            zval: 20
+            zval: 20,
+            blockedSize: this.labelZoomAdjustmentBlocked
         });
+        console.log(this.hoverBox);
         this.add(this.hoverBox);
     }
 
@@ -446,6 +449,8 @@ export abstract class ElementAbstract extends THREE.Group implements GraphObject
             (<Label>this.label).show();
         this.label.traverse(function (object) {
             object.visible = true;
+
+            console.log(this.label);
         });
     }
 
@@ -456,6 +461,7 @@ export abstract class ElementAbstract extends THREE.Group implements GraphObject
     public adjustZoom(zoomLevel:number) {
         if (this.labelZoomAdjustmentBlocked)
             return;
+
 
         let isInField = HelperService.getInstance().isObjectInCameraField(this.plane, this);
         if (isInField) {

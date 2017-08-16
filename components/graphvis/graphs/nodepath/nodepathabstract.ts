@@ -10,6 +10,8 @@ export abstract class NodepathAbstract extends ElementAbstract {
     protected lines:THREE.Line[] = [];
     protected nodes:THREE.Mesh[] = [];
 
+    protected createNodes = true;
+
     protected lineColor1;
     protected lineColor2;
     protected lineWidth;
@@ -29,6 +31,7 @@ export abstract class NodepathAbstract extends ElementAbstract {
         this.lineWidth = typeof options['lineWidth'] !== "undefined" ? options['lineWidth'] : config.linewidth;
         this.opacity = typeof options['opacity'] !== "undefined" ? options['opacity'] : config.opacity;
         this.startEndNodeSize = typeof options['startEndNodeSize'] !== "undefined" ? options['startEndNodeSize'] : config.startEndNodeSize;
+        this.createNodes = typeof options['createNodes'] !== "undefined" ? options['createNodes'] : this.createNodes;
 
 
         let lastPos = null;
@@ -40,17 +43,20 @@ export abstract class NodepathAbstract extends ElementAbstract {
             if (!lastPos) {
                 lastPos = posToSet;
 
-                let startNode = new THREE.Mesh(new THREE.CircleGeometry(
-                    5,
-                    GraphVisConfig.graphelements.abstractnode.segments),
-                    new THREE.MeshBasicMaterial(
-                        {
-                            color: this.lineColor1,
-                            opacity: 1
-                        }));
-                startNode.position.set(lastPos.x, lastPos.y, 11);
-                this.nodes.push(startNode);
-                this.add(startNode);
+                if (this.createNodes) {
+                    let startNode = new THREE.Mesh(new THREE.CircleGeometry(
+                        5,
+                        GraphVisConfig.graphelements.abstractnode.segments),
+                        new THREE.MeshBasicMaterial(
+                            {
+                                color: this.lineColor1,
+                                opacity: 1
+                            }));
+                    startNode.position.set(lastPos.x, lastPos.y, 11);
+                    this.nodes.push(startNode);
+                    this.add(startNode);
+                }
+
                 return;
             }
 
@@ -73,18 +79,20 @@ export abstract class NodepathAbstract extends ElementAbstract {
             lastPos = posToSet;
         });
 
-        let endNode = new THREE.Mesh(new THREE.CircleGeometry(
-            7,
-            GraphVisConfig.graphelements.abstractnode.segments),
-            new THREE.MeshBasicMaterial(
-                {
-                    color: this.lineColor2,
-                    opacity: 1
-                }));
+        if (this.createNodes) {
+            let endNode = new THREE.Mesh(new THREE.CircleGeometry(
+                7,
+                GraphVisConfig.graphelements.abstractnode.segments),
+                new THREE.MeshBasicMaterial(
+                    {
+                        color: this.lineColor2,
+                        opacity: 1
+                    }));
 
-        endNode.position.set(lastPos.x, lastPos.y, 10);
-        this.nodes.push(endNode);
-        this.add(endNode);
+            endNode.position.set(lastPos.x, lastPos.y, 10);
+            this.nodes.push(endNode);
+            this.add(endNode);
+        }
 
     }
 

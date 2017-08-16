@@ -5,6 +5,10 @@ import {BasicConnection} from "../data/databasicconnection";
 import {BasicEntity} from "../data/databasicentity";
 import {ElementAbstract} from "./graphelementabstract";
 import {EdgeAbstract} from "./edges/edgeelementabstract";
+import {ResourceResourceTransitionConnectionOfUserVisited} from "../../../../afel/graph/data/connections/resresUserGenerated";
+import {AfelLearnerDataEntity} from "../../../../afel/graph/data/learner";
+import {LearningPath} from "../../../../afel/graph/graphs/nodepath/learningpath";
+import {NodepathAbstract} from "./nodepath/nodepathabstract";
 
 
 export enum AUTOGRAPH_EDGETYPES {
@@ -45,7 +49,8 @@ export class AutoGraph extends GraphAbstract {
             //     sourceNodeType: NodeDoc,
             //     edge: EdgeBasic
             // }
-        ]
+        ],
+        paths: []
     };
 
 
@@ -133,11 +138,68 @@ export class AutoGraph extends GraphAbstract {
         else
             this.createRegisteredEdges();
 
+
+
         if (setLayout)
             this.setLayout();
 
         this.connectionsWantedToCreateByNodePair = {};
     }
+
+    protected createPaths() {
+
+        let BreakException = {};
+
+        this.mappingStructure.paths.forEach((p) => {
+            let cClass = p['dataConnectionClass'];
+            let cEntityGetter = p['dataConnectionEntities'];
+            let pathClass = p['path'];
+
+
+            let pathNodes = [];
+            cEntityGetter().forEach((c:BasicConnection, i) => {
+                let nS:BasicEntity = c.getEntities()["src"];
+                let nE:BasicEntity = c.getEntities()["dst"];
+
+                if (i === 0) {
+                    try {
+                        nS.getRegisteredGraphElements().forEach((elm:NodeAbstract) => {
+                            if (elm.getPlane().getId() === this.plane.getId()) {
+                                pathNodes.push(elm);
+                                throw BreakException;
+                            }
+                        });
+                    } catch (e) {
+                        if (e !== BreakException)
+                            throw e;
+                    }
+                }
+
+                try {
+                    nE.getRegisteredGraphElements().forEach((elm:NodeAbstract) => {
+                        if (elm.getPlane().getId() === this.plane.getId()) {
+                            pathNodes.push(elm);
+                            throw BreakException;
+                        }
+                    });
+                } catch (e) {
+                    if (e !== BreakException)
+                        throw e;
+                }
+
+            });
+
+            console.log(pathNodes);
+
+
+            let path:NodepathAbstract = new pathClass(pathNodes, this.plane);
+            this.plane.getGraphScene().addObject(path);
+            // this.plane.getGraphScene().render();
+        });
+
+
+    }
+
 
     protected getNodeByDataObject(data:BasicEntity):NodeAbstract {
         let foundNode:NodeAbstract = null;
@@ -358,6 +420,7 @@ export class AutoGraph extends GraphAbstract {
         this.layout.setInitPositions(() => {
             this.layout.calculateLayout(function () {
                 console.log("Finished calculating layout " + this.graphElements.length + " nodes, " + this.edges.length + " edges");
+                this.createPaths();
                 this.plane.getGraphScene().render();
                 this.addEventListeners();
             }.bind(this), null);
