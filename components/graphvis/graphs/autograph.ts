@@ -5,9 +5,6 @@ import {BasicConnection} from "../data/databasicconnection";
 import {BasicEntity} from "../data/databasicentity";
 import {ElementAbstract} from "./graphelementabstract";
 import {EdgeAbstract} from "./edges/edgeelementabstract";
-import {ResourceResourceTransitionConnectionOfUserVisited} from "../../../../afel/graph/data/connections/resresUserGenerated";
-import {AfelLearnerDataEntity} from "../../../../afel/graph/data/learner";
-import {LearningPath} from "../../../../afel/graph/graphs/nodepath/learningpath";
 import {NodepathAbstract} from "./nodepath/nodepathabstract";
 
 
