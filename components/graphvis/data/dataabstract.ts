@@ -45,6 +45,10 @@ export abstract class DataAbstract {
         return this.data[key];
     }
 
+    public setData(key:string, value) {
+        this.data[key] = value;
+    }
+
     /**
      * Static function to get a data object by its ID
      * Returns null if not found

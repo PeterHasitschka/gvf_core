@@ -24,7 +24,8 @@ export class AutoGraph extends GraphAbstract {
      * Used for preventing creating the same edge multiple times and setting weights
      */
     protected connectionsWantedToCreateByNodePair = {};
-    protected applyWeights = false;
+    protected applyCalculatedWeights = false;
+    protected applyOfflineWeightsByData = false;
     protected thinOut = true;
     protected thinOutThreshold = 0.0;
     protected nodeWeightByUniqueEdges = true;
@@ -35,6 +36,7 @@ export class AutoGraph extends GraphAbstract {
             // {
             //     data: DocumentDataEntity,
             //     node: NodeDoc
+            //     filter: someFct
             // },
         ],
         edges: [
@@ -69,6 +71,9 @@ export class AutoGraph extends GraphAbstract {
 
 
         this.mappingStructure.nodes.forEach((nodeMapping) => {
+
+            // Function can be defined in the mapping to e.g. only show nodes from a specific server call
+            let filterFct = typeof nodeMapping["filter"] !== "undefined" && nodeMapping["filter"] ? nodeMapping["filter"] : null;
             let dataList;
             if (!explicitList)
                 dataList = nodeMapping.data.getDataList();
@@ -93,7 +98,15 @@ export class AutoGraph extends GraphAbstract {
                     }
                 });
                 if (!node) {
+
+                    if (filterFct && !filterFct(dataEntity))
+                        return;
+
                     node = new nodeMapping.node(0, 0, dataEntity, this.plane, {});
+
+                    if (this.applyOfflineWeightsByData && dataEntity.getData("weight")) {
+                        node.setWeight(dataEntity.getData("weight"));
+                    }
                     this.graphElements.push(node);
                     this.plane.getGraphScene().addObject(node);
                 }
@@ -112,8 +125,13 @@ export class AutoGraph extends GraphAbstract {
                     if (edgeMapping.type === AUTOGRAPH_EDGETYPES.BY_DATA) {
                         let dstNode = this.getNodeByDataObject(connectedEntity);
                         if (connection.constructor === edgeMapping.dataConnection) {
+
+                            let weight = false;
+                            if (!this.applyCalculatedWeights && this.applyOfflineWeightsByData && connection.getData("weight"))
+                                weight = connection.getData("weight");
+
                             this.registerAndCheckExistingRequestedEdge(srcNode, dstNode, edgeMapping.edge,
-                                connection.getData("weight") !== null ? connection.getData("weight") : false)
+                                weight);
                         }
                     } else if (edgeMapping.type === AUTOGRAPH_EDGETYPES.BY_FUNCTION ||
                         edgeMapping.type === AUTOGRAPH_EDGETYPES.BY_ONE_HOP) {
@@ -133,11 +151,10 @@ export class AutoGraph extends GraphAbstract {
             });
         });
 
-        if (this.applyWeights)
+        if (this.applyCalculatedWeights)
             this.setEdgeAndNodeWeightsAndCreateEdges();
         else
             this.createRegisteredEdges();
-
 
 
         if (setLayout)
@@ -188,9 +205,6 @@ export class AutoGraph extends GraphAbstract {
                 }
 
             });
-
-            console.log(pathNodes);
-
 
             let path:NodepathAbstract = new pathClass(pathNodes, this.plane);
             this.plane.getGraphScene().addObject(path);
@@ -266,6 +280,10 @@ export class AutoGraph extends GraphAbstract {
      * @param node2 {NodeAbstract}
      */
     registerAndCheckExistingRequestedEdge(node1:NodeAbstract, node2:NodeAbstract, edgeClass, weight = false) {
+
+        if (!node1 || !node2)
+            return;
+
         let id1 = node1.getUniqueId();
         let id2 = node2.getUniqueId();
         let minId = Math.min(id1, id2);
@@ -311,7 +329,8 @@ export class AutoGraph extends GraphAbstract {
 
     }
 
-    protected createEdge(n1:NodeAbstract, n2:NodeAbstract, edgeClass, weight = false) {
+    protected createEdge(n1:NodeAbstract, n2:NodeAbstract, edgeClass, calculatedWeight = false) {
+
 
 
         /*
@@ -335,15 +354,15 @@ export class AutoGraph extends GraphAbstract {
             if (e !== BreakException)
                 throw e;
 
-            if (weight !== false)
-                existingEdgeToReturn.setWeight(Number(weight));
+            if (calculatedWeight !== false)
+                existingEdgeToReturn.setWeight(Number(calculatedWeight));
             return existingEdgeToReturn;
         }
 
 
         let edge = new edgeClass(n1, n2, this.plane);
-        if (weight !== false)
-            edge.setWeight(weight);
+        if (calculatedWeight !== false)
+            edge.setWeight(calculatedWeight);
         n1.addEdge(edge);
         n2.addEdge(edge);
         this.edges.push(edge);

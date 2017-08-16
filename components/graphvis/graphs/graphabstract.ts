@@ -59,7 +59,7 @@ export abstract class GraphAbstract {
     }
 
 
-    public addGraphElements(explicitList = null, setLayout = false)  {
+    public addGraphElements(explicitList = null, setLayout = false) {
     }
 
     protected addEventListeners() {
@@ -137,6 +137,10 @@ export abstract class GraphAbstract {
 
     public getMaxNodeWeight(nodeClassName:string):number {
         return typeof this.maxNodeWeight[nodeClassName] === "undefined" ? 0 : this.maxNodeWeight[nodeClassName];
+    }
+
+    public setMaxNodeWeight(nodeClassName:string, weight) {
+        this.maxNodeWeight[nodeClassName] = weight;
     }
 
     public getLayout():LayoutInterface {

@@ -36,6 +36,7 @@ export class Plane {
     private polygonSelection:SelectionPolygon;
 
 
+
     /**
      */
     constructor(private name:string, private graphclass, public uiService:UiService, private dataGetterFct = null, private preMaximized = false) {
