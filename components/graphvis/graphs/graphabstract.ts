@@ -135,11 +135,11 @@ export abstract class GraphAbstract {
     }
 
 
-    public getMaxNodeWeight(nodeClassName:string):number {
+    public getMaxWeight(nodeClassName:string):number {
         return typeof this.maxNodeWeight[nodeClassName] === "undefined" ? 0 : this.maxNodeWeight[nodeClassName];
     }
 
-    public setMaxNodeWeight(nodeClassName:string, weight) {
+    public setMaxWeight(nodeClassName:string, weight) {
         this.maxNodeWeight[nodeClassName] = weight;
     }
 

@@ -104,14 +104,19 @@ export abstract class EdgeAbstract extends THREE.Line implements GraphObject {
     public setWeight(weight:number) {
         if (isNaN(weight))
             return false;
-
+        let maxWeight = this.plane.getGraph().getMaxWeight(this.constructor.name);
+        if (weight > maxWeight) {
+            this.plane.getGraph().setMaxWeight(this.constructor.name, weight);
+            maxWeight = weight;
+        }
         this.weight = weight;
         this.updateWidth();
     }
 
     protected updateWidth() {
         let config = GraphVisConfig.edges;
-        this.material['linewidth'] = config.abstractedge.thickness + this.weight * config.abstractedge.weight_factor;
+        let maxWeight = this.plane.getGraph().getMaxWeight(this.constructor.name);
+        this.material['linewidth'] = config.abstractedge.thickness + (this.weight / maxWeight) * config.abstractedge.weight_factor;
     }
 
     public getWeight():number {

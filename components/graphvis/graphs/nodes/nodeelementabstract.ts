@@ -129,10 +129,10 @@ export abstract class NodeAbstract extends ElementAbstract {
             return false;
 
         this.nodeWeight = weight;
-        let maxNodeWeight = this.getPlane().getGraph().getMaxNodeWeight(this.constructor.name);
+        let maxNodeWeight = this.getPlane().getGraph().getMaxWeight(this.constructor.name);
 
         if (weight > maxNodeWeight) {
-            this.getPlane().getGraph().setMaxNodeWeight(this.constructor.name, weight);
+            this.getPlane().getGraph().setMaxWeight(this.constructor.name, weight);
             maxNodeWeight = weight;
         }
 
