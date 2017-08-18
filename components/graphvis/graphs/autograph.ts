@@ -128,7 +128,7 @@ export class AutoGraph extends GraphAbstract {
                                 weight = connection.getData("weight");
 
                             this.registerAndCheckExistingRequestedEdge(srcNode, dstNode, edgeMapping.edge,
-                                weight);
+                                weight, connection);
                         }
                     } else if (edgeMapping.type === AUTOGRAPH_EDGETYPES.BY_FUNCTION ||
                         edgeMapping.type === AUTOGRAPH_EDGETYPES.BY_ONE_HOP) {
@@ -138,7 +138,7 @@ export class AutoGraph extends GraphAbstract {
                         if (edgeMapping.type === AUTOGRAPH_EDGETYPES.BY_FUNCTION) {
                             nodesToConnect = edgeMapping.fct(srcNode);
                             nodesToConnect.forEach((n:NodeAbstract) => {
-                                this.registerAndCheckExistingRequestedEdge(srcNode, n, edgeMapping.edge)
+                                this.registerAndCheckExistingRequestedEdge(srcNode, n, edgeMapping.edge, false, connection)
                             });
                         }
                         else if (edgeMapping.type === AUTOGRAPH_EDGETYPES.BY_ONE_HOP)
@@ -276,7 +276,7 @@ export class AutoGraph extends GraphAbstract {
      * @param node1 {NodeAbstract}
      * @param node2 {NodeAbstract}
      */
-    registerAndCheckExistingRequestedEdge(node1:NodeAbstract, node2:NodeAbstract, edgeClass, weight = false) {
+    registerAndCheckExistingRequestedEdge(node1:NodeAbstract, node2:NodeAbstract, edgeClass, weight = false, connection:BasicConnection = null) {
 
         if (!node1 || !node2)
             return;
@@ -306,6 +306,7 @@ export class AutoGraph extends GraphAbstract {
         this.connectionsWantedToCreateByNodePair[edgeClass.name][minId][maxId]['n1'] = node1;
         this.connectionsWantedToCreateByNodePair[edgeClass.name][minId][maxId]['n2'] = node2;
         this.connectionsWantedToCreateByNodePair[edgeClass.name][minId][maxId]['weight_by_connectiondata'] = weight;
+        this.connectionsWantedToCreateByNodePair[edgeClass.name][minId][maxId]['connection_entity'] = connection;
 
 
     }
@@ -319,14 +320,15 @@ export class AutoGraph extends GraphAbstract {
                     let node2 = this.connectionsWantedToCreateByNodePair[edgeType][i1][i2]['n2'];
                     let edgeClass = this.connectionsWantedToCreateByNodePair[edgeType][i1][i2]['edgeClass'];
                     let weight = this.connectionsWantedToCreateByNodePair[edgeType][i1][i2]['weight_by_connectiondata'];
-                    this.createEdge(node1, node2, edgeClass, weight);
+                    let connectionEntity = this.connectionsWantedToCreateByNodePair[edgeType][i1][i2]['connection_entity'];
+                    this.createEdge(node1, node2, edgeClass, weight, connectionEntity);
                 }
             }
         }
 
     }
 
-    protected createEdge(n1:NodeAbstract, n2:NodeAbstract, edgeClass, calculatedWeight = false) {
+    protected createEdge(n1:NodeAbstract, n2:NodeAbstract, edgeClass, calculatedWeight = false, connectionEntity:BasicConnection = null) {
 
 
 
@@ -356,8 +358,13 @@ export class AutoGraph extends GraphAbstract {
             return existingEdgeToReturn;
         }
 
+        let edge = null;
+        if (connectionEntity)
+            edge = new edgeClass(n1, n2, this.plane, connectionEntity);
+        else
+            edge = new edgeClass(n1, n2, this.plane);
 
-        let edge = new edgeClass(n1, n2, this.plane);
+
         if (calculatedWeight !== false)
             edge.setWeight(calculatedWeight);
         n1.addEdge(edge);
@@ -399,7 +406,9 @@ export class AutoGraph extends GraphAbstract {
 
                     let edge = this.createEdge(this.connectionsWantedToCreateByNodePair[edgeType][i][j]['n1'],
                         this.connectionsWantedToCreateByNodePair[edgeType][i][j]['n2'],
-                        this.connectionsWantedToCreateByNodePair[edgeType][i][j]['edgeClass']);
+                        this.connectionsWantedToCreateByNodePair[edgeType][i][j]['edgeClass'],
+                        false,
+                        this.connectionsWantedToCreateByNodePair[edgeType][i][j]['connection_entity']);
                     edge.setWeight(weight);
 
 

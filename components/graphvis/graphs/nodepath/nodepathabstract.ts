@@ -112,4 +112,8 @@ export abstract class NodepathAbstract extends ElementAbstract {
     }
 
 
+    public getNodeList():NodeAbstract[] {
+        return this.nodesToConnect;
+    }
+
 }

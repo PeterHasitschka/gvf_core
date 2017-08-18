@@ -4,6 +4,7 @@ import {GraphObject} from "../graphobjectinterface";
 import {Plane} from "../../../plane/plane";
 import {NodeAbstract} from "../nodes/nodeelementabstract";
 import LineCurve3 = THREE.LineCurve3;
+import {BasicConnection} from "../../data/databasicconnection";
 
 
 /**
@@ -28,6 +29,7 @@ export abstract class EdgeAbstract extends THREE.Line implements GraphObject {
     protected addRandom;
     protected isHighlighted;
     protected weight;
+    protected connectionEntity:BasicConnection;
 
     /**
      * Creating an edge by taking the graphelements and the plane
@@ -35,8 +37,9 @@ export abstract class EdgeAbstract extends THREE.Line implements GraphObject {
      * @param sourceNode
      * @param destNode
      * @param plane
+     * @param connectionEntity BasicConnection Optional connection entity
      */
-    constructor(sourceNode:NodeAbstract, destNode:NodeAbstract, plane:Plane) {
+    constructor(sourceNode:NodeAbstract, destNode:NodeAbstract, plane:Plane, connectionEntity:BasicConnection = null) {
 
         let startX:number = sourceNode.getPosition()['x'];
         let startY:number = sourceNode.getPosition()['y'];
@@ -77,6 +80,11 @@ export abstract class EdgeAbstract extends THREE.Line implements GraphObject {
 
         this.origOpacity = this.opacity;
         this.frustumCulled = false;
+        this.connectionEntity = connectionEntity;
+
+        if (this.connectionEntity) {
+            this.connectionEntity
+        }
     }
 
     private addRandomColorValue(color:number):number {
@@ -223,6 +231,10 @@ export abstract class EdgeAbstract extends THREE.Line implements GraphObject {
 
     public getIsVisible():boolean {
         return this.visible;
+    }
+
+    public getConnectionEntity():BasicConnection {
+        return this.connectionEntity;
     }
 }
 

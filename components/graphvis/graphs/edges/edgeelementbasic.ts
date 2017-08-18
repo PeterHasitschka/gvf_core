@@ -9,11 +9,9 @@ import {NodeAbstract} from "../nodes/nodeelementabstract";
 export class EdgeBasic extends EdgeAbstract {
 
 
-
-    constructor(sourceNode:NodeAbstract, destNode:NodeAbstract, plane:Plane)  {
-        super(sourceNode, destNode, plane);
+    constructor(sourceNode:NodeAbstract, destNode:NodeAbstract, plane:Plane, connectionEntity = null) {
+        super(sourceNode, destNode, plane, connectionEntity);
     }
-
 
 
 }
