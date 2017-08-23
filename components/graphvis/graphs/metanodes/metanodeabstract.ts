@@ -6,7 +6,7 @@ import {BasicGroup} from "../../data/databasicgroup";
 import {ElementAbstract} from "../graphelementabstract";
 import {Label} from "../labels/label";
 import {AnimationService} from "../../../../services/animationservice";
-export abstract class MetanodeAbstract extends ElementAbstract {
+export abstract class MetanodeAbstract extends NodeAbstract {
 
 
     protected meshs = {};

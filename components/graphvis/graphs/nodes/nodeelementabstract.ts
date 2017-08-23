@@ -136,7 +136,7 @@ export abstract class NodeAbstract extends ElementAbstract {
             maxNodeWeight = weight;
         }
 
-        let scale = 1.0 +  (weight / maxNodeWeight) * 5;
+        let scale = 1.0 + (weight / maxNodeWeight) * 5;
         this.nodeMesh.scale['set'](scale, scale, scale);
     }
 
@@ -147,7 +147,21 @@ export abstract class NodeAbstract extends ElementAbstract {
 
     public setIsVisible(vis:boolean) {
         this.edges.forEach((e:EdgeAbstract) => {
-            e.setIsVisible(vis);
+
+
+            // Only show if other connected node is also visible
+            if (vis) {
+                let otherNode:NodeAbstract = null;
+                if (e.getSourceNode() === this)
+                    otherNode = e.getDestNode();
+                else
+                    otherNode = e.getSourceNode();
+
+                if (otherNode.getIsVisible())
+                    e.setIsVisible(vis);
+            }
+            else
+                e.setIsVisible(vis);
         });
         super.setIsVisible(vis);
     }
