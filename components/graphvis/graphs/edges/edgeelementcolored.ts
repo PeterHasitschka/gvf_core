@@ -10,8 +10,8 @@ export class EdgeColored extends EdgeBasic {
 
     protected static opacity = 1.0;
 
-    constructor(sourceNode:NodeAbstract, destNode:NodeAbstract, plane:Plane, color:number, connectionEntity=null) {
-        super(sourceNode, destNode, plane, connectionEntity);
+    constructor(sourceNode:NodeAbstract, destNode:NodeAbstract, plane:Plane, color:number, connectionEntity = null, options = null) {
+        super(sourceNode, destNode, plane, connectionEntity, options);
         this.setColor(color);
         this.setOpacity(this.constructor['opacity']);
     }

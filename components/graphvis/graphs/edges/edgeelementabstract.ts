@@ -5,6 +5,7 @@ import {Plane} from "../../../plane/plane";
 import {NodeAbstract} from "../nodes/nodeelementabstract";
 import LineCurve3 = THREE.LineCurve3;
 import {BasicConnection} from "../../data/databasicconnection";
+import Vector2 = THREE.Vector2;
 
 
 /**
@@ -30,6 +31,10 @@ export abstract class EdgeAbstract extends THREE.Line implements GraphObject {
     protected isHighlighted;
     protected weight;
     protected connectionEntity:BasicConnection;
+    protected numPointsOnCurve;
+    protected rawVertices:THREE.Vector2[];
+    protected splineOptions;
+
 
     /**
      * Creating an edge by taking the graphelements and the plane
@@ -38,8 +43,9 @@ export abstract class EdgeAbstract extends THREE.Line implements GraphObject {
      * @param destNode
      * @param plane
      * @param connectionEntity BasicConnection Optional connection entity
+     * @param options Optional options. E.g. Spline options ('spline')
      */
-    constructor(sourceNode:NodeAbstract, destNode:NodeAbstract, plane:Plane, connectionEntity:BasicConnection = null) {
+    constructor(sourceNode:NodeAbstract, destNode:NodeAbstract, plane:Plane, connectionEntity:BasicConnection = null, options = null) {
 
         let startX:number = sourceNode.getPosition()['x'];
         let startY:number = sourceNode.getPosition()['y'];
@@ -48,6 +54,7 @@ export abstract class EdgeAbstract extends THREE.Line implements GraphObject {
 
         let config = GraphVisConfig.edges;
         let color = config.abstractedge.color;
+
 
         // if (this.addRandom)
         //     color = this.addRandomColorValue(color);
@@ -58,14 +65,68 @@ export abstract class EdgeAbstract extends THREE.Line implements GraphObject {
             transparent: true
         });
 
-        let geometry = new THREE.Geometry();
-        geometry.vertices.push(new THREE.Vector3(startX, startY, config.abstractedge.z_pos));
-        geometry.vertices.push(new THREE.Vector3(endX, endY, config.abstractedge.z_pos));
+
+        let splineOptions = {
+            spline: true,
+            splineOnLineOffset: 0.5,
+            splineNormalLengthFactor: 0.1,
+            left: true
+        };
+
+        if (options && typeof options['spline'] !== "undefined")
+            splineOptions = options['spline'];
+
+        let numPointsOnCurve = config.abstractedge.numPointsOnSpline;
+        if (typeof splineOptions['numPointsOnSpline'] !== "undefined")
+            numPointsOnCurve = splineOptions['numPointsOnSpline'];
+
+        /**
+         *
+         * @param startEndPoints
+         * @param splineOptions
+         * @returns {any}
+         */
+        let calculateSplineVerticesFromRawStartEndPoints = function (startEndPoints:THREE.Vector2[], splineOptions):THREE.Vector2[] {
+
+            if (!splineOptions['spline'])
+                return startEndPoints;
+
+            let start = startEndPoints[0];
+            let end = startEndPoints[1];
+
+            let vect = new THREE.Vector2(end.x - start.x, end.y - start.y); // Calculate a vector between start and end
+            let vectPart = vect.clone().multiplyScalar(splineOptions['splineOnLineOffset']);   // find a point on
+            // that vector (e.g. the half = 0.5)
+            let normal = vect.clone().multiplyScalar(splineOptions['splineNormalLengthFactor'])
+                .rotateAround(new THREE.Vector2(0, 0), Math.PI / 2.0); // Calculate the normal with a specific
+            // length (e.g. 0.5 is half) of the original vector
+
+            if (splineOptions['left'])  // Add this normal at the half-point of the whole vector and add start again
+                vectPart.add(normal).add(start);
+            else
+                vectPart.sub(normal).add(start);
+            return [start, vectPart, end];
+        };
+
+        let rawVertices = [
+            new THREE.Vector2(startX, startY),
+            new THREE.Vector2(endX, endY)
+        ];
+        let curve = new THREE.SplineCurve(calculateSplineVerticesFromRawStartEndPoints(rawVertices, splineOptions));
+        let path = new THREE.Path(curve.getPoints(numPointsOnCurve));
+        var geometry = path.createPointsGeometry(numPointsOnCurve);
 
 
         super(geometry, material);
 
+        this.rawVertices = rawVertices;
+        this.splineOptions = splineOptions;
+
+        this.calculateSplineVerticesFromRawStartEndPoints = calculateSplineVerticesFromRawStartEndPoints.bind(this);
+
+
         this.weight = 0;
+        this.numPointsOnCurve = numPointsOnCurve;
 
 
         this.plane = plane;
@@ -81,10 +142,6 @@ export abstract class EdgeAbstract extends THREE.Line implements GraphObject {
         this.origOpacity = this.opacity;
         this.frustumCulled = false;
         this.connectionEntity = connectionEntity;
-
-        if (this.connectionEntity) {
-            this.connectionEntity
-        }
     }
 
     private addRandomColorValue(color:number):number {
@@ -157,11 +214,26 @@ export abstract class EdgeAbstract extends THREE.Line implements GraphObject {
      * No rendering is performed!
      */
     public updatePositions() {
-        this.threeGeometry.vertices[0]['x'] = this.sourceNode.getPosition()['x'];
-        this.threeGeometry.vertices[0]['y'] = this.sourceNode.getPosition()['y'];
-        this.threeGeometry.vertices[1]['x'] = this.destNode.getPosition()['x'];
-        this.threeGeometry.vertices[1]['y'] = this.destNode.getPosition()['y'];
+        this.rawVertices[0]['x'] = this.sourceNode.getPosition()['x'];
+        this.rawVertices[0]['y'] = this.sourceNode.getPosition()['y'];
+        this.rawVertices[1]['x'] = this.destNode.getPosition()['x'];
+        this.rawVertices[1]['y'] = this.destNode.getPosition()['y'];
+
+        let curve = new THREE.SplineCurve(this.calculateSplineVerticesFromRawStartEndPoints(this.rawVertices, this.splineOptions));
+        let path = new THREE.Path(curve.getPoints(this.numPointsOnCurve));
+        this.geometry = path.createPointsGeometry(this.numPointsOnCurve);
         this.threeGeometry.verticesNeedUpdate = true;
+    }
+
+    /**
+     * Will be set in constructor due to super-access policy on derived classes (no access of this.something before super() call)
+     * Calculates third point between the start and endpoint, depending on the splineOptions to be used as raw data for the spline
+     * @param startEndPoints
+     * @param splineOptions
+     * @returns {null}
+     */
+    protected calculateSplineVerticesFromRawStartEndPoints(startEndPoints:THREE.Vector2[], splineOptions):THREE.Vector2[] {
+        return null;
     }
 
     /**

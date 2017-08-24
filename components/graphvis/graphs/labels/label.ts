@@ -158,7 +158,7 @@ export class Label extends THREE.Points {
 
         if (this.options.blockedSize)
             return;
-        console.log(this.options.blockedSize);
+        // console.log(this.options.blockedSize);
         let globalZoom = this.plane.getGraphScene().getThreeCamera()['zoom'];
         let textElm = this.svgElement.getElementsByTagName("text")[0];
         let fontSize = this.options.fontSize;

@@ -75,7 +75,8 @@ export class GraphVisConfig {
             color: 0xaaaaff,
             z_pos: -1.0,
             thickness: 0.3,
-            weight_factor: 10
+            weight_factor: 10,
+            numPointsOnSpline: 30
         }
     };
 

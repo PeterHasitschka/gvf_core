@@ -39,13 +39,14 @@ export abstract class MetanodeAbstract extends NodeAbstract {
     protected createMeshs(options) {
 
         let nodeSize = (options && typeof options['size'] !== "undefined") ? options['size'] : GraphVisConfig.graphelements.abstractnode.size;
+        let color = (options && typeof options['color'] !== "undefined") ? options['color'] : GraphVisConfig.graphelements.abstractnode.color;
 
         let nodeMesh = new THREE.Mesh(new THREE.CircleGeometry(
             nodeSize,
             GraphVisConfig.graphelements.abstractnode.segments),
             new THREE.MeshBasicMaterial(
                 {
-                    color: GraphVisConfig.graphelements.abstractnode.color
+                    color: color
                 }));
 
         this.meshs['basenode'] = nodeMesh;
