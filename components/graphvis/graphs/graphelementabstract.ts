@@ -449,8 +449,6 @@ export abstract class ElementAbstract extends THREE.Group implements GraphObject
             (<Label>this.label).show();
         this.label.traverse(function (object) {
             object.visible = true;
-
-            console.log(this.label);
         });
     }
 
