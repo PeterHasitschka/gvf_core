@@ -53,6 +53,7 @@ export abstract class ElementAbstract extends THREE.Group implements GraphObject
     protected hoverText = null;
     protected hoverTextFontSize = 14;
     protected hoverTextColor = "black";
+    protected hovertextCenterX = true;
 
     protected static idCounter = 0;
 
@@ -174,7 +175,8 @@ export abstract class ElementAbstract extends THREE.Group implements GraphObject
             strokeColor: null,
             hidden: true,
             zval: 20,
-            blockedSize: this.labelZoomAdjustmentBlocked
+            blockedSize: this.labelZoomAdjustmentBlocked,
+            centerX : this.hovertextCenterX
         });
         console.log(this.hoverBox);
         this.add(this.hoverBox);
@@ -457,16 +459,20 @@ export abstract class ElementAbstract extends THREE.Group implements GraphObject
     }
 
     public adjustZoom(zoomLevel:number) {
-        if (this.labelZoomAdjustmentBlocked)
-            return;
 
+        if (this.labelZoomAdjustmentBlocked && this.labelType === GRAPH_ELEMENT_LABEL_TYPE.TEXT) {
+            return;
+        }
 
         let isInField = HelperService.getInstance().isObjectInCameraField(this.plane, this);
         if (isInField) {
             if (this.labelType !== GRAPH_ELEMENT_LABEL_TYPE.NONE && typeof this.label === "undefined" && zoomLevel >= this.labelZoomLevelMin) {
+
                 this.createLabel();
             }
         }
+
+
         if (isInField && this.label) {
             if (zoomLevel < this.labelZoomLevelMin && this.label.visible) {
                 this.hideLabel();

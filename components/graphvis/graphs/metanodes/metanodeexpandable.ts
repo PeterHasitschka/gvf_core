@@ -5,6 +5,8 @@ export class MetanodeExpandable extends MetanodeAbstract {
 
     protected areResNodesCollapsed;
 
+    protected exclusiveOpening = true;
+
     constructor(x:number, y:number, nodes:NodeAbstract[], plane:Plane, options) {
         let size;
         if (typeof options['size'] !== "undefined" && options['size'])
@@ -14,17 +16,22 @@ export class MetanodeExpandable extends MetanodeAbstract {
         super(x, y, nodes, plane, options);
         this.areResNodesCollapsed = false;
         this.name = "Meta node Expandable";
+
     }
 
 
-    public toggleCollapseResNodes(animated, onFinishCb = null) {
+    public toggleCollapseNodes(animated, onFinishCb = null) {
         if (!this.areResNodesCollapsed)
-            this.collapseResNodes(false, onFinishCb);
+            this.collapseNodes(false, onFinishCb);
         else
-            this.expandResNodes(false, onFinishCb);
+            this.expandNodes(false, onFinishCb);
     }
 
-    public collapseResNodes(animated, onFinishCb = null) {
+    public collapseNodes(animated, onFinishCb = null) {
+
+        if (this.areResNodesCollapsed)
+            return;
+
         this.areResNodesCollapsed = true;
         let posX = this.getPosition()['x'];
         let posY = this.getPosition()['y'];
@@ -43,10 +50,15 @@ export class MetanodeExpandable extends MetanodeAbstract {
             }
             n.setIsVisible(false);
         });
+
         this.plane.getGraphScene().render();
     }
 
-    public expandResNodes(animated, onFinishCb = null) {
+    public expandNodes(animated, onFinishCb = null) {
+
+        if (!this.areResNodesCollapsed)
+            return;
+
         this.areResNodesCollapsed = false;
 
         this.nodes.forEach((n:NodeAbstract) => {
@@ -63,11 +75,20 @@ export class MetanodeExpandable extends MetanodeAbstract {
             }
             n.setIsVisible(true);
         });
+
+        if (this.exclusiveOpening) {
+            this.plane.getGraphScene().getObjectGroup().children.forEach((o) => {
+                if (o.constructor === this.constructor && o.id !== this.id) {
+                    (<MetanodeExpandable>o).collapseNodes(false, null);
+                }
+            });
+        }
+
         this.plane.getGraphScene().render();
     }
 
     public onClick() {
-        this.toggleCollapseResNodes(false, function () {
+        this.toggleCollapseNodes(false, function () {
         });
         super.onClick();
     }

@@ -26,10 +26,10 @@ export abstract class NodeAbstract extends ElementAbstract {
         this.name = NodeAbstract.IDENTIFIER;
 
         let nodeSize = (options && typeof options['size'] !== "undefined") ? options['size'] : GraphVisConfig.graphelements.abstractnode.size;
-
+        let numSegments = (options && typeof options['segments'] !== "undefined") ? options['segments'] : GraphVisConfig.graphelements.abstractnode.segments;
         this.nodeMesh = new THREE.Mesh(new THREE.CircleGeometry(
-            nodeSize,
-            GraphVisConfig.graphelements.abstractnode.segments),
+            nodeSize, numSegments
+            ),
             new THREE.MeshBasicMaterial(
                 {
                     color: GraphVisConfig.graphelements.abstractnode.color
