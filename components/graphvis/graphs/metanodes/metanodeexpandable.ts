@@ -5,7 +5,7 @@ export class MetanodeExpandable extends MetanodeAbstract {
 
     protected areResNodesCollapsed;
 
-    protected exclusiveOpening = true;
+    protected exclusiveOpening;
 
     constructor(x:number, y:number, nodes:NodeAbstract[], plane:Plane, options) {
         let size;
@@ -14,6 +14,7 @@ export class MetanodeExpandable extends MetanodeAbstract {
         else
             size = nodes.length;
         super(x, y, nodes, plane, options);
+        this.exclusiveOpening = true;
         this.areResNodesCollapsed = false;
         this.name = "Meta node Expandable";
 
