@@ -176,7 +176,7 @@ export abstract class ElementAbstract extends THREE.Group implements GraphObject
             hidden: true,
             zval: 20,
             blockedSize: this.labelZoomAdjustmentBlocked,
-            centerX : this.hovertextCenterX
+            centerX: this.hovertextCenterX
         });
         console.log(this.hoverBox);
         this.add(this.hoverBox);
@@ -202,6 +202,10 @@ export abstract class ElementAbstract extends THREE.Group implements GraphObject
         this.edges.forEach((edge:EdgeAbstract) => {
             edge.updatePositions();
         });
+    }
+
+    public setPositionZ(z:number) {
+        this.position.setZ(z);
     }
 
     public saveOrigPosition(overwrite = false) {
@@ -360,7 +364,8 @@ export abstract class ElementAbstract extends THREE.Group implements GraphObject
      */
     public onIntersectLeave():void {
         InterGraphEventService.getInstance().send(INTERGRAPH_EVENTS.ELEMENT_LEFT, this);
-        this.hoverBox.hide();
+        if (this.hoverBox)
+            this.hoverBox.hide();
         this.deHighlight(true);
     }
 

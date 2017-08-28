@@ -25,6 +25,7 @@ export abstract class MetanodeAbstract extends NodeAbstract {
             n.setIsCurrentlyInMetaNode(true);
         });
         this.isdeletablebyuser = true;
+
     }
 
     protected zoomAndCenter() {

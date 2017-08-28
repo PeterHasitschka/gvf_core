@@ -323,7 +323,7 @@ export class AnimationService {
             if (n === null)
                 return;
 
-            n.setLabelZoomAdjustmentBlocked(false);
+            // n.setLabelZoomAdjustmentBlocked(false);
 
             this.register(
                 "nodepos_" + n.getUniqueId(),

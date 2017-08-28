@@ -4,6 +4,7 @@ import {GraphVisConfig} from "../../config";
 import {DataAbstract} from "../../data/dataabstract";
 import {InterGraphEventService, INTERGRAPH_EVENTS} from "../../../../services/intergraphevents.service";
 import {EdgeAbstract} from "../edges/edgeelementabstract";
+import {ShadowNodeSimple} from "./shadownodesimple";
 export abstract class NodeAbstract extends ElementAbstract {
 
 
@@ -11,6 +12,12 @@ export abstract class NodeAbstract extends ElementAbstract {
     protected distancesToOtherNodes = {};
     protected isCurrentlyInMetaNode = false;
     protected nodeWeight = 0;
+
+    /**
+     * Are used to point e.g. somewhere without creating another node with the same entity again...
+     * Some kind of linked node with the same behaviour than this.
+     */
+    protected shadowNodes:ShadowNodeSimple[];
 
     public static IDENTIFIER = "Node Abstract";
 
@@ -39,6 +46,7 @@ export abstract class NodeAbstract extends ElementAbstract {
         this.zPos = Math.random() - 0.5;
         this.add(this.nodeMesh);
         //this.nodeMesh['onIntersectStart'] = this.onIntersectStart;
+        this.shadowNodes = [];
     }
 
 
@@ -62,6 +70,10 @@ export abstract class NodeAbstract extends ElementAbstract {
         // this.edges.forEach((e:EdgeAbstract) => {
         //     e.highlight();
         // });
+
+        // this.shadowNodes.forEach((sn:ShadowNodeSimple) => {
+        //     sn.highlight(render);
+        // });
         super.highlight(render);
     }
 
@@ -73,6 +85,11 @@ export abstract class NodeAbstract extends ElementAbstract {
             this.nodeMesh.material['color'].setHex(this.selectColor);
         // this.edges.forEach((e:EdgeAbstract) => {
         //     e.deHighlight();
+        // });
+
+
+        // this.shadowNodes.forEach((sn:ShadowNodeSimple) => {
+        //     sn.deHighlight(render);
         // });
         super.deHighlight(render);
     }
@@ -146,9 +163,11 @@ export abstract class NodeAbstract extends ElementAbstract {
 
 
     public setIsVisible(vis:boolean) {
+
+        this.shadowNodes.forEach((sn:ShadowNodeSimple) => {
+            sn.setIsVisible(vis);
+        });
         this.edges.forEach((e:EdgeAbstract) => {
-
-
             // Only show if other connected node is also visible
             if (vis) {
                 let otherNode:NodeAbstract = null;
@@ -163,6 +182,30 @@ export abstract class NodeAbstract extends ElementAbstract {
             else
                 e.setIsVisible(vis);
         });
+
+
         super.setIsVisible(vis);
+    }
+
+
+    public addShadowNode(sn:ShadowNodeSimple) {
+        this.shadowNodes.push(sn);
+    }
+
+    public removeShadowNode(sn:ShadowNodeSimple) {
+
+        let BreakException = {};
+        try {
+            this.shadowNodes.forEach((s_, k) => {
+                if (s_.getUniqueId() === sn.getUniqueId()) {
+                    this.shadowNodes = this.shadowNodes.splice(k, 1);
+                    throw BreakException;
+                }
+            });
+
+        } catch (e) {
+            if (e !== BreakException)
+                throw e;
+        }
     }
 }
