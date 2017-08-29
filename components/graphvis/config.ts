@@ -48,7 +48,8 @@ export class GraphVisConfig {
             highlight_color: 0xff3333,
             select_color: 0xff0000,
             z_pos: 0.0,
-            set_random_z_pos : false
+            set_random_z_pos : false,
+            additionalmeshcolor : 0xffaaff
         },
         abstractgroup: {
             segments: 128,

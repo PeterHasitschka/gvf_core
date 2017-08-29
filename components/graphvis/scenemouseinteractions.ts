@@ -32,9 +32,12 @@ export class SceneMouseInteractions {
         let stopTraversalUp = false;
         while (!stopTraversalUp) {
             if (obj && typeof obj[fctName] !== "undefined") {
-                stack.push(obj);
-                if (debugStack) {
-                    debugStack.push(obj);
+                // Implicite ignore flag
+                if (typeof obj["ignoreHover"] === "undefined" || !obj["ignoreHover"]) {
+                    stack.push(obj);
+                    if (debugStack) {
+                        debugStack.push(obj);
+                    }
                 }
             }
             obj = obj.parent;

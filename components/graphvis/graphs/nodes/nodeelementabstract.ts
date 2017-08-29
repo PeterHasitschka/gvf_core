@@ -5,6 +5,13 @@ import {DataAbstract} from "../../data/dataabstract";
 import {InterGraphEventService, INTERGRAPH_EVENTS} from "../../../../services/intergraphevents.service";
 import {EdgeAbstract} from "../edges/edgeelementabstract";
 import {ShadowNodeSimple} from "./shadownodesimple";
+import {Pie} from "../metanodes/pie";
+
+export enum NODEMESHCREATIONMODES {
+    STANDARD_NODE,
+    DOUBLE_NODE
+}
+
 export abstract class NodeAbstract extends ElementAbstract {
 
 
@@ -12,10 +19,17 @@ export abstract class NodeAbstract extends ElementAbstract {
     protected distancesToOtherNodes = {};
     protected isCurrentlyInMetaNode = false;
     protected nodeWeight = 0;
+    protected ignoreHover;
 
+    protected additionalDoubleMesh:THREE.Mesh;
     protected minSize;
     protected maxSize;
     protected nodeSize;
+    protected numSegments;
+    protected nodeMeshCreationMode:NODEMESHCREATIONMODES;
+    protected additionalMeshSize;
+    protected additionalMeshColor;
+
 
     /**
      * Are used to point e.g. somewhere without creating another node with the same entity again...
@@ -36,25 +50,50 @@ export abstract class NodeAbstract extends ElementAbstract {
         super(x, y, dataEntity, plane, options);
         this.name = NodeAbstract.IDENTIFIER;
 
-        let nodeSize = (options && typeof options['size'] !== "undefined") ? options['size'] : GraphVisConfig.graphelements.abstractnode.size;
-        this.nodeSize = nodeSize;
-        this.minSize = (options && typeof options['minSize'] !== "undefined") ? options['minSize'] :  GraphVisConfig.graphelements.abstractnode.minSize;
-        this.maxSize = (options && typeof options['maxSize'] !== "undefined") ? options['maxSize'] :  GraphVisConfig.graphelements.abstractnode.maxSize;
+        this.nodeSize = (options && typeof options['size'] !== "undefined") ? options['size'] : GraphVisConfig.graphelements.abstractnode.size;
+        this.minSize = (options && typeof options['minSize'] !== "undefined") ? options['minSize'] : GraphVisConfig.graphelements.abstractnode.minSize;
+        this.maxSize = (options && typeof options['maxSize'] !== "undefined") ? options['maxSize'] : GraphVisConfig.graphelements.abstractnode.maxSize;
+        this.additionalMeshSize = (options && typeof options['additionalmeshsize'] !== "undefined") ? options['additionalmeshsize'] : this.nodeSize;
+        this.additionalMeshColor = (options && typeof options['additionalmeshcolor'] !== "undefined") ? options['additionalmeshcolor'] : GraphVisConfig.graphelements.abstractnode.additionalmeshcolor;
 
-        let numSegments = (options && typeof options['segments'] !== "undefined") ? options['segments'] : GraphVisConfig.graphelements.abstractnode.segments;
-        this.nodeMesh = new THREE.Mesh(new THREE.CircleGeometry(
-            nodeSize, numSegments
-            ),
-            new THREE.MeshBasicMaterial(
-                {
-                    color: GraphVisConfig.graphelements.abstractnode.color
-                }));
+        this.numSegments = (options && typeof options['segments'] !== "undefined") ? options['segments'] : GraphVisConfig.graphelements.abstractnode.segments;
+        this.nodeMeshCreationMode = (options && typeof options['nodemeshcreationmode'] !== "undefined") ? options['nodemeshcreationmode'] : NODEMESHCREATIONMODES.STANDARD_NODE;
+
+        this.createNodeMesh(this.nodeMeshCreationMode);
+        //this.nodeMesh['onIntersectStart'] = this.onIntersectStart;
+        this.shadowNodes = [];
+        this.ignoreHover = false;
+    }
+
+    protected createNodeMesh(mode:NODEMESHCREATIONMODES) {
 
         // For 'real' overlapping
         this.zPos = Math.random() - 0.5;
+
+        switch (mode) {
+            case NODEMESHCREATIONMODES.STANDARD_NODE :
+                this.nodeMesh = new THREE.Mesh(new THREE.CircleGeometry(
+                    this.nodeSize, this.numSegments
+                    ),
+                    new THREE.MeshBasicMaterial(
+                        {
+                            color: GraphVisConfig.graphelements.abstractnode.color
+                        }));
+                break;
+
+            case NODEMESHCREATIONMODES.DOUBLE_NODE :
+
+                this.nodeMesh = new Pie(Math.PI / 2, Math.PI * 1.5, this.nodeSize, GraphVisConfig.graphelements.abstractnode.color, 0);
+                this.additionalDoubleMesh = new Pie(Math.PI * 1.5, Math.PI / 2, this.additionalMeshSize, this.additionalMeshColor, 0);
+                this.add(this.additionalDoubleMesh);
+                break;
+
+            default:
+                console.warn("NODE MASH CREATION MODE NOT AVAILABLE!");
+        }
+
+
         this.add(this.nodeMesh);
-        //this.nodeMesh['onIntersectStart'] = this.onIntersectStart;
-        this.shadowNodes = [];
     }
 
 
@@ -223,5 +262,9 @@ export abstract class NodeAbstract extends ElementAbstract {
 
     public getShadowNodes():ShadowNodeSimple[] {
         return this.shadowNodes;
+    }
+
+    public setIgnoreHover(val:boolean) {
+        this.ignoreHover = val;
     }
 }

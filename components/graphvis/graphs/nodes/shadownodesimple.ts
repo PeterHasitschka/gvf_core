@@ -13,7 +13,6 @@ export class ShadowNodeSimple extends NodeSimple {
 
     private linkedNode:NodeAbstract;
     private link:EdgeAbstract;
-
     constructor(x:number, y:number, linkedNode:NodeAbstract, plane:Plane, options:Object) {
         super(x, y, linkedNode.getDataEntity(), plane, options);
         this.setColor(0x000000);
