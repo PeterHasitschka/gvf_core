@@ -13,6 +13,10 @@ export abstract class NodeAbstract extends ElementAbstract {
     protected isCurrentlyInMetaNode = false;
     protected nodeWeight = 0;
 
+    protected minSize;
+    protected maxSize;
+    protected nodeSize;
+
     /**
      * Are used to point e.g. somewhere without creating another node with the same entity again...
      * Some kind of linked node with the same behaviour than this.
@@ -33,6 +37,10 @@ export abstract class NodeAbstract extends ElementAbstract {
         this.name = NodeAbstract.IDENTIFIER;
 
         let nodeSize = (options && typeof options['size'] !== "undefined") ? options['size'] : GraphVisConfig.graphelements.abstractnode.size;
+        this.nodeSize = nodeSize;
+        this.minSize = (options && typeof options['minSize'] !== "undefined") ? options['minSize'] :  GraphVisConfig.graphelements.abstractnode.minSize;
+        this.maxSize = (options && typeof options['maxSize'] !== "undefined") ? options['maxSize'] :  GraphVisConfig.graphelements.abstractnode.maxSize;
+
         let numSegments = (options && typeof options['segments'] !== "undefined") ? options['segments'] : GraphVisConfig.graphelements.abstractnode.segments;
         this.nodeMesh = new THREE.Mesh(new THREE.CircleGeometry(
             nodeSize, numSegments
@@ -153,7 +161,12 @@ export abstract class NodeAbstract extends ElementAbstract {
             maxNodeWeight = weight;
         }
 
-        let scale = 1.0 + (weight / maxNodeWeight) * 5;
+        // let scale = 1.0 + (weight / maxNodeWeight) * 5;
+        let scale = (weight / maxNodeWeight) * (this.maxSize - this.minSize) + this.minSize;
+
+        // Take init node size into account
+        scale /= this.nodeSize;
+
         this.nodeMesh.scale['set'](scale, scale, scale);
     }
 

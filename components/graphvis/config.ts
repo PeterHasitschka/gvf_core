@@ -41,7 +41,9 @@ export class GraphVisConfig {
     public static graphelements = {
         abstractnode: {
             segments: 32,
-            size: 3,
+            size: 10,
+            minSize: 10,
+            maxSize: 40,
             color: 0xff33ff,
             highlight_color: 0xff3333,
             select_color: 0xff0000,
