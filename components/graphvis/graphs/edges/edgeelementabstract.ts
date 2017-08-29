@@ -115,10 +115,8 @@ export abstract class EdgeAbstract extends THREE.Line implements GraphObject {
         let curve = new THREE.SplineCurve(calculateSplineVerticesFromRawStartEndPoints(rawVertices, splineOptions));
         let path = new THREE.Path(curve.getPoints(numPointsOnCurve));
         var geometry = path.createPointsGeometry(numPointsOnCurve);
-
-
+        geometry.translate(0, 0, config.abstractedge.z_pos);
         super(geometry, material);
-
         this.rawVertices = rawVertices;
         this.splineOptions = splineOptions;
 
@@ -222,6 +220,7 @@ export abstract class EdgeAbstract extends THREE.Line implements GraphObject {
         let curve = new THREE.SplineCurve(this.calculateSplineVerticesFromRawStartEndPoints(this.rawVertices, this.splineOptions));
         let path = new THREE.Path(curve.getPoints(this.numPointsOnCurve));
         this.geometry = path.createPointsGeometry(this.numPointsOnCurve);
+        this.geometry.translate(0, 0, this.zPos);
         this.threeGeometry.verticesNeedUpdate = true;
     }
 
