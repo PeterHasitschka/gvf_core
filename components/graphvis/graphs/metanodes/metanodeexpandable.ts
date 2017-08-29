@@ -96,19 +96,19 @@ export class MetanodeExpandable extends MetanodeAbstract {
         this.plane.getGraphScene().render();
     }
 
-    // public onIntersectStart() {
-    //     this.expandNodes(this.expandAutoAnimated, function () {
-    //
-    //         window.setTimeout(function () {
-    //             this.collapseNodes(this.expandAutoAnimated, null);
-    //             this.setIsVisible(true);
-    //         }.bind(this), 1000);
-    //
-    //     }.bind(this));
-    //     this.setIsVisible(false);
-    //     super.onIntersectStart();
-    // }
 
+    // public select(render = false) {
+    //     this.expandNodes(this.expandAutoAnimated, function(){
+    //
+    //     });
+    //     super.select(render);
+    // }
+    // public deSelect(render = false) {
+    //     this.collapseNodes(this.expandAutoAnimated, function(){
+    //
+    //     });
+    //     super.deSelect(render);
+    // }
 
     public onClick() {
         this.toggleCollapseNodes(false, function () {

@@ -164,9 +164,9 @@ export abstract class NodeAbstract extends ElementAbstract {
 
     public setIsVisible(vis:boolean) {
 
-        this.shadowNodes.forEach((sn:ShadowNodeSimple) => {
-            sn.setIsVisible(vis);
-        });
+        // this.shadowNodes.forEach((sn:ShadowNodeSimple) => {
+        //     sn.setIsVisible(vis);
+        // });
         this.edges.forEach((e:EdgeAbstract) => {
             // Only show if other connected node is also visible
             if (vis) {
@@ -193,7 +193,6 @@ export abstract class NodeAbstract extends ElementAbstract {
     }
 
     public removeShadowNode(sn:ShadowNodeSimple) {
-
         let BreakException = {};
         try {
             this.shadowNodes.forEach((s_, k) => {
@@ -207,5 +206,9 @@ export abstract class NodeAbstract extends ElementAbstract {
             if (e !== BreakException)
                 throw e;
         }
+    }
+
+    public getShadowNodes():ShadowNodeSimple[] {
+        return this.shadowNodes;
     }
 }
