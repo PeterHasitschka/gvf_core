@@ -114,6 +114,9 @@ export class MetanodeExpandable extends MetanodeAbstract {
         this.toggleCollapseNodes(false, function () {
         });
         super.onClick();
+        this.plane.getGraphScene().render();
     }
+
+
 
 }

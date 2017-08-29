@@ -91,11 +91,15 @@ export abstract class MetanodeAbstract extends NodeAbstract {
     }
 
 
+
     /**
      * On Mouse-Hover
      * Sending an Event for notifying that node was intersected
      */
     public onIntersectStart():void {
+        this.nodes.forEach((n:NodeAbstract) => {
+          n.highlight();
+        });
         super.onIntersectStart();
         InterGraphEventService.getInstance().send(INTERGRAPH_EVENTS.NODE_HOVERED, this);
         //this.plane.getGraphScene().render();
@@ -106,6 +110,9 @@ export abstract class MetanodeAbstract extends NodeAbstract {
      * Sending an Event for notifying that node was left
      */
     public onIntersectLeave():void {
+        this.nodes.forEach((n:NodeAbstract) => {
+            n.deHighlight();
+        });
         super.onIntersectLeave();
         InterGraphEventService.getInstance().send(INTERGRAPH_EVENTS.NODE_LEFT, this);
         //this.plane.getGraphScene().render();
@@ -152,5 +159,9 @@ export abstract class MetanodeAbstract extends NodeAbstract {
 
     protected getCenterPos() {
         return this.getPosition();
+    }
+
+    public getSubNodes():NodeAbstract[] {
+        return this.nodes;
     }
 }
