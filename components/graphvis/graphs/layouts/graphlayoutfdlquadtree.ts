@@ -3,6 +3,7 @@ import {Plane} from '../../../plane/plane';
 import {EdgeAbstract} from "../edges/edgeelementabstract";
 import {NodeAbstract} from "../nodes/nodeelementabstract";
 import {AnimationService} from "../../../../services/animationservice";
+import {DataAbstract} from "../../data/dataabstract";
 
 export enum WORKER_MSGS {
     STARTCALCULATING,
@@ -43,17 +44,27 @@ export class GraphLayoutFdlQuadtree extends GraphLayoutAbstract {
         return;
     }
 
+    /**
+     * Calculate a quadTreeLayout!
+     * @param nodes Nodes to be set, but also those which are just here to be used to calculate the others position
+     * @param newEntities   if not null, only the nodes with the data entity id found in this objects keys (!) are repositioned (values are irrelevant)
+     * @param exclusiveEdgeClasses  @TODO not implemented yet. May be used to ignore different kind of edges
+     * @param doHiddenNodes If true, all nodes are taken into accout. Else only visible#
+     * @returns {{nodeData: Array, rect: any}}
+     */
+    public static quadTreeLayout(nodes:NodeAbstract[], newEntities = null, exclusiveEdgeClasses = null, doHiddenNodes = false) {
 
-    private calculate(animation:boolean = false, cb = null, newNodes = null) {
+
         var createGraph = require('ngraph.graph');
         var g = createGraph();
 
         let tmpNodeMapping = {};
 
-        this.nodes.forEach((n:NodeAbstract) => {
+        nodes.forEach((n:NodeAbstract) => {
 
-            if (!n.getIsVisible())
+            if (!doHiddenNodes && !n.getIsVisible())
                 return;
+
 
             tmpNodeMapping[n.getUniqueId()] = n;
 
@@ -65,11 +76,10 @@ export class GraphLayoutFdlQuadtree extends GraphLayoutAbstract {
                     connectedNode = e.getSourceNode();
 
 
-                if (connectedNode.getIsVisible())
+                if (doHiddenNodes || connectedNode.getIsVisible())
                     g.addLink(n.getUniqueId(), connectedNode.getUniqueId());
             });
         });
-
         var physicsSettings = {
             springLength: 30,
             springCoeff: 0.0008,
@@ -81,16 +91,15 @@ export class GraphLayoutFdlQuadtree extends GraphLayoutAbstract {
 
         var layout = require('ngraph.forcelayout')(g, physicsSettings);
 
-        if (newNodes) {
-            this.nodes.forEach((n:NodeAbstract) => {
-                if (!n.getIsVisible())
+        if (newEntities) {
+            nodes.forEach((n:NodeAbstract) => {
+                if (!n.getIsVisible() && !doHiddenNodes)
                     return;
-                if (!(n.getDataEntity().getId() in newNodes)) {
+                if (!(n.getDataEntity().getId() in newEntities)) {
                     layout.setNodePosition(n.getUniqueId(), n.getPosition()['x'], n.getPosition()['y']);
                     let nodeToPin = g.getNode(n.getUniqueId());
                     layout.pinNode(nodeToPin, true);
                 }
-
             });
         }
 
@@ -98,12 +107,27 @@ export class GraphLayoutFdlQuadtree extends GraphLayoutAbstract {
             layout.step();
         }
 
-        let nodesToFinishAnim = g.getNodesCount();
+        let retArr = [];
+
         g.forEachNode(function (n) {
+            if (typeof tmpNodeMapping[n.id] === "undefined")
+                return;
             let pos = layout.getNodePosition(n.id);
-
             let node = <NodeAbstract>tmpNodeMapping[n.id];
+            retArr.push({node: node, pos: pos});
+        });
+        return {nodeData: retArr, rect: layout.getGraphRect()}
+    }
 
+
+    private calculate(animation:boolean = false, cb = null, newNodes = null) {
+
+        let calculated = GraphLayoutFdlQuadtree.quadTreeLayout(this.nodes, newNodes, null);
+
+        let nodesToFinishAnim = calculated.nodeData.length;
+        calculated.nodeData.forEach(function (nData) {
+            let pos = nData.pos;
+            let node = nData.node;
 
             if (!animation) {
                 node.setPosition(pos.x, pos.y);
