@@ -10,6 +10,8 @@ export class MetanodeExpandable extends MetanodeAbstract {
 
     protected expandAutoAnimated;
 
+    protected static entities:MetanodeExpandable[] = [];
+
     constructor(x:number, y:number, nodes:NodeAbstract[], plane:Plane, options) {
         let size;
         if (typeof options['size'] !== "undefined" && options['size'])
@@ -21,6 +23,9 @@ export class MetanodeExpandable extends MetanodeAbstract {
         this.areResNodesCollapsed = false;
         this.expandAutoAnimated = false;
         this.name = "Meta node Expandable";
+
+
+        MetanodeExpandable.entities.push(this);
     }
 
 
@@ -59,7 +64,7 @@ export class MetanodeExpandable extends MetanodeAbstract {
         this.plane.getGraphScene().render();
     }
 
-    public expandNodes(animated, onFinishCb = null) {
+    public expandNodes(animated, onFinishCb = null, ignoreExclusiveOpening = false) {
 
         if (!this.areResNodesCollapsed)
             return;
@@ -85,7 +90,7 @@ export class MetanodeExpandable extends MetanodeAbstract {
             AnimationService.getInstance().restoreNodeOriginalPositions(this.nodes, this.plane, onFinishCb);
         }
 
-        if (this.exclusiveOpening) {
+        if (!ignoreExclusiveOpening && this.exclusiveOpening) {
             this.plane.getGraphScene().getObjectGroup().children.forEach((o) => {
                 if (o.constructor === this.constructor && o.id !== this.id) {
                     (<MetanodeExpandable>o).collapseNodes(false, null);
@@ -115,6 +120,10 @@ export class MetanodeExpandable extends MetanodeAbstract {
         });
         super.onClick();
         this.plane.getGraphScene().render();
+    }
+
+    public static getAllNodes(){
+        return MetanodeExpandable.entities;
     }
 
 

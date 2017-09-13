@@ -54,6 +54,7 @@ export abstract class ElementAbstract extends THREE.Group implements GraphObject
     protected hoverTextFontSize = 14;
     protected hoverTextColor = "black";
     protected hovertextCenterX = true;
+    protected hoverTextYOffset = -12;
 
     protected static idCounter = 0;
 
@@ -169,7 +170,7 @@ export abstract class ElementAbstract extends THREE.Group implements GraphObject
      * Create Hoverbox on the fly (on first hover)
      */
     protected createHoverBox() {
-        this.hoverBox = new Label(this.getPlane(), this.hoverText ? this.hoverText : "", 0, -12, {
+        this.hoverBox = new Label(this.getPlane(), this.hoverText ? this.hoverText : "", 0, this.hoverTextYOffset, {
             color: this.hoverTextColor,
             fontSize: this.hoverTextFontSize,
             strokeColor: null,
@@ -221,6 +222,14 @@ export abstract class ElementAbstract extends THREE.Group implements GraphObject
      * Setting the color of the simple node (e.g. 0xffffff)
      */
     public setColor(color:number):void {
+    }
+
+    public setOpacity(opacity:number):void{
+        this.children.forEach((elm) => {
+           if (typeof elm['material'] !== "undefined") {
+               elm['material']['opacity'] = opacity;
+           }
+        });
     }
 
     public getColor():number {

@@ -11,6 +11,7 @@ import {ElementAbstract} from "./graphelementabstract";
 import {InterGraphEventService, INTERGRAPH_EVENTS} from "../../../services/intergraphevents.service";
 import {GroupedObservable} from "rxjs/operator/groupBy";
 import {GroupAbstract} from "./groups/groupelementabstract";
+import {BasicConnection} from "../data/databasicconnection";
 /**
  * Abstract Graph Class
  * Holding the corresponding data and the plane
@@ -60,6 +61,10 @@ export abstract class GraphAbstract {
 
 
     public addGraphElements(explicitList = null, setLayout = false) {
+    }
+
+    public addExplicitListOfConnections(connections:BasicConnection[]){
+
     }
 
     protected addEventListeners() {

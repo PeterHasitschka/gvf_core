@@ -160,6 +160,15 @@ export class AutoGraph extends GraphAbstract {
         this.connectionsWantedToCreateByNodePair = {};
     }
 
+
+    public addExplicitListOfConnections(connections:BasicConnection[]) {
+        console.log("TODO: JUST ADD THESE CONNECTION TO THE PLANE!", connections);
+
+        this.mappingStructure.edges.forEach((mapping) => {
+
+        });
+    }
+
     protected createPaths() {
 
         let BreakException = {};
@@ -312,7 +321,6 @@ export class AutoGraph extends GraphAbstract {
     }
 
     protected createRegisteredEdges() {
-
         for (var edgeType in this.connectionsWantedToCreateByNodePair) {
             for (var i1 in this.connectionsWantedToCreateByNodePair[edgeType]) {
                 for (var i2 in this.connectionsWantedToCreateByNodePair[edgeType][i1]) {
@@ -325,7 +333,6 @@ export class AutoGraph extends GraphAbstract {
                 }
             }
         }
-
     }
 
     protected createEdge(n1:NodeAbstract, n2:NodeAbstract, edgeClass, calculatedWeight = false, connectionEntity:BasicConnection = null) {
