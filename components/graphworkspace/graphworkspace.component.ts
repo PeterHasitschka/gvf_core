@@ -37,12 +37,28 @@ export class GraphworkspaceComponent implements OnInit {
         this.apiService.sendEvent("initready", null);
 
 
+        this.sayGoodbye();
+
 
         // DataService.getInstance().fetchData().then(() => {
         //     //console.log("Fetched Demo Data", DataService.getInstance().getDemoEntities());
         // });
     }
 
+    /**
+     * A message to all my current colleagues and those who will work on GVF in the future.
+     * Please take care of my baby and NEVER EVER THINK ABOUT WRITING PROJECT RELATED STUFF INTO THE CORE!
+     */
+    private sayGoodbye() {
+        console.log("%c🐬🐬🐬🐬%c\tSo Long, and Thanks for All the Fish\t%c🐬🐬🐬🐬",
+            "font-weight:bold; font-size:20px; color:white; background:black",
+            "font-weight:bold; font-size:20px; color:cyan; background:black",
+            "font-weight:bold; font-size:20px; color:white; background:black");
+        console.log("%cIt was just a fantastic time with you guys!\n" +
+            "I wish you all the best for the future. Please take care of my baby, the GVF!\n" +
+            "Best, Peter!",
+        "font-weight:bold; font-size:18px; color:yellow; background:black");
+    }
 
     /**
      * Returning all registered planes
